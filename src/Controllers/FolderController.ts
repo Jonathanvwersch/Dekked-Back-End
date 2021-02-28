@@ -34,6 +34,26 @@ export class FolderController {
     }
   }
 
+  public async updateFolder(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { name, color, folder_id } = req.body;
+    try {
+      const folders = await FolderService.updateFolder({
+        name,
+        color,
+        folder_id,
+        owner_id: userId
+      });
+      return res.status(200).json({ success: true });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
   // public async deleteFolder(
   //   req: express.Request,
   //   res: express.Response

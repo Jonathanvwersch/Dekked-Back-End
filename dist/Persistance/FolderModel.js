@@ -17,14 +17,16 @@ function createFolder(name, owner_id, color) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const now = new Date();
-            const creationResponse = yield database_1.default('folders').insert({
+            const creationResponse = yield database_1.default('folders')
+                .insert({
                 name,
                 owner_id,
                 color,
                 date_created: now,
                 date_modified: now
-            });
-            return creationResponse.id;
+            })
+                .returning('id');
+            return creationResponse[0];
         }
         catch (error) {
             console.log(error);

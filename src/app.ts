@@ -75,6 +75,14 @@ app.get(
 //   }),
 //   (req, res) => folderController.moveFolder(req, res)
 // );
+app.put(
+  '/folder',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => folderController.updateFolder(req, res)
+);
+
 app.post(
   '/folder',
   passport.authenticate('jwt', {
@@ -138,6 +146,14 @@ app.post(
   binderController.createBinder
 );
 
+app.put(
+  '/binder',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  binderController.updateBinder
+);
+
 // Study Packs
 app.get(
   '/study-packs',
@@ -153,6 +169,14 @@ app.post(
     session: false
   }),
   studyPackController.createStudyPack
+);
+
+app.put(
+  '/study-pack',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  studyPackController.updateStudyPack
 );
 
 // Pages

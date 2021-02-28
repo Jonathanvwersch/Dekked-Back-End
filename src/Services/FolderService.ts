@@ -10,6 +10,21 @@ async function getFolderObject(user_id: string) {
   return folderObject;
 }
 
+async function updateFolder({
+  color,
+  name,
+  folder_id,
+  owner_id
+}: {
+  color?: string;
+  name?: string;
+  folder_id: string;
+  owner_id: string;
+}) {
+  await FolderModel.updateFolder({ color, name, folder_id, owner_id });
+}
+
 export default {
-  getFolderObject
+  getFolderObject,
+  updateFolder
 };

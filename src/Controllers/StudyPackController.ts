@@ -2,7 +2,7 @@ import express from 'express';
 import FolderModel from '../Persistance/FolderModel';
 import { createStudyPack, getStudyPacksByUserId } from '../Persistance/StudyPackModel';
 import FileTreeService from '../Services/FileTreeService';
-import { createStudyPackObject } from '../Services/StudyPackService';
+import StudyPackService, { createStudyPackObject } from '../Services/StudyPackService';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 
 export class StudyPackController {
@@ -42,6 +42,26 @@ export class StudyPackController {
         }
       });
     } catch (e) {
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
+  public async updateStudyPack(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { name, color, study_pack_id } = req.body;
+    try {
+      await StudyPackService.updateStudyPack({
+        name,
+        color,
+        study_pack_id,
+        owner_id: userId
+      });
+      return res.status(200).json({ success: true });
+    } catch (e) {
+      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }

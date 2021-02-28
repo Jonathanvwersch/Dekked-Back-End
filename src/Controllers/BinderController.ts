@@ -1,6 +1,6 @@
 import express from 'express';
 import { createBinder, getBindersByUserId } from '../Persistance/BinderModel';
-import { createBinderObject } from '../Services/BinderService';
+import BinderService, { createBinderObject } from '../Services/BinderService';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 
 export class BinderController {
@@ -40,6 +40,26 @@ export class BinderController {
         }
       });
     } catch (e) {
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
+  public async updateBinder(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { name, color, binder_id } = req.body;
+    try {
+      await BinderService.updateBinder({
+        name,
+        color,
+        binder_id,
+        owner_id: userId
+      });
+      return res.status(200).json({ success: true });
+    } catch (e) {
+      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }

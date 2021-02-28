@@ -55,3 +55,29 @@ export async function getBinderById(id: string) {
     throw Error('Error getting binder by id');
   }
 }
+
+export async function updateBinder({
+  binder_id,
+  owner_id,
+  color,
+  name
+}: {
+  binder_id: string;
+  owner_id: string;
+  color?: string;
+  name?: string;
+}) {
+  try {
+    await db('binders').update({ name, color }).where({ id: binder_id, owner_id });
+  } catch (err) {
+    console.log(err);
+    throw Error('There was an error updating binder');
+  }
+}
+
+export default {
+  updateBinder,
+  createBinder,
+  getBinderById,
+  getBindersByUserId
+};

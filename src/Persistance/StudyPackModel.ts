@@ -16,6 +16,7 @@ export async function createStudyPack(
   owner_id: string,
   color: string
 ) {
+  console.log({ binder_id, name, owner_id, color });
   try {
     const study_pack: StudyPackInterface[] = await db
       .table('study_packs')
@@ -67,3 +68,29 @@ export async function getStudyPacksByUserId(user_id: string) {
     throw Error('Error getting study pack by user id');
   }
 }
+
+export async function updateStudyPack({
+  study_pack_id,
+  owner_id,
+  color,
+  name
+}: {
+  study_pack_id: string;
+  owner_id: string;
+  color?: string;
+  name?: string;
+}) {
+  try {
+    await db('study_packs').update({ name, color }).where({ id: study_pack_id, owner_id });
+  } catch (err) {
+    console.log(err);
+    throw Error('There was an error updating study pack');
+  }
+}
+
+export default {
+  createStudyPack,
+  getStudyPackById,
+  getStudyPacksByBinderId,
+  updateStudyPack
+};

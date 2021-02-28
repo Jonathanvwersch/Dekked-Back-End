@@ -15,13 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FolderController = void 0;
 const FolderModel_1 = __importDefault(require("../Persistance/FolderModel"));
 const authHelpers_1 = require("../utils/passport/authHelpers");
+const FolderService_1 = __importDefault(require("../Services/FolderService"));
 class FolderController {
     createFolder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = authHelpers_1.getUserIdFromRequest(req);
             try {
+                console.log('CREAATING FOLDER');
                 const { name, color } = req.body;
                 const response = yield FolderModel_1.default.createFolder(name, userId, color);
+                console.log(response);
                 res.status(200).json({
                     success: true,
                     data: response
@@ -37,8 +40,8 @@ class FolderController {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = authHelpers_1.getUserIdFromRequest(req);
             try {
-                const folders = yield FolderModel_1.default.getFoldersByUser(userId);
-                return res.status(200).json({ success: true, data: folders });
+                const folders = yield FolderService_1.default.getFolderObject(userId);
+                return res.status(200).json({ success: true, data: { folders } });
             }
             catch (e) {
                 console.log(e);

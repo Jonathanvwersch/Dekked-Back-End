@@ -39,6 +39,24 @@ async function getFoldersByUser(owner_id: string): Promise<FolderInterface[]> {
   }
 }
 
+async function updateFolder({
+  name,
+  color,
+  folder_id,
+  owner_id
+}: {
+  name?: string;
+  color?: string;
+  folder_id: string;
+  owner_id: string;
+}) {
+  try {
+    await db('folders').update({ name, color }).where({ id: folder_id, owner_id });
+  } catch (err) {
+    console.log(err);
+    throw Error('There was an error updating folder');
+  }
+}
 // async function deleteAllChildren(folder_id: string, owner_id: string) {
 //   if (folder_id === 'ROOT') {
 //     throw new Error('ROOT folder cannot be deleted');
@@ -100,5 +118,6 @@ async function getFoldersByUser(owner_id: string): Promise<FolderInterface[]> {
 
 export default {
   createFolder,
-  getFoldersByUser
+  getFoldersByUser,
+  updateFolder
 };
