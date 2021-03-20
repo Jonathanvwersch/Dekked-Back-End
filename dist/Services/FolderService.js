@@ -23,6 +23,12 @@ function getFolderObject(user_id) {
         return folderObject;
     });
 }
+function updateFolder({ color, name, folder_id, owner_id }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield FolderModel_1.default.updateFolder({ color, name, folder_id, owner_id });
+    });
+}
 exports.default = {
-    getFolderObject
+    getFolderObject,
+    updateFolder
 };

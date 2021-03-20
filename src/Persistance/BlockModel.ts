@@ -11,10 +11,15 @@ declare global {
 
 // Types: h1, bulleted_list, main_text...
 
-async function createBlock(page_id: string, draft_key: string, content: string): Promise<string> {
+async function createBlock(
+  page_id: string,
+  draft_key: string,
+  content: string,
+  owner_id: string
+): Promise<string> {
   const response: BlockInterface[] = await db
     .table('blocks')
-    .insert({ page_id, draft_key, content }, ['id']);
+    .insert({ page_id, draft_key, content, owner_id }, ['id']);
 
   if (response[0].id) {
     return response[0].id;
@@ -52,7 +57,7 @@ async function updateBlock({
   return response;
 }
 
-async function getBlockInPage(page_id: string): Promise<BlockInterface[]> {
+async function getBlocksInPage(page_id: string): Promise<BlockInterface[]> {
   const response: BlockInterface[] = await db.table('blocks').select('*').where('page_id', page_id);
   return response;
 }
@@ -61,5 +66,5 @@ export default {
   createBlock,
   getBlock,
   updateBlock,
-  getBlockInPage
+  getBlocksInPage
 };

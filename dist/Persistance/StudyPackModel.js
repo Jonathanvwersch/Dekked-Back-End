@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStudyPacksByUserId = exports.getStudyPacksByBinderId = exports.getStudyPackById = exports.createStudyPack = void 0;
+exports.updateStudyPack = exports.getStudyPacksByUserId = exports.getStudyPacksByBinderId = exports.getStudyPackById = exports.createStudyPack = void 0;
 const database_1 = __importDefault(require("./database"));
 function createStudyPack(binder_id, name, owner_id, color) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log({ binder_id, name, owner_id, color });
         try {
             const study_pack = yield database_1.default
                 .table('study_packs')
@@ -79,3 +80,21 @@ function getStudyPacksByUserId(user_id) {
     });
 }
 exports.getStudyPacksByUserId = getStudyPacksByUserId;
+function updateStudyPack({ study_pack_id, owner_id, color, name }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield database_1.default('study_packs').update({ name, color }).where({ id: study_pack_id, owner_id });
+        }
+        catch (err) {
+            console.log(err);
+            throw Error('There was an error updating study pack');
+        }
+    });
+}
+exports.updateStudyPack = updateStudyPack;
+exports.default = {
+    createStudyPack,
+    getStudyPackById,
+    getStudyPacksByBinderId,
+    updateStudyPack
+};

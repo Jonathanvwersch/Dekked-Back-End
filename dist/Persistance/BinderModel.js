@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBinderById = exports.getBindersByUserId = exports.createBinder = void 0;
+exports.updateBinder = exports.getBinderById = exports.getBindersByUserId = exports.createBinder = void 0;
 const database_1 = __importDefault(require("./database"));
 function createBinder(folder_id, name, owner_id, color) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -64,3 +64,21 @@ function getBinderById(id) {
     });
 }
 exports.getBinderById = getBinderById;
+function updateBinder({ binder_id, owner_id, color, name }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield database_1.default('binders').update({ name, color }).where({ id: binder_id, owner_id });
+        }
+        catch (err) {
+            console.log(err);
+            throw Error('There was an error updating binder');
+        }
+    });
+}
+exports.updateBinder = updateBinder;
+exports.default = {
+    updateBinder,
+    createBinder,
+    getBinderById,
+    getBindersByUserId
+};

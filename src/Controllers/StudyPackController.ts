@@ -2,6 +2,7 @@ import express from 'express';
 import FolderModel from '../Persistance/FolderModel';
 import { createStudyPack, getStudyPacksByUserId } from '../Persistance/StudyPackModel';
 import FileTreeService from '../Services/FileTreeService';
+import PageService from '../Services/PageService';
 import StudyPackService, { createStudyPackObject } from '../Services/StudyPackService';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 
@@ -35,10 +36,11 @@ export class StudyPackController {
       const userId = getUserIdFromRequest(req);
       const { binder_id, name, color } = req.body;
       const response = await createStudyPack(binder_id, name, userId, color);
+      await PageService.createPage(response.id, undefined, userId);
       return res.status(200).json({
         success: true,
         data: {
-          binder: response
+          study_pack: response
         }
       });
     } catch (e) {

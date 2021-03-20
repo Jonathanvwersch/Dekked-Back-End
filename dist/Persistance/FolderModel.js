@@ -46,6 +46,17 @@ function getFoldersByUser(owner_id) {
         }
     });
 }
+function updateFolder({ name, color, folder_id, owner_id }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield database_1.default('folders').update({ name, color }).where({ id: folder_id, owner_id });
+        }
+        catch (err) {
+            console.log(err);
+            throw Error('There was an error updating folder');
+        }
+    });
+}
 // async function deleteAllChildren(folder_id: string, owner_id: string) {
 //   if (folder_id === 'ROOT') {
 //     throw new Error('ROOT folder cannot be deleted');
@@ -98,5 +109,6 @@ function getFoldersByUser(owner_id) {
 // }
 exports.default = {
     createFolder,
-    getFoldersByUser
+    getFoldersByUser,
+    updateFolder
 };

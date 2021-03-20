@@ -49,5 +49,24 @@ class FolderController {
             }
         });
     }
+    updateFolder(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { name, color, folder_id } = req.body;
+            try {
+                const folders = yield FolderService_1.default.updateFolder({
+                    name,
+                    color,
+                    folder_id,
+                    owner_id: userId
+                });
+                return res.status(200).json({ success: true });
+            }
+            catch (e) {
+                console.log(e);
+                return res.status(500).json({ success: false, error: e.message });
+            }
+        });
+    }
 }
 exports.FolderController = FolderController;

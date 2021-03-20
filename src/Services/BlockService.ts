@@ -9,20 +9,31 @@ export async function checkBlockExists(page_id: string, draft_key: string) {
   }
 }
 
-async function saveOrCreateBlock(block: string, draft_key: string, page_id: string) {
+async function saveOrCreateBlock(
+  block: string,
+  draft_key: string,
+  page_id: string,
+  owner_id: string
+) {
   const exists = await checkBlockExists(page_id, draft_key);
   if (exists) {
     const response = await BlockModel.updateBlock({ page_id, draft_key, content: block });
     return response;
   } else {
-    const response = await BlockModel.createBlock(page_id, draft_key, block);
+    const response = await BlockModel.createBlock(page_id, draft_key, block, owner_id);
     return response;
   }
 }
 
-export async function saveBlocks(blocks: [string], page_id: string, draft_keys: [string]) {
+export async function saveBlocks(
+  blocks: [string],
+  page_id: string,
+  draft_keys: [string],
+  owner_id: string
+) {
+  console.log(blocks, page_id, draft_keys);
   for (let i = 0; i < blocks.length; i++) {
-    await saveOrCreateBlock(blocks[i], draft_keys[i], page_id);
+    await saveOrCreateBlock(blocks[i], draft_keys[i], page_id, owner_id);
   }
 }
 

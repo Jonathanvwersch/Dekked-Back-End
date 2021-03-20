@@ -48,6 +48,13 @@ function getPages() {
         return response;
     });
 }
+// async function getPageByStudyPackId() {
+//   const response: PageInterface[] = await db.table('pages').select('*').where('id', id);
+//   if (response.length) {
+//     return response[0];
+//   }
+//   throw new Error('Page not found!');
+// }
 exports.default = {
     createPage,
     getPage,

@@ -111,5 +111,21 @@ class PageController {
             }
         });
     }
+    getPageByStudyPackId(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield PageModel_1.default.getPages();
+                return res.status(200).json({
+                    success: true,
+                    data: {
+                        pages: response
+                    }
+                });
+            }
+            catch (e) {
+                return res.status(500).json({ success: false, error: e.message });
+            }
+        });
+    }
 }
 exports.PageController = PageController;

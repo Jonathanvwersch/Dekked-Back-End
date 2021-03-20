@@ -30,6 +30,7 @@ function createTables() {
                 table.uuid('id').primary().unique().defaultTo(database_1.default.raw('uuid_generate_v4()'));
                 table.string('title').notNullable();
                 table.uuid('owner_id').notNullable();
+                table.uuid('study_pack_id').notNullable();
                 table.specificType('ordering', 'text []').notNullable();
             });
         }

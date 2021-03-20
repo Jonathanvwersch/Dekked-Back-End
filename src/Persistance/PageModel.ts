@@ -7,17 +7,19 @@ declare global {
     title: string;
     ordering: string[];
     owner_id: string;
+    study_pack_id: string;
   }
 }
 
 async function createPage(
-  title: string = '',
+  study_pack_id: string,
+  title: string = 'Untitled',
   owner_id: string = 'f6dccc9d-4f97-4775-b5a6-eafda9738123',
   ordering = []
 ): Promise<string> {
   const response: PageInterface[] = await db
     .table('pages')
-    .insert({ title, ordering, owner_id }, ['id']);
+    .insert({ title, ordering, owner_id, study_pack_id }, ['id']);
   if (response[0].id) {
     return response[0].id;
   }
@@ -44,7 +46,7 @@ async function updatePage({
   ordering?: string[];
 }): Promise<number> {
   if (!page_id) throw new Error('Must specify page');
-  const response: number = await db('pages').update({ title, ordering }).where('id', page_id);
+  const response: number = await db('pages').update({ ordering }).where('id', page_id);
 
   return response;
 }
@@ -55,9 +57,19 @@ async function getPages() {
   return response;
 }
 
+async function getPageByStudyPackId(study_pack_id: string) {
+  const response: PageInterface[] = await db.table('pages').select('*').where({ study_pack_id });
+
+  if (response.length) {
+    return response[0];
+  }
+  throw new Error('Page not found!');
+}
+
 export default {
   createPage,
   getPage,
   updatePage,
-  getPages
+  getPages,
+  getPageByStudyPackId
 };

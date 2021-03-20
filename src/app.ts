@@ -180,13 +180,33 @@ app.put(
 );
 
 // Pages
-app.put('/page/:page_id', (req, res) => pageController.saveFullPage(req, res));
+app.put(
+  '/page/:page_id',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => pageController.saveFullPage(req, res)
+);
 app.get('/pages', (req, res) => pageController.getPages(req, res));
 app.get('/page-meta/:page_id', (req, res) => pageController.getPageMeta(req, res));
 app.get('/page/:page_id', (req, res) => pageController.getFullPage(req, res));
-app.post('/page', (req, res) => pageController.createPage(req, res));
+// app.post('/page', (req, res) => pageController.createPage(req, res));
 app.patch('/page', (req, res) => pageController.updatePage(req, res));
-// Block
-app.post('/block', (req, res) => blockController.createBlock(req, res));
+app.get(
+  '/get-page-by-parent-id/:study_pack_id',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  pageController.getPageByStudyPackId
+);
 
+// Block
+// app.post('/block', (req, res) => blockController.createBlock(req, res));
+app.get(
+  '/get-blocks-by-page/:page_id',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  blockController.getBlocksByPage
+);
 app.listen(5000, () => console.log('Server running'));

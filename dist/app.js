@@ -66,6 +66,9 @@ app.get('/file-tree', passport_2.default.authenticate('jwt', {
 //   }),
 //   (req, res) => folderController.moveFolder(req, res)
 // );
+app.put('/folder', passport_2.default.authenticate('jwt', {
+    session: false
+}), (req, res) => folderController.updateFolder(req, res));
 app.post('/folder', passport_2.default.authenticate('jwt', {
     session: false
 }), (req, res) => folderController.createFolder(req, res));
@@ -103,6 +106,9 @@ app.get('/binders', passport_2.default.authenticate('jwt', {
 app.post('/binder', passport_2.default.authenticate('jwt', {
     session: false
 }), binderController.createBinder);
+app.put('/binder', passport_2.default.authenticate('jwt', {
+    session: false
+}), binderController.updateBinder);
 // Study Packs
 app.get('/study-packs', passport_2.default.authenticate('jwt', {
     session: false
@@ -110,6 +116,9 @@ app.get('/study-packs', passport_2.default.authenticate('jwt', {
 app.post('/study-pack', passport_2.default.authenticate('jwt', {
     session: false
 }), studyPackController.createStudyPack);
+app.put('/study-pack', passport_2.default.authenticate('jwt', {
+    session: false
+}), studyPackController.updateStudyPack);
 // Pages
 app.put('/page/:page_id', (req, res) => pageController.saveFullPage(req, res));
 app.get('/pages', (req, res) => pageController.getPages(req, res));
