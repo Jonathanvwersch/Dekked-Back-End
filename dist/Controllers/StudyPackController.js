@@ -27,9 +27,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudyPackController = void 0;
 const StudyPackModel_1 = require("../Persistance/StudyPackModel");
+const PageService_1 = __importDefault(require("../Services/PageService"));
 const StudyPackService_1 = __importStar(require("../Services/StudyPackService"));
 const authHelpers_1 = require("../utils/passport/authHelpers");
 class StudyPackController {
@@ -57,10 +61,11 @@ class StudyPackController {
                 const userId = authHelpers_1.getUserIdFromRequest(req);
                 const { binder_id, name, color } = req.body;
                 const response = yield StudyPackModel_1.createStudyPack(binder_id, name, userId, color);
+                yield PageService_1.default.createPage(response.id, undefined, userId);
                 return res.status(200).json({
                     success: true,
                     data: {
-                        binder: response
+                        study_pack: response
                     }
                 });
             }

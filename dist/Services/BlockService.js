@@ -26,7 +26,7 @@ function checkBlockExists(page_id, draft_key) {
     });
 }
 exports.checkBlockExists = checkBlockExists;
-function saveOrCreateBlock(block, draft_key, page_id) {
+function saveOrCreateBlock(block, draft_key, page_id, owner_id) {
     return __awaiter(this, void 0, void 0, function* () {
         const exists = yield checkBlockExists(page_id, draft_key);
         if (exists) {
@@ -34,15 +34,16 @@ function saveOrCreateBlock(block, draft_key, page_id) {
             return response;
         }
         else {
-            const response = yield BlockModel_1.default.createBlock(page_id, draft_key, block);
+            const response = yield BlockModel_1.default.createBlock(page_id, draft_key, block, owner_id);
             return response;
         }
     });
 }
-function saveBlocks(blocks, page_id, draft_keys) {
+function saveBlocks(blocks, page_id, draft_keys, owner_id) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(blocks, page_id, draft_keys);
         for (let i = 0; i < blocks.length; i++) {
-            yield saveOrCreateBlock(blocks[i], draft_keys[i], page_id);
+            yield saveOrCreateBlock(blocks[i], draft_keys[i], page_id, owner_id);
         }
     });
 }
