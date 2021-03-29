@@ -116,9 +116,7 @@ class BinderController {
           name,
           color,
           binder_id,
-          owner_id: userId,
-          date_created: now,
-          date_modified: now
+          owner_id: userId
         });
         return res.status(200).json({ success: true });
       } catch (e) {
