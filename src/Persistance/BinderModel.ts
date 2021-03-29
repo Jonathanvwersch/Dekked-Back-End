@@ -7,6 +7,8 @@ declare global {
     folder_id: string;
     name: string;
     color: string;
+    date_created: Date;
+    date_modified: Date;
   }
 }
 
@@ -17,9 +19,10 @@ export async function createBinder(
   color: string
 ) {
   try {
+    const now = new Date();
     const binder: BinderInterface[] = await db
       .table('binders')
-      .insert({ folder_id, name, owner_id, color }, ['*']);
+      .insert({ folder_id, name, owner_id, color, date_created: now, date_modified: now }, ['*']);
     console.log(binder);
     return binder[0];
   } catch (err) {
