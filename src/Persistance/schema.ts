@@ -48,6 +48,8 @@ async function createTables() {
       table.uuid('owner_id').notNullable();
       table.uuid('folder_id').notNullable();
       table.string('name').notNullable();
+      table.dateTime('date_created').notNullable();
+      table.dateTime('date_modified').notNullable();
       table.string('color').notNullable();
     });
   }
@@ -58,6 +60,8 @@ async function createTables() {
       table.uuid('owner_id').notNullable();
       table.uuid('binder_id').notNullable();
       table.string('name').notNullable();
+      table.dateTime('date_created').notNullable();
+      table.dateTime('date_modified').notNullable();
       table.string('color').notNullable();
     });
   }
