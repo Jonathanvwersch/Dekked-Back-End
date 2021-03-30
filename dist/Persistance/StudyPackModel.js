@@ -42,10 +42,9 @@ function createStudyPack(binder_id, name, owner_id, color) {
   return __awaiter(this, void 0, void 0, function* () {
     console.log({ binder_id, name, owner_id, color });
     try {
-      const now = new Date();
       const study_pack = yield database_1.default
         .table('study_packs')
-        .insert({ binder_id, name, owner_id, color, date_created: now, date_modified: now }, ['*']);
+        .insert({ binder_id, name, owner_id, color }, ['*']);
       console.log(study_pack);
       return study_pack[0];
     } catch (err) {

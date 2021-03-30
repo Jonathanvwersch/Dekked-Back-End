@@ -41,10 +41,9 @@ const database_1 = __importDefault(require('./database'));
 function createBinder(folder_id, name, owner_id, color) {
   return __awaiter(this, void 0, void 0, function* () {
     try {
-      const now = new Date();
       const binder = yield database_1.default
         .table('binders')
-        .insert({ folder_id, name, owner_id, color, date_created: now, date_modified: now }, ['*']);
+        .insert({ folder_id, name, owner_id, color }, ['*']);
       console.log(binder);
       return binder[0];
     } catch (err) {

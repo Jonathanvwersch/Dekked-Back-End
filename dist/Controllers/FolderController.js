@@ -45,7 +45,7 @@ class FolderController {
     return __awaiter(this, void 0, void 0, function* () {
       const userId = authHelpers_1.getUserIdFromRequest(req);
       try {
-        console.log('CREAATING FOLDER');
+        console.log('CREATING FOLDER');
         const { name, color } = req.body;
         const response = yield FolderModel_1.default.createFolder(name, userId, color);
         console.log(response);
