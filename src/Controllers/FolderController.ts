@@ -6,7 +6,7 @@ export class FolderController {
   public async createFolder(req: express.Request, res: express.Response) {
     const userId = getUserIdFromRequest(req);
     try {
-      console.log('CREAATING FOLDER');
+      console.log('CREATING FOLDER');
       const { name, color } = req.body;
       const response = await FolderModel.createFolder(name, userId, color);
       console.log(response);

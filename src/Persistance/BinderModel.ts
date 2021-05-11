@@ -17,6 +17,7 @@ export async function createBinder(
   color: string
 ) {
   try {
+    const now = new Date();
     const binder: BinderInterface[] = await db
       .table('binders')
       .insert({ folder_id, name, owner_id, color }, ['*']);
