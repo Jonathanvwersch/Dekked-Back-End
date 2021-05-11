@@ -3,7 +3,7 @@ import db from './database';
 
 declare global {
   interface PageInterface {
-    id?: string;
+    id: string;
     title: string;
     ordering: string[];
     owner_id: string;
@@ -66,10 +66,23 @@ async function getPageByStudyPackId(study_pack_id: string) {
   throw new Error('Page not found!');
 }
 
+async function deletePage({
+  page_id,
+  owner_id
+}: {
+  page_id: string;
+  owner_id: string;
+}): Promise<number> {
+  const response: number = await db('pages').delete().where({ owner_id, id: page_id });
+
+  return response;
+}
+
 export default {
   createPage,
   getPage,
   updatePage,
   getPages,
-  getPageByStudyPackId
+  getPageByStudyPackId,
+  deletePage
 };

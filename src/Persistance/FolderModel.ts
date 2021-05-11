@@ -57,6 +57,16 @@ async function updateFolder({
     throw Error('There was an error updating folder');
   }
 }
+
+async function deleteFolder({ folder_id, owner_id }: { folder_id: string; owner_id: string }) {
+  try {
+    await db('folders').delete('*').where({ id: folder_id, owner_id });
+  } catch (err) {
+    console.log(err);
+    throw Error('There was an error deleting folder');
+  }
+}
+
 // async function deleteAllChildren(folder_id: string, owner_id: string) {
 //   if (folder_id === 'ROOT') {
 //     throw new Error('ROOT folder cannot be deleted');
@@ -119,5 +129,6 @@ async function updateFolder({
 export default {
   createFolder,
   getFoldersByUser,
-  updateFolder
+  updateFolder,
+  deleteFolder
 };

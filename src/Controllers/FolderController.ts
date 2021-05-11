@@ -54,6 +54,21 @@ export class FolderController {
     }
   }
 
+  public async deleteFolder(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { folder_id } = req.body;
+    try {
+      await FolderService.deleteFolder(folder_id, userId);
+      return res.status(200).json({ success: true });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
   // public async deleteFolder(
   //   req: express.Request,
   //   res: express.Response

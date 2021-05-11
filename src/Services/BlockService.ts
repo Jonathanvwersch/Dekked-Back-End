@@ -47,3 +47,17 @@ export function getOrganizedBlocks(ordering: string[], blocks: BlockInterface[])
 
   return orderedBlocks;
 }
+
+export async function deleteBlock(block_id: string, owner_id: string) {
+  await BlockModel.deleteBlock(block_id, owner_id);
+}
+
+export async function getBlocksInPage(page_id: string) {
+  const blocks = await BlockModel.getBlocksInPage(page_id);
+  return blocks;
+}
+
+export default {
+  getBlocksInPage,
+  deleteBlock
+};

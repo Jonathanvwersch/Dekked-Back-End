@@ -63,4 +63,22 @@ export class BinderController {
       return res.status(500).json({ success: false, error: e.message });
     }
   }
+
+  public async deleteBinder(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { binder_id } = req.body;
+    try {
+      await BinderService.deleteBinder({
+        binder_id,
+        owner_id: userId
+      });
+      return res.status(200).json({ success: true });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
 }

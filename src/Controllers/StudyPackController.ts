@@ -67,4 +67,22 @@ export class StudyPackController {
       return res.status(500).json({ success: false, error: e.message });
     }
   }
+
+  public async deleteStudyPack(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { study_pack_id } = req.body;
+    try {
+      await StudyPackService.deleteStudyPack({
+        study_pack_id,
+        owner_id: userId
+      });
+      return res.status(200).json({ success: true });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
 }

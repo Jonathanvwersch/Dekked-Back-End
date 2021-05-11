@@ -2,7 +2,7 @@ import db from './database';
 
 declare global {
   interface BlockInterface {
-    id?: string;
+    id: string;
     draft_key: string;
     page_id: string;
     content: string;
@@ -62,9 +62,18 @@ async function getBlocksInPage(page_id: string): Promise<BlockInterface[]> {
   return response;
 }
 
+async function deleteBlock(id: string, owner_id: string) {
+  try {
+    await db.table('blocks').delete('*').where({ id, owner_id });
+  } catch (error) {
+    throw Error('There was an error deleting block');
+  }
+}
+
 export default {
   createBlock,
   getBlock,
   updateBlock,
-  getBlocksInPage
+  getBlocksInPage,
+  deleteBlock
 };

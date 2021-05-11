@@ -13,7 +13,6 @@ import passport from 'passport';
 import { FileTreeController } from './Controllers/FileTreeController';
 import { BinderController } from './Controllers/BinderController';
 import { StudyPackController } from './Controllers/StudyPackController';
-// require('./utils/passport/passport');
 
 const app = express();
 applyPassportStrategy(passport);
@@ -106,6 +105,14 @@ app.get(
   folderController.getFolders
 );
 
+app.delete(
+  '/folders',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  folderController.deleteFolder
+);
+
 // Card
 app.post('/card', (req, res) => cardController.createCard(req, res));
 app.get('/card/:card_id', (req, res) => cardController.getCard(req, res));
@@ -154,6 +161,14 @@ app.put(
   binderController.updateBinder
 );
 
+app.delete(
+  '/binder',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  binderController.deleteBinder
+);
+
 // Study Packs
 app.get(
   '/study-packs',
@@ -177,6 +192,22 @@ app.put(
     session: false
   }),
   studyPackController.updateStudyPack
+);
+
+app.put(
+  '/study-pack',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  studyPackController.updateStudyPack
+);
+
+app.delete(
+  '/study-pack',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  studyPackController.deleteStudyPack
 );
 
 // Pages

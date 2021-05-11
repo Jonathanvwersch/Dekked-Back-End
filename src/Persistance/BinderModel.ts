@@ -75,9 +75,40 @@ export async function updateBinder({
   }
 }
 
+export async function deleteBinder({
+  binder_id,
+  owner_id
+}: {
+  binder_id: string;
+  owner_id: string;
+}) {
+  try {
+    await db('binders').delete('*').where({ id: binder_id, owner_id });
+  } catch (err) {
+    console.log(err);
+    throw Error('There was an error deleting binder');
+  }
+}
+
+export async function getBindersByFolderId(owner_id: string, folder_id: string) {
+  try {
+    const binders: BinderInterface[] = await db
+      .table('binders')
+      .select('*')
+      .where({ owner_id, folder_id });
+
+    return binders;
+  } catch (err) {
+    console.log(err);
+    throw Error('There was an error fetching the binders');
+  }
+}
+
 export default {
   updateBinder,
   createBinder,
   getBinderById,
-  getBindersByUserId
+  getBindersByUserId,
+  deleteBinder,
+  getBindersByFolderId
 };

@@ -45,11 +45,11 @@ export async function getStudyPackById(id: string) {
 
 export async function getStudyPacksByBinderId(binder_id: string) {
   try {
-    const binders: BinderInterface[] = await db
+    const study_packs: StudyPackInterface[] = await db
       .table('study_packs')
       .select('*')
       .where({ binder_id });
-    return binders;
+    return study_packs;
   } catch (err) {
     console.log(err);
     throw Error('Error getting study pack by binder id');
@@ -88,9 +88,24 @@ export async function updateStudyPack({
   }
 }
 
+async function deleteStudyPack({
+  study_pack_id,
+  owner_id
+}: {
+  study_pack_id: string;
+  owner_id: string;
+}) {
+  try {
+    await db('study_packs').delete('*').where({ id: study_pack_id, owner_id });
+  } catch (err) {
+    console.log(err);
+    throw Error('There was an error deleting study pack');
+  }
+}
 export default {
   createStudyPack,
   getStudyPackById,
   getStudyPacksByBinderId,
-  updateStudyPack
+  updateStudyPack,
+  deleteStudyPack
 };
