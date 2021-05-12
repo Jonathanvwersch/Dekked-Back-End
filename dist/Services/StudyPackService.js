@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createStudyPackObject = void 0;
 const StudyPackModel_1 = __importDefault(require("../Persistance/StudyPackModel"));
+const PageService_1 = __importDefault(require("./PageService"));
 function createStudyPackObject(study_packs) {
     let studyPackObject = {};
     study_packs.forEach((val) => {
@@ -27,7 +28,33 @@ function updateStudyPack({ color, name, study_pack_id, owner_id }) {
         yield StudyPackModel_1.default.updateStudyPack({ color, name, study_pack_id, owner_id });
     });
 }
+function deleteStudyPack({ study_pack_id, owner_id }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield StudyPackModel_1.default.deleteStudyPack({ owner_id, study_pack_id });
+            const page = yield PageService_1.default.getPageByStudyPackIdAsync(study_pack_id);
+            yield PageService_1.default.deletePage(page.id, owner_id);
+        }
+        catch (error) {
+            console.log(error);
+            throw new Error('There was an error deleting the study pack');
+        }
+    });
+}
+function getStudyPacksByBinderId(binder_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const studyPacks = yield StudyPackModel_1.default.getStudyPacksByBinderId(binder_id);
+            return studyPacks;
+        }
+        catch (err) {
+            throw new Error('There was an error getting study packs by binder id');
+        }
+    });
+}
 exports.default = {
     createStudyPackObject,
-    updateStudyPack
+    updateStudyPack,
+    deleteStudyPack,
+    getStudyPacksByBinderId
 };

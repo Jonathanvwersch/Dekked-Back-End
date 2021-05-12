@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const FolderModel_1 = __importDefault(require("../Persistance/FolderModel"));
+const BinderService_1 = __importDefault(require("./BinderService"));
 function getFolderObject(user_id) {
     return __awaiter(this, void 0, void 0, function* () {
         const folders = yield FolderModel_1.default.getFoldersByUser(user_id);
@@ -28,7 +29,15 @@ function updateFolder({ color, name, folder_id, owner_id }) {
         yield FolderModel_1.default.updateFolder({ color, name, folder_id, owner_id });
     });
 }
+function deleteFolder(folder_id, owner_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const binders = yield BinderService_1.default.getBindersByFolderId(folder_id, owner_id);
+        yield Promise.all(binders.map((val) => BinderService_1.default.deleteBinder({ binder_id: val.id, owner_id })));
+        yield FolderModel_1.default.deleteFolder({ folder_id, owner_id });
+    });
+}
 exports.default = {
     getFolderObject,
-    updateFolder
+    updateFolder,
+    deleteFolder
 };

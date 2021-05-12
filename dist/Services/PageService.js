@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const PageModel_1 = __importDefault(require("../Persistance/PageModel"));
+const BlockService_1 = __importDefault(require("./BlockService"));
 function getPageByStudyPackIdAsync(study_pack_id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -37,7 +38,21 @@ function createPage(study_pack_id, title, owner_id) {
         }
     });
 }
+function deletePage(page_id, owner_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const blocks = yield BlockService_1.default.getBlocksInPage(page_id);
+            yield Promise.all(blocks.map((val) => __awaiter(this, void 0, void 0, function* () { return BlockService_1.default.deleteBlock(val.id, owner_id); })));
+            yield PageModel_1.default.deletePage({ page_id, owner_id });
+        }
+        catch (e) {
+            console.log(e);
+            throw new Error('There was an error deleting page');
+        }
+    });
+}
 exports.default = {
     getPageByStudyPackIdAsync,
-    createPage
+    createPage,
+    deletePage
 };

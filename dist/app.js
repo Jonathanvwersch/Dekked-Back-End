@@ -18,7 +18,6 @@ const passport_2 = __importDefault(require("passport"));
 const FileTreeController_1 = require("./Controllers/FileTreeController");
 const BinderController_1 = require("./Controllers/BinderController");
 const StudyPackController_1 = require("./Controllers/StudyPackController");
-// require('./utils/passport/passport');
 const app = express_1.default();
 passport_1.applyPassportStrategy(passport_2.default);
 app.use(cookie_parser_1.default());
@@ -79,6 +78,9 @@ app.post('/folder', passport_2.default.authenticate('jwt', {
 //   }),
 //   (req, res) => folderController.deleteFolder(req, res)
 // );
+app.delete('/folder', passport_2.default.authenticate('jwt', {
+    session: false
+}), folderController.deleteFolder);
 app.get('/folders', passport_2.default.authenticate('jwt', {
     session: false
 }), folderController.getFolders);
@@ -109,6 +111,9 @@ app.post('/binder', passport_2.default.authenticate('jwt', {
 app.put('/binder', passport_2.default.authenticate('jwt', {
     session: false
 }), binderController.updateBinder);
+app.delete('/binder', passport_2.default.authenticate('jwt', {
+    session: false
+}), binderController.deleteBinder);
 // Study Packs
 app.get('/study-packs', passport_2.default.authenticate('jwt', {
     session: false
@@ -119,6 +124,12 @@ app.post('/study-pack', passport_2.default.authenticate('jwt', {
 app.put('/study-pack', passport_2.default.authenticate('jwt', {
     session: false
 }), studyPackController.updateStudyPack);
+app.put('/study-pack', passport_2.default.authenticate('jwt', {
+    session: false
+}), studyPackController.updateStudyPack);
+app.delete('/study-pack', passport_2.default.authenticate('jwt', {
+    session: false
+}), studyPackController.deleteStudyPack);
 // Pages
 app.put('/page/:page_id', passport_2.default.authenticate('jwt', {
     session: false

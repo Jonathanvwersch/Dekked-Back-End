@@ -65,6 +65,19 @@ async function createTables() {
       table.string('color').notNullable();
     });
   }
+
+  if (!(await db.schema.hasTable('flashcards'))) {
+    await db.schema.createTable('flashcards', (table) => {
+      table.uuid('id').primary().unique().defaultTo(db.raw('uuid_generate_v4()'));
+      table.uuid('owner_id').notNullable();
+      table.uuid('study_pack_id').notNullable();
+      table.specificType('back_ordering', 'text []').notNullable();
+      table.specificType('front_ordering', 'text []').notNullable();
+      table.dateTime('date_created').notNullable();
+      table.dateTime('date_modified').notNullable();
+      table.string('block_link').notNullable();
+    });
+  }
 }
 createTables();
 

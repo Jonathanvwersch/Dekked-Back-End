@@ -57,6 +57,17 @@ function updateFolder({ name, color, folder_id, owner_id }) {
         }
     });
 }
+function deleteFolder({ folder_id, owner_id }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield database_1.default('folders').delete('*').where({ id: folder_id, owner_id });
+        }
+        catch (err) {
+            console.log(err);
+            throw Error('There was an error deleting folder');
+        }
+    });
+}
 // async function deleteAllChildren(folder_id: string, owner_id: string) {
 //   if (folder_id === 'ROOT') {
 //     throw new Error('ROOT folder cannot be deleted');
@@ -110,5 +121,6 @@ function updateFolder({ name, color, folder_id, owner_id }) {
 exports.default = {
     createFolder,
     getFoldersByUser,
-    updateFolder
+    updateFolder,
+    deleteFolder
 };

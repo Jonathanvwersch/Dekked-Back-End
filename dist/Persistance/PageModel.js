@@ -57,10 +57,17 @@ function getPageByStudyPackId(study_pack_id) {
         throw new Error('Page not found!');
     });
 }
+function deletePage({ page_id, owner_id }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield database_1.default('pages').delete().where({ owner_id, id: page_id });
+        return response;
+    });
+}
 exports.default = {
     createPage,
     getPage,
     updatePage,
     getPages,
-    getPageByStudyPackId
+    getPageByStudyPackId,
+    deletePage
 };

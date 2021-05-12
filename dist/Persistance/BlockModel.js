@@ -49,9 +49,20 @@ function getBlocksInPage(page_id) {
         return response;
     });
 }
+function deleteBlock(id, owner_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield database_1.default.table('blocks').delete('*').where({ id, owner_id });
+        }
+        catch (error) {
+            throw Error('There was an error deleting block');
+        }
+    });
+}
 exports.default = {
     createBlock,
     getBlock,
     updateBlock,
-    getBlocksInPage
+    getBlocksInPage,
+    deleteBlock
 };
