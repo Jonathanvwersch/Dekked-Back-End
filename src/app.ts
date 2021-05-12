@@ -97,20 +97,19 @@ app.post(
 //   (req, res) => folderController.deleteFolder(req, res)
 // );
 
+app.delete(
+  '/folder',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  folderController.deleteFolder
+);
 app.get(
   '/folders',
   passport.authenticate('jwt', {
     session: false
   }),
   folderController.getFolders
-);
-
-app.delete(
-  '/folders',
-  passport.authenticate('jwt', {
-    session: false
-  }),
-  folderController.deleteFolder
 );
 
 // Card
