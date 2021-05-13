@@ -40,9 +40,12 @@ const database_1 = __importDefault(require('./database'));
 // Types: h1, bulleted_list, main_text...
 function createBlock(page_id, draft_key, content, owner_id) {
   return __awaiter(this, void 0, void 0, function* () {
+    const now = new Date();
     const response = yield database_1.default
       .table('blocks')
-      .insert({ page_id, draft_key, content, owner_id }, ['id']);
+      .insert({ page_id, draft_key, content, owner_id, date_created: now, date_modified: now }, [
+        'id'
+      ]);
     if (response[0].id) {
       return response[0].id;
     }
