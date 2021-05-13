@@ -22,7 +22,7 @@ export async function createStudyPack(
   try {
     const study_pack: StudyPackInterface[] = await db
       .table('study_packs')
-      .insert({ binder_id, name, owner_id, color, date_created: now, date_modified: now }, ['*']);
+      .insert({ binder_id, name, owner_id, color }, ['*']);
     return study_pack[0];
   } catch (err) {
     console.log(err);
