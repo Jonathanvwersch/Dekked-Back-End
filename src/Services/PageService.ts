@@ -23,7 +23,9 @@ async function createPage(study_pack_id: string, title?: string, owner_id?: stri
 async function deletePage(page_id: string, owner_id: string) {
   try {
     const blocks = await BlockService.getBlocksInPage(page_id);
-    await Promise.all(blocks.map(async (val) => BlockService.deleteBlock(val.id, owner_id)));
+    await Promise.all(
+      blocks.map(async (val: BlockInterface) => BlockService.deleteBlock(val.id, owner_id))
+    );
     await PageModel.deletePage({ page_id, owner_id });
   } catch (e) {
     console.log(e);

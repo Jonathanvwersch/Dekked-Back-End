@@ -22,7 +22,7 @@ class BlockController {
             try {
                 const { page_id } = req.params;
                 const page = yield PageModel_1.default.getPage(page_id);
-                const blocks = yield BlockModel_1.default.getBlocksInPage(page_id);
+                const blocks = yield BlockModel_1.default.getBlocksByParentId(page_id);
                 const organizedBlocks = BlockService_1.getOrganizedBlocks(page.ordering, blocks);
                 return res.status(200).json({
                     success: true,

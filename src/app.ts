@@ -13,6 +13,7 @@ import passport from 'passport';
 import { FileTreeController } from './Controllers/FileTreeController';
 import { BinderController } from './Controllers/BinderController';
 import { StudyPackController } from './Controllers/StudyPackController';
+import { FlashcardController } from './Controllers/FlashcardController';
 
 const app = express();
 applyPassportStrategy(passport);
@@ -30,6 +31,7 @@ const userController = new UserController();
 const fileTreeController = new FileTreeController();
 const binderController = new BinderController();
 const studyPackController = new StudyPackController();
+const flashcardController = new FlashcardController();
 app.post('/register', (req, res) => {
   userController.register(req, res);
 });
@@ -89,13 +91,6 @@ app.post(
   }),
   (req, res) => folderController.createFolder(req, res)
 );
-// app.delete(
-//   '/folders',
-//   passport.authenticate('jwt', {
-//     session: false
-//   }),
-//   (req, res) => folderController.deleteFolder(req, res)
-// );
 
 app.delete(
   '/folder',
@@ -239,4 +234,22 @@ app.get(
   }),
   blockController.getBlocksByPage
 );
+
+// Flashcards
+app.get(
+  '/get-flashcards-by-study-pack-id/:study_pack_id',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  flashcardController.getFullFlashcardsByStudyPackId
+);
+
+app.post(
+  '/flashcard',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  flashcardController.createFlashCard
+);
+
 app.listen(5000, () => console.log('Server running'));

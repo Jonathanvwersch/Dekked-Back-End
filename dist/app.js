@@ -18,6 +18,7 @@ const passport_2 = __importDefault(require("passport"));
 const FileTreeController_1 = require("./Controllers/FileTreeController");
 const BinderController_1 = require("./Controllers/BinderController");
 const StudyPackController_1 = require("./Controllers/StudyPackController");
+const FlashcardController_1 = require("./Controllers/FlashcardController");
 const app = express_1.default();
 passport_1.applyPassportStrategy(passport_2.default);
 app.use(cookie_parser_1.default());
@@ -33,6 +34,7 @@ const userController = new UserController_1.UserController();
 const fileTreeController = new FileTreeController_1.FileTreeController();
 const binderController = new BinderController_1.BinderController();
 const studyPackController = new StudyPackController_1.StudyPackController();
+const flashcardController = new FlashcardController_1.FlashcardController();
 app.post('/register', (req, res) => {
     userController.register(req, res);
 });
@@ -71,13 +73,6 @@ app.put('/folder', passport_2.default.authenticate('jwt', {
 app.post('/folder', passport_2.default.authenticate('jwt', {
     session: false
 }), (req, res) => folderController.createFolder(req, res));
-// app.delete(
-//   '/folders',
-//   passport.authenticate('jwt', {
-//     session: false
-//   }),
-//   (req, res) => folderController.deleteFolder(req, res)
-// );
 app.delete('/folder', passport_2.default.authenticate('jwt', {
     session: false
 }), folderController.deleteFolder);
@@ -147,4 +142,11 @@ app.get('/get-page-by-parent-id/:study_pack_id', passport_2.default.authenticate
 app.get('/get-blocks-by-page/:page_id', passport_2.default.authenticate('jwt', {
     session: false
 }), blockController.getBlocksByPage);
+// Flashcards
+app.get('/get-flashcards-by-study-pack-id/:study_pack_id', passport_2.default.authenticate('jwt', {
+    session: false
+}), flashcardController.getFullFlashcardsByStudyPackId);
+app.post('/flashcard', passport_2.default.authenticate('jwt', {
+    session: false
+}), flashcardController.createFlashCard);
 app.listen(5000, () => console.log('Server running'));

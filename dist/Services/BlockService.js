@@ -14,10 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBlocksInPage = exports.deleteBlock = exports.getOrganizedBlocks = exports.saveBlocks = exports.checkBlockExists = void 0;
 const BlockModel_1 = __importDefault(require("../Persistance/BlockModel"));
-function checkBlockExists(page_id, draft_key) {
+function checkBlockExists(parent_id, draft_key) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield BlockModel_1.default.getBlock(page_id, draft_key);
+            yield BlockModel_1.default.getBlock(parent_id, draft_key);
             return true;
         }
         catch (error) {
@@ -26,24 +26,24 @@ function checkBlockExists(page_id, draft_key) {
     });
 }
 exports.checkBlockExists = checkBlockExists;
-function saveOrCreateBlock(block, draft_key, page_id, owner_id) {
+function saveOrCreateBlock(block, draft_key, parent_id, owner_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const exists = yield checkBlockExists(page_id, draft_key);
+        const exists = yield checkBlockExists(parent_id, draft_key);
         if (exists) {
-            const response = yield BlockModel_1.default.updateBlock({ page_id, draft_key, content: block });
+            const response = yield BlockModel_1.default.updateBlock({ parent_id, draft_key, content: block });
             return response;
         }
         else {
-            const response = yield BlockModel_1.default.createBlock(page_id, draft_key, block, owner_id);
+            const response = yield BlockModel_1.default.createBlock(parent_id, draft_key, block, owner_id);
             return response;
         }
     });
 }
-function saveBlocks(blocks, page_id, draft_keys, owner_id) {
+function saveBlocks(blocks, parent_id, draft_keys, owner_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(blocks, page_id, draft_keys);
+        console.log(blocks, parent_id, draft_keys);
         for (let i = 0; i < blocks.length; i++) {
-            yield saveOrCreateBlock(blocks[i], draft_keys[i], page_id, owner_id);
+            yield saveOrCreateBlock(blocks[i], draft_keys[i], parent_id, owner_id);
         }
     });
 }
@@ -63,9 +63,9 @@ function deleteBlock(block_id, owner_id) {
     });
 }
 exports.deleteBlock = deleteBlock;
-function getBlocksInPage(page_id) {
+function getBlocksInPage(parent_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const blocks = yield BlockModel_1.default.getBlocksInPage(page_id);
+        const blocks = yield BlockModel_1.default.getBlocksByParentId(parent_id);
         return blocks;
     });
 }

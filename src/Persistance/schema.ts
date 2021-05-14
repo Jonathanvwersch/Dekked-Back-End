@@ -28,7 +28,7 @@ async function createTables() {
       table.string('draft_key').notNullable();
       table.string('content').notNullable();
       table.string('owner_id').notNullable();
-      table.uuid('page_id').notNullable();
+      table.uuid('parent_id').notNullable();
     });
   }
 

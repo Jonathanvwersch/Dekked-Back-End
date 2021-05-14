@@ -11,7 +11,7 @@ export class BlockController {
     try {
       const { page_id } = req.params;
       const page = await PageModel.getPage(page_id);
-      const blocks = await BlockModel.getBlocksInPage(page_id);
+      const blocks = await BlockModel.getBlocksByParentId(page_id);
       const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);
 
       return res.status(200).json({

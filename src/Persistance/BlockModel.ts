@@ -4,7 +4,7 @@ declare global {
   interface BlockInterface {
     id: string;
     draft_key: string;
-    page_id: string;
+    parent_id: string;
     content: string;
   }
 }
@@ -12,14 +12,14 @@ declare global {
 // Types: h1, bulleted_list, main_text...
 
 async function createBlock(
-  page_id: string,
+  parent_id: string,
   draft_key: string,
   content: string,
   owner_id: string
 ): Promise<string> {
   const response: BlockInterface[] = await db
     .table('blocks')
-    .insert({ page_id, draft_key, content, owner_id }, ['id']);
+    .insert({ parent_id, draft_key, content, owner_id }, ['id']);
 
   if (response[0].id) {
     return response[0].id;
@@ -28,11 +28,11 @@ async function createBlock(
   throw new Error('Error creating block');
 }
 
-async function getBlock(page_id: string, draft_key: string) {
+async function getBlock(parent_id: string, draft_key: string) {
   const response: BlockInterface[] = await db
     .table('blocks')
     .select('*')
-    .where({ draft_key, page_id });
+    .where({ draft_key, parent_id });
 
   if (response.length) {
     return response[0];
@@ -43,22 +43,25 @@ async function getBlock(page_id: string, draft_key: string) {
 
 async function updateBlock({
   id,
-  page_id,
+  parent_id,
   draft_key,
   content
 }: {
   id?: string;
-  page_id: string;
+  parent_id: string;
   draft_key: string;
   content: string;
 }): Promise<number> {
-  const response = await db.table('blocks').update({ content }).where({ draft_key, page_id });
+  const response = await db.table('blocks').update({ content }).where({ draft_key, parent_id });
 
   return response;
 }
 
-async function getBlocksInPage(page_id: string): Promise<BlockInterface[]> {
-  const response: BlockInterface[] = await db.table('blocks').select('*').where('page_id', page_id);
+async function getBlocksByParentId(parent_id: string): Promise<BlockInterface[]> {
+  const response: BlockInterface[] = await db
+    .table('blocks')
+    .select('*')
+    .where('parent_id', parent_id);
   return response;
 }
 
@@ -74,6 +77,6 @@ export default {
   createBlock,
   getBlock,
   updateBlock,
-  getBlocksInPage,
+  getBlocksByParentId,
   deleteBlock
 };

@@ -1,8 +1,8 @@
 import BlockModel from '../Persistance/BlockModel';
 
-export async function checkBlockExists(page_id: string, draft_key: string) {
+export async function checkBlockExists(parent_id: string, draft_key: string) {
   try {
-    await BlockModel.getBlock(page_id, draft_key);
+    await BlockModel.getBlock(parent_id, draft_key);
     return true;
   } catch (error) {
     return false;
@@ -12,28 +12,28 @@ export async function checkBlockExists(page_id: string, draft_key: string) {
 async function saveOrCreateBlock(
   block: string,
   draft_key: string,
-  page_id: string,
+  parent_id: string,
   owner_id: string
 ) {
-  const exists = await checkBlockExists(page_id, draft_key);
+  const exists = await checkBlockExists(parent_id, draft_key);
   if (exists) {
-    const response = await BlockModel.updateBlock({ page_id, draft_key, content: block });
+    const response = await BlockModel.updateBlock({ parent_id, draft_key, content: block });
     return response;
   } else {
-    const response = await BlockModel.createBlock(page_id, draft_key, block, owner_id);
+    const response = await BlockModel.createBlock(parent_id, draft_key, block, owner_id);
     return response;
   }
 }
 
 export async function saveBlocks(
   blocks: [string],
-  page_id: string,
+  parent_id: string,
   draft_keys: [string],
   owner_id: string
 ) {
-  console.log(blocks, page_id, draft_keys);
+  console.log(blocks, parent_id, draft_keys);
   for (let i = 0; i < blocks.length; i++) {
-    await saveOrCreateBlock(blocks[i], draft_keys[i], page_id, owner_id);
+    await saveOrCreateBlock(blocks[i], draft_keys[i], parent_id, owner_id);
   }
 }
 
@@ -52,8 +52,8 @@ export async function deleteBlock(block_id: string, owner_id: string) {
   await BlockModel.deleteBlock(block_id, owner_id);
 }
 
-export async function getBlocksInPage(page_id: string) {
-  const blocks = await BlockModel.getBlocksInPage(page_id);
+export async function getBlocksInPage(parent_id: string) {
+  const blocks = await BlockModel.getBlocksByParentId(parent_id);
   return blocks;
 }
 
