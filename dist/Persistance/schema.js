@@ -40,7 +40,7 @@ function createTables() {
                 table.string('draft_key').notNullable();
                 table.string('content').notNullable();
                 table.string('owner_id').notNullable();
-                table.uuid('page_id').notNullable();
+                table.uuid('parent_id').notNullable();
             });
         }
         if (!(yield database_1.default.schema.hasTable('users'))) {

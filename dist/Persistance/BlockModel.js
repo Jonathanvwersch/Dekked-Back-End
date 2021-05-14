@@ -14,38 +14,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("./database"));
 // Types: h1, bulleted_list, main_text...
-function createBlock(page_id, draft_key, content, owner_id) {
+function createBlock(parent_id, draft_key, content, owner_id) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield database_1.default
             .table('blocks')
-            .insert({ page_id, draft_key, content, owner_id }, ['id']);
+            .insert({ parent_id, draft_key, content, owner_id }, ['id']);
         if (response[0].id) {
             return response[0].id;
         }
         throw new Error('Error creating block');
     });
 }
-function getBlock(page_id, draft_key) {
+function getBlock(parent_id, draft_key) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield database_1.default
             .table('blocks')
             .select('*')
-            .where({ draft_key, page_id });
+            .where({ draft_key, parent_id });
         if (response.length) {
             return response[0];
         }
         throw new Error('Block not found');
     });
 }
-function updateBlock({ id, page_id, draft_key, content }) {
+function updateBlock({ id, parent_id, draft_key, content }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default.table('blocks').update({ content }).where({ draft_key, page_id });
+        const response = yield database_1.default.table('blocks').update({ content }).where({ draft_key, parent_id });
         return response;
     });
 }
-function getBlocksInPage(page_id) {
+function getBlocksByParentId(parent_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default.table('blocks').select('*').where('page_id', page_id);
+        const response = yield database_1.default
+            .table('blocks')
+            .select('*')
+            .where('parent_id', parent_id);
         return response;
     });
 }
@@ -63,6 +66,6 @@ exports.default = {
     createBlock,
     getBlock,
     updateBlock,
-    getBlocksInPage,
+    getBlocksByParentId,
     deleteBlock
 };
