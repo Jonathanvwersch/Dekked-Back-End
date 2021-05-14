@@ -71,8 +71,8 @@ async function createTables() {
       table.uuid('id').primary().unique().defaultTo(db.raw('uuid_generate_v4()'));
       table.uuid('owner_id').notNullable();
       table.uuid('study_pack_id').notNullable();
-      table.specificType('back_ordering', 'text []');
-      table.specificType('front_ordering', 'text []');
+      table.specificType('back_ordering', 'text []').nullable();
+      table.specificType('front_ordering', 'text []').nullable();
       table.dateTime('date_created').notNullable();
       table.dateTime('date_modified').notNullable();
       table.string('block_link').notNullable();
