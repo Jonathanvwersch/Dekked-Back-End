@@ -7,6 +7,8 @@ declare global {
     folder_id: string;
     name: string;
     color: string;
+    date_created: Date;
+    date_modified: Date;
   }
 }
 

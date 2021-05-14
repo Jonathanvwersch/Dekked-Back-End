@@ -7,6 +7,8 @@ declare global {
     binder_id: string;
     name: string;
     color: string;
+    date_created: Date;
+    date_modified: Date;
   }
 }
 
@@ -16,12 +18,11 @@ export async function createStudyPack(
   owner_id: string,
   color: string
 ) {
-  console.log({ binder_id, name, owner_id, color });
+  const now = new Date();
   try {
     const study_pack: StudyPackInterface[] = await db
       .table('study_packs')
       .insert({ binder_id, name, owner_id, color }, ['*']);
-    console.log(study_pack);
     return study_pack[0];
   } catch (err) {
     console.log(err);
