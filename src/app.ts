@@ -252,4 +252,12 @@ app.post(
   flashcardController.createFlashCard
 );
 
+app.put(
+  '/flashcard/:flash_card_id',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => flashcardController.saveFullFlashcard(req, res)
+);
+
 app.listen(5000, () => console.log('Server running'));

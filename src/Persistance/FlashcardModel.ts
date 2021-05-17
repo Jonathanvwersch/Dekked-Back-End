@@ -30,7 +30,9 @@ async function createFlashcard({
         study_pack_id,
         block_link,
         date_created: now,
-        date_modified: now
+        date_modified: now,
+        front_ordering: [],
+        back_ordering: []
       })
       .returning('id');
 
@@ -45,7 +47,7 @@ async function getFlashcardsByStudyPackId(owner_id: string, study_pack_id: strin
   try {
     const flashcards: FlashcardInterface[] = await db('flashcards').select('*').where({
       owner_id,
-      id: study_pack_id
+      study_pack_id
     });
 
     return flashcards;
@@ -60,16 +62,12 @@ async function updateFlashcard({
   owner_id,
   back_ordering,
   front_ordering,
-  date_created,
-  date_modified,
   block_link
 }: {
   id: string;
   owner_id: string;
   back_ordering?: string[];
   front_ordering?: string[];
-  date_created?: Date;
-  date_modified?: Date;
   block_link?: string;
 }) {
   try {
@@ -77,9 +75,8 @@ async function updateFlashcard({
       .update({
         back_ordering,
         front_ordering,
-        date_created,
-        date_modified,
-        block_link
+        block_link,
+        date_modified: new Date()
       })
       .where({ id, owner_id });
   } catch (error) {

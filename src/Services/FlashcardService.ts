@@ -1,6 +1,6 @@
 import BlockModel from '../Persistance/BlockModel';
 import FlashcardModel from '../Persistance/FlashcardModel';
-import { getOrganizedBlocks } from './BlockService';
+import { getOrganizedBlocks, saveBlocks } from './BlockService';
 
 async function createFlashcard(study_pack_id: string, owner_id: string, block_link?: string) {
   const result = await FlashcardModel.createFlashcard({ owner_id, study_pack_id, block_link });
@@ -23,7 +23,6 @@ async function getFullFlashcardsByStudyPackId(study_pack_id: string, owner_id: s
         };
       })
     );
-
     return fullFlashcards;
   } catch (error) {
     console.log(error);
@@ -31,7 +30,26 @@ async function getFullFlashcardsByStudyPackId(study_pack_id: string, owner_id: s
   }
 }
 
+async function saveFlashcard(
+  flash_card_id: string,
+  owner_id: string,
+  front_blocks: [string],
+  front_draft_keys: [string],
+  back_blocks: [string],
+  back_draft_keys: [string]
+) {
+  await saveBlocks(front_blocks, flash_card_id, front_draft_keys, owner_id);
+  await saveBlocks(back_blocks, flash_card_id, back_draft_keys, owner_id);
+  await FlashcardModel.updateFlashcard({
+    id: flash_card_id,
+    owner_id,
+    back_ordering: back_draft_keys,
+    front_ordering: front_draft_keys
+  });
+}
+
 export default {
   createFlashcard,
-  getFullFlashcardsByStudyPackId
+  getFullFlashcardsByStudyPackId,
+  saveFlashcard
 };

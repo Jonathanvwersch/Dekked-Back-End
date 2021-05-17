@@ -74,7 +74,6 @@ export class PageController {
       const { blocks, draft_keys }: { blocks: [string]; draft_keys: [string] } = req.body;
       await saveBlocks(blocks, page_id, draft_keys, userId);
       await PageModel.updatePage({ page_id, ordering: draft_keys });
-
       return res.status(200).json({ success: true });
     } catch (e) {
       console.log(e);
