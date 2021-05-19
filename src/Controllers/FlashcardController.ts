@@ -14,6 +14,7 @@ export class FlashcardController {
         study_pack_id,
         userId
       );
+
       return res.status(200).json({
         success: true,
         data: {

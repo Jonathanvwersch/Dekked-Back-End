@@ -12,10 +12,9 @@ async function getFullFlashcardsByStudyPackId(study_pack_id: string, owner_id: s
     const flashcards = await FlashcardModel.getFlashcardsByStudyPackId(owner_id, study_pack_id);
     const fullFlashcards = await Promise.all(
       flashcards.map(async (val) => {
-        const blocksInCard = await BlockModel.getBlocksByParentId(study_pack_id);
+        const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
         const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
         const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
-
         return {
           flashcard: val,
           front_blocks,

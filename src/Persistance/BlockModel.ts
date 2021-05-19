@@ -58,10 +58,7 @@ async function updateBlock({
 }
 
 async function getBlocksByParentId(parent_id: string): Promise<BlockInterface[]> {
-  const response: BlockInterface[] = await db
-    .table('blocks')
-    .select('*')
-    .where('parent_id', parent_id);
+  const response: BlockInterface[] = await db.table('blocks').select('*').where({ parent_id });
   return response;
 }
 
