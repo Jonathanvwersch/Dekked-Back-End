@@ -1,6 +1,6 @@
 import BlockModel from '../Persistance/BlockModel';
 import FlashcardModel from '../Persistance/FlashcardModel';
-import { getOrganizedBlocks, saveBlocks } from './BlockService';
+import BlockService, { getOrganizedBlocks, saveBlocks } from './BlockService';
 
 async function createFlashcard(study_pack_id: string, owner_id: string, block_link?: string) {
   const result = await FlashcardModel.createFlashcard({ owner_id, study_pack_id, block_link });
@@ -48,8 +48,25 @@ async function saveFlashcard(
   });
 }
 
+async function deleteFlashcard(owner_id: string, id: string) {
+  try {
+    const blocks = await BlockService.getBlocksInParent(id);
+    await Promise.all(
+      blocks.map(async (val: BlockInterface) => BlockService.deleteBlock(val.id, owner_id))
+    );
+    await FlashcardModel.deleteFlashcard({
+      owner_id,
+      id
+    });
+  } catch (error) {
+    console.log(error);
+    throw Error('There was an error deleting flashcard');
+  }
+}
+
 export default {
   createFlashcard,
   getFullFlashcardsByStudyPackId,
-  saveFlashcard
+  saveFlashcard,
+  deleteFlashcard
 };

@@ -260,4 +260,12 @@ app.put(
   (req, res) => flashcardController.saveFullFlashcard(req, res)
 );
 
+app.delete(
+  '/flashcard/:flash_card_id',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  (req, res) => flashcardController.deleteFlashcard(req, res)
+);
+
 app.listen(5000, () => console.log('Server running'));

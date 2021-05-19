@@ -52,12 +52,12 @@ export async function deleteBlock(block_id: string, owner_id: string) {
   await BlockModel.deleteBlock(block_id, owner_id);
 }
 
-export async function getBlocksInPage(parent_id: string) {
+export async function getBlocksInParent(parent_id: string) {
   const blocks = await BlockModel.getBlocksByParentId(parent_id);
   return blocks;
 }
 
 export default {
-  getBlocksInPage,
+  getBlocksInParent,
   deleteBlock
 };

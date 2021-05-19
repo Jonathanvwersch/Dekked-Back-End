@@ -85,8 +85,21 @@ async function updateFlashcard({
   }
 }
 
+async function deleteFlashcard({ owner_id, id }: { owner_id: string; id: string }) {
+  try {
+    await db('flashcards').delete('*').where({
+      owner_id,
+      id
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error('There was an error deleting flashcard');
+  }
+}
+
 export default {
   createFlashcard,
   getFlashcardsByStudyPackId,
-  updateFlashcard
+  updateFlashcard,
+  deleteFlashcard
 };

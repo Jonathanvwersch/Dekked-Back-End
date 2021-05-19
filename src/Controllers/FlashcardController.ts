@@ -67,4 +67,21 @@ export class FlashcardController {
       return res.status(500).json({ success: false, error: error.message });
     }
   }
+
+  public async deleteFlashcard(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    try {
+      const userId = getUserIdFromRequest(req);
+      const { flash_card_id } = req.params;
+
+      await FlashcardService.deleteFlashcard(userId, flash_card_id);
+      return res.status(200).json({
+        success: true
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  }
 }

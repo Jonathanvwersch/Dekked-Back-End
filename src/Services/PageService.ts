@@ -22,7 +22,7 @@ async function createPage(study_pack_id: string, title?: string, owner_id?: stri
 
 async function deletePage(page_id: string, owner_id: string) {
   try {
-    const blocks = await BlockService.getBlocksInPage(page_id);
+    const blocks = await BlockService.getBlocksInParent(page_id);
     await Promise.all(
       blocks.map(async (val: BlockInterface) => BlockService.deleteBlock(val.id, owner_id))
     );
