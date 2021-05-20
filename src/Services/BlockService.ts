@@ -26,9 +26,9 @@ async function saveOrCreateBlock(
 }
 
 export async function saveBlocks(
-  blocks: [string],
+  blocks: string[],
   parent_id: string,
-  draft_keys: [string],
+  draft_keys: string[],
   owner_id: string
 ) {
   console.log(blocks, parent_id, draft_keys);

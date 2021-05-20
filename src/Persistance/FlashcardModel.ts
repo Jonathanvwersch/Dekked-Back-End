@@ -16,23 +16,27 @@ declare global {
 async function createFlashcard({
   owner_id,
   study_pack_id,
-  block_link
+  block_link,
+  front_draft_keys,
+  back_draft_keys
 }: {
   owner_id: string;
   study_pack_id: string;
   block_link?: string;
+  front_draft_keys?: string[];
+  back_draft_keys?: string[];
 }) {
   try {
     const now = new Date();
-    const creationResponse: String = await db('flashcards')
+    const creationResponse: string = await db('flashcards')
       .insert({
         owner_id,
         study_pack_id,
         block_link,
         date_created: now,
         date_modified: now,
-        front_ordering: [],
-        back_ordering: []
+        front_ordering: front_draft_keys ?? [],
+        back_ordering: back_draft_keys ?? []
       })
       .returning('id');
 

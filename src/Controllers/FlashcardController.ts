@@ -32,9 +32,24 @@ export class FlashcardController {
   ): Promise<express.Response<any>> {
     try {
       const userId = getUserIdFromRequest(req);
-      const { study_pack_id, linked_block } = req.body;
+      const {
+        study_pack_id,
+        linked_block,
+        front_blocks,
+        front_draft_keys,
+        back_blocks,
+        back_draft_keys
+      } = req.body;
 
-      const response = await FlashcardService.createFlashcard(study_pack_id, userId, linked_block);
+      const response = await FlashcardService.createFlashcard(
+        study_pack_id,
+        userId,
+        linked_block,
+        front_blocks,
+        front_draft_keys,
+        back_blocks,
+        back_draft_keys
+      );
       return res.status(200).json({
         success: true,
         data: { flashcard_id: response }

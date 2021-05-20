@@ -2,8 +2,24 @@ import BlockModel from '../Persistance/BlockModel';
 import FlashcardModel from '../Persistance/FlashcardModel';
 import BlockService, { getOrganizedBlocks, saveBlocks } from './BlockService';
 
-async function createFlashcard(study_pack_id: string, owner_id: string, block_link?: string) {
-  const result = await FlashcardModel.createFlashcard({ owner_id, study_pack_id, block_link });
+async function createFlashcard(
+  study_pack_id: string,
+  owner_id: string,
+  block_link?: string,
+  front_blocks?: string[],
+  front_draft_keys?: string[],
+  back_blocks?: string[],
+  back_draft_keys?: string[]
+) {
+  const result = await FlashcardModel.createFlashcard({
+    owner_id,
+    study_pack_id,
+    block_link,
+    front_draft_keys,
+    back_draft_keys
+  });
+  await saveBlocks(front_blocks ?? [], result, front_draft_keys ?? [], owner_id);
+  await saveBlocks(back_blocks ?? [], result, back_draft_keys ?? [], owner_id);
   return result;
 }
 
