@@ -19,7 +19,6 @@ async function createFlashcard(
     front_draft_keys,
     back_draft_keys
   });
-  console.log('result: ', result);
   if (result.length) {
     await saveBlocks(front_blocks ?? [], result[0], front_draft_keys ?? [], owner_id);
     await saveBlocks(back_blocks ?? [], result[0], back_draft_keys ?? [], owner_id);
