@@ -1,3 +1,4 @@
+import e from 'express';
 import BlockModel from '../Persistance/BlockModel';
 import FlashcardModel from '../Persistance/FlashcardModel';
 import BlockService, { getOrganizedBlocks, saveBlocks } from './BlockService';
@@ -18,9 +19,14 @@ async function createFlashcard(
     front_draft_keys,
     back_draft_keys
   });
-  await saveBlocks(front_blocks ?? [], result, front_draft_keys ?? [], owner_id);
-  await saveBlocks(back_blocks ?? [], result, back_draft_keys ?? [], owner_id);
-  return result;
+  console.log('result: ', result);
+  if (result.length) {
+    await saveBlocks(front_blocks ?? [], result[0], front_draft_keys ?? [], owner_id);
+    await saveBlocks(back_blocks ?? [], result[0], back_draft_keys ?? [], owner_id);
+    return result;
+  } else {
+    throw new Error('There was an error creating flashcard');
+  }
 }
 
 async function getFullFlashcardsByStudyPackId(study_pack_id: string, owner_id: string) {
