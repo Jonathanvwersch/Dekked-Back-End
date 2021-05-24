@@ -34,7 +34,7 @@ export class FlashcardController {
       const userId = getUserIdFromRequest(req);
       const {
         study_pack_id,
-        linked_block,
+        block_link,
         front_blocks,
         front_draft_keys,
         back_blocks,
@@ -44,7 +44,7 @@ export class FlashcardController {
       const response = await FlashcardService.createFlashcard(
         study_pack_id,
         userId,
-        linked_block,
+        block_link,
         front_blocks,
         front_draft_keys,
         back_blocks,
