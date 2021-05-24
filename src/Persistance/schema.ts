@@ -26,7 +26,7 @@ async function createTables() {
     await db.schema.createTable('blocks', (table) => {
       table.uuid('id').primary().unique().defaultTo(db.raw('uuid_generate_v4()'));
       table.string('draft_key').notNullable();
-      table.string('content').notNullable();
+      table.text('content', 'TEXT').notNullable();
       table.string('owner_id').notNullable();
       table.uuid('parent_id').notNullable();
     });
