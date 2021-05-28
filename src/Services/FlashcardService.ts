@@ -1,4 +1,5 @@
 import e from 'express';
+import { authenticate } from 'passport';
 import BlockModel from '../Persistance/BlockModel';
 import FlashcardModel from '../Persistance/FlashcardModel';
 import BlockService, { getOrganizedBlocks, saveBlocks } from './BlockService';

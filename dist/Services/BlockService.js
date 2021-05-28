@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBlocksInPage = exports.deleteBlock = exports.getOrganizedBlocks = exports.saveBlocks = exports.checkBlockExists = void 0;
+exports.getBlocksInParent = exports.deleteBlock = exports.getOrganizedBlocks = exports.saveBlocks = exports.checkBlockExists = void 0;
 const BlockModel_1 = __importDefault(require("../Persistance/BlockModel"));
 function checkBlockExists(parent_id, draft_key) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -63,14 +63,14 @@ function deleteBlock(block_id, owner_id) {
     });
 }
 exports.deleteBlock = deleteBlock;
-function getBlocksInPage(parent_id) {
+function getBlocksInParent(parent_id) {
     return __awaiter(this, void 0, void 0, function* () {
         const blocks = yield BlockModel_1.default.getBlocksByParentId(parent_id);
         return blocks;
     });
 }
-exports.getBlocksInPage = getBlocksInPage;
+exports.getBlocksInParent = getBlocksInParent;
 exports.default = {
-    getBlocksInPage,
+    getBlocksInParent,
     deleteBlock
 };

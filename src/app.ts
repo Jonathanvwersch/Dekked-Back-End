@@ -32,6 +32,8 @@ const fileTreeController = new FileTreeController();
 const binderController = new BinderController();
 const studyPackController = new StudyPackController();
 const flashcardController = new FlashcardController();
+
+// User
 app.post('/register', (req, res) => {
   userController.register(req, res);
 });
@@ -58,6 +60,22 @@ app.get(
       }
     }
   }
+);
+
+app.get(
+  '/user',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  userController.getUser
+);
+
+app.put(
+  '/user',
+  passport.authenticate('jwt', {
+    session: false
+  }),
+  userController.editUser
 );
 
 app.get(

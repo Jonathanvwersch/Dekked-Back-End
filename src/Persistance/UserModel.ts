@@ -10,7 +10,7 @@ declare global {
 }
 export async function getUserById(id: string) {
   try {
-    const user: UserInterface = await db.table('users').select({ id }).first();
+    const user: UserInterface = await db.table('users').where({ id }).first();
     return user;
   } catch (err) {
     throw err;
@@ -41,5 +41,24 @@ export async function createNewUser(
   } catch (error) {
     console.log(error);
     throw error;
+  }
+}
+
+export async function updateUser({
+  id,
+  first_name,
+  last_name,
+  email_address
+}: {
+  id: string;
+  first_name?: string;
+  last_name?: string;
+  email_address?: string;
+}) {
+  try {
+    await db.table('users').update({ email_address, first_name, last_name }).where({ id });
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error updating user');
   }
 }

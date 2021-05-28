@@ -45,10 +45,7 @@ function updateBlock({ id, parent_id, draft_key, content }) {
 }
 function getBlocksByParentId(parent_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default
-            .table('blocks')
-            .select('*')
-            .where('parent_id', parent_id);
+        const response = yield database_1.default.table('blocks').select('*').where({ parent_id });
         return response;
     });
 }

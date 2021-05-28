@@ -149,4 +149,10 @@ app.get('/get-flashcards-by-study-pack-id/:study_pack_id', passport_2.default.au
 app.post('/flashcard', passport_2.default.authenticate('jwt', {
     session: false
 }), flashcardController.createFlashCard);
+app.put('/flashcard/:flash_card_id', passport_2.default.authenticate('jwt', {
+    session: false
+}), (req, res) => flashcardController.saveFullFlashcard(req, res));
+app.delete('/flashcard/:flash_card_id', passport_2.default.authenticate('jwt', {
+    session: false
+}), (req, res) => flashcardController.deleteFlashcard(req, res));
 app.listen(5000, () => console.log('Server running'));

@@ -1,6 +1,8 @@
 import express from 'express';
 import passport from 'passport';
 import { createUser, login } from '../Services/AuthService';
+import UserService from '../Services/UserService';
+import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 
 export class UserController {
   public async register(
@@ -41,6 +43,45 @@ export class UserController {
     } catch (e) {
       console.log(e.message);
       return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
+  public async getUser(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    try {
+      const userId = getUserIdFromRequest(req);
+      const user = await UserService.getUserByIdAsync(userId);
+      return res.status(200).json({
+        success: true,
+        data: {
+          user
+        }
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  }
+
+  public async editUser(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    try {
+      const userId = getUserIdFromRequest(req);
+      const { last_name, first_name, email_address } = req.body;
+      await UserService.updateUserAsync({
+        id: userId,
+        last_name,
+        first_name,
+        email_address
+      });
+      return res.status(200).json({
+        success: true
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
     }
   }
 }

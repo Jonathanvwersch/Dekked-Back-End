@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("./database"));
-function createFlashcard({ owner_id, study_pack_id, block_link }) {
+function createFlashcard({ owner_id, study_pack_id, block_link, front_draft_keys, back_draft_keys }) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const now = new Date();
@@ -23,7 +23,9 @@ function createFlashcard({ owner_id, study_pack_id, block_link }) {
                 study_pack_id,
                 block_link,
                 date_created: now,
-                date_modified: now
+                date_modified: now,
+                front_ordering: front_draft_keys !== null && front_draft_keys !== void 0 ? front_draft_keys : [],
+                back_ordering: back_draft_keys !== null && back_draft_keys !== void 0 ? back_draft_keys : []
             })
                 .returning('id');
             return creationResponse;
@@ -39,7 +41,7 @@ function getFlashcardsByStudyPackId(owner_id, study_pack_id) {
         try {
             const flashcards = yield database_1.default('flashcards').select('*').where({
                 owner_id,
-                id: study_pack_id
+                study_pack_id
             });
             return flashcards;
         }
@@ -49,16 +51,15 @@ function getFlashcardsByStudyPackId(owner_id, study_pack_id) {
         }
     });
 }
-function updateFlashcard({ id, owner_id, back_ordering, front_ordering, date_created, date_modified, block_link }) {
+function updateFlashcard({ id, owner_id, back_ordering, front_ordering, block_link }) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield database_1.default('flashcards')
                 .update({
                 back_ordering,
                 front_ordering,
-                date_created,
-                date_modified,
-                block_link
+                block_link,
+                date_modified: new Date()
             })
                 .where({ id, owner_id });
         }
@@ -68,8 +69,23 @@ function updateFlashcard({ id, owner_id, back_ordering, front_ordering, date_cre
         }
     });
 }
+function deleteFlashcard({ owner_id, id }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield database_1.default('flashcards').delete('*').where({
+                owner_id,
+                id
+            });
+        }
+        catch (error) {
+            console.log(error);
+            throw new Error('There was an error deleting flashcard');
+        }
+    });
+}
 exports.default = {
     createFlashcard,
     getFlashcardsByStudyPackId,
-    updateFlashcard
+    updateFlashcard,
+    deleteFlashcard
 };
