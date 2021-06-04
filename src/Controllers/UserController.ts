@@ -51,8 +51,8 @@ export class UserController {
     res: express.Response
   ): Promise<express.Response<any>> {
     try {
-      const userId = getUserIdFromRequest(req);
-      const user = await UserService.getUserByIdAsync(userId);
+      const { user_id } = req.body;
+      const user = await UserService.getUserByIdAsync(user_id);
       return res.status(200).json({
         success: true,
         data: {
