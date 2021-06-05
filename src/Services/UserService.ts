@@ -12,7 +12,7 @@ async function getUserByIdAsync(userId: string) {
     };
   } catch (error) {
     console.log(error);
-    throw Error('There was an error fetching user data');
+    throw Error(`There was an error fetching data of user with id: ${userId}`);
   }
 }
 
