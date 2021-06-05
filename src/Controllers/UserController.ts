@@ -50,8 +50,8 @@ export class UserController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
     try {
-      const userId = getUserIdFromRequest(req);
       const user = await UserService.getUserByIdAsync(userId);
       return res.status(200).json({
         success: true,
@@ -60,6 +60,8 @@ export class UserController {
         }
       });
     } catch (error) {
+      console.log(error);
+      console.log(userId);
       return res.status(500).json({ success: false, error: error.message });
     }
   }
