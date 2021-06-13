@@ -81,7 +81,11 @@ export class UserController {
         email_address
       });
       return res.status(200).json({
-        success: true
+        success: true,
+        first_name,
+        last_name,
+        email_address,
+        userId
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
