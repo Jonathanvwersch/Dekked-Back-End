@@ -22,7 +22,7 @@ export async function createBinder(
     const now = new Date();
     const binders: BinderInterface[] = await db
       .table('binders')
-      .insert({ folder_id, name, owner_id, color })
+      .insert({ folder_id, name, owner_id, color, date_created: now, date_modified: now })
       .returning('*');
     console.log('binders', binders);
     return binders[0];
