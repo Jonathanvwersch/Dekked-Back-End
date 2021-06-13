@@ -1,5 +1,4 @@
 import BinderModel from '../Persistance/BinderModel';
-import { getStudyPacksByBinderId } from '../Persistance/StudyPackModel';
 import StudyPackService from './StudyPackService';
 
 export function createBinderObject(binders: BinderInterface[]) {

@@ -38,11 +38,9 @@ async function getPage(id: string): Promise<PageInterface> {
 
 async function updatePage({
   page_id,
-  title,
   ordering
 }: {
   page_id: string;
-  title?: string;
   ordering?: string[];
 }): Promise<number> {
   if (!page_id) throw new Error('Must specify page');

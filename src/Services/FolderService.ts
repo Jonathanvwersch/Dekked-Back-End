@@ -1,6 +1,6 @@
-import BinderModel from '../Persistance/BinderModel';
 import FolderModel from '../Persistance/FolderModel';
 import BinderService from './BinderService';
+
 async function getFolderObject(user_id: string) {
   const folders = await FolderModel.getFoldersByUser(user_id);
   let folderObject: { [key: string]: FolderInterface } = {};
