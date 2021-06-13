@@ -17,7 +17,7 @@ export async function createBinder(
   name: string,
   owner_id: string,
   color: string
-) {
+): Promise<BinderInterface> {
   try {
     const now = new Date();
     const binder: BinderInterface[] = await db

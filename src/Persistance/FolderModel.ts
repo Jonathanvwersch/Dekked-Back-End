@@ -10,10 +10,14 @@ declare global {
   }
 }
 
-async function createFolder(name: string, owner_id: string, color: string): Promise<String> {
+async function createFolder(
+  name: string,
+  owner_id: string,
+  color: string
+): Promise<FolderInterface> {
   try {
     const now = new Date();
-    const creationResponse: String = await db('folders')
+    const folder: FolderInterface[] = await db('folders')
       .insert({
         name,
         owner_id,
@@ -22,7 +26,7 @@ async function createFolder(name: string, owner_id: string, color: string): Prom
         date_modified: now
       })
       .returning('id');
-    return creationResponse[0];
+    return folder[0];
   } catch (error) {
     console.log(error);
     throw new Error('There was an error creating folder');
