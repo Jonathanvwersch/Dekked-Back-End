@@ -22,11 +22,11 @@ export async function createBinder(
     const now = new Date();
     const binder: BinderInterface[] = await db
       .table('binders')
-      .insert({ folder_id, name, owner_id, color, date_created: now, date_modified: now }, ['*']);
+      .insert({ folder_id, name, owner_id, color }, ['*']);
     return binder[0];
   } catch (err) {
-    console.log(err);
-    throw new Error('There was an error creating binder');
+    console.error(err);
+    throw new Error('There was an error creating the binder');
   }
 }
 
