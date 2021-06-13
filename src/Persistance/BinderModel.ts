@@ -25,9 +25,7 @@ export async function createBinder(
         folder_id,
         name,
         owner_id,
-        color,
-        date_created: now,
-        date_modified: now
+        color
       })
       .returning('id');
     return binder[0];
