@@ -26,7 +26,7 @@ async function createFolder(
         date_modified: now
       })
       .returning('id');
-    console.log(folders);
+    console.log('folders', folders);
     return folders[0];
   } catch (error) {
     console.log(error);
