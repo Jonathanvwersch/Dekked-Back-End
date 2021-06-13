@@ -17,7 +17,7 @@ export async function createStudyPack(
   name: string,
   owner_id: string,
   color: string
-) {
+): Promise<StudyPackInterface> {
   const now = new Date();
   try {
     const study_pack: StudyPackInterface[] = await db

@@ -17,7 +17,7 @@ async function createFolder(
 ): Promise<FolderInterface> {
   try {
     const now = new Date();
-    const folder: FolderInterface[] = await db('folders')
+    const folders: FolderInterface[] = await db('folders')
       .insert({
         name,
         owner_id,
@@ -26,7 +26,8 @@ async function createFolder(
         date_modified: now
       })
       .returning('id');
-    return folder[0];
+    console.log(folders);
+    return folders[0];
   } catch (error) {
     console.log(error);
     throw new Error('There was an error creating folder');
