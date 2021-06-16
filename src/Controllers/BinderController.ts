@@ -1,7 +1,6 @@
 import express from 'express';
 import { createBinder, getBindersByUserId } from '../Persistance/BinderModel';
 import BinderService, { createBinderObject } from '../Services/BinderService';
-import FileTreeService from '../Services/FileTreeService';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 
 export class BinderController {
@@ -34,15 +33,11 @@ export class BinderController {
       const userId = getUserIdFromRequest(req);
       const { folder_id, name, color, id } = req.body;
       const binder = await createBinder(folder_id, name, userId, color, id);
-      const binders = await getBindersByUserId(userId);
-      const fileTree = await FileTreeService.createFullFileTree(userId);
 
       return res.status(200).json({
         success: true,
         data: {
-          binder,
-          binders,
-          fileTree
+          binder
         }
       });
     } catch (e) {

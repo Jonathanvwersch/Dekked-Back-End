@@ -1,8 +1,7 @@
 import express from 'express';
-import FolderModel, { getFoldersByUser } from '../Persistance/FolderModel';
+import FolderModel from '../Persistance/FolderModel';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 import FolderService from '../Services/FolderService';
-import FileTreeService from '../Services/FileTreeService';
 export class FolderController {
   public async getFolders(
     req: express.Request,
@@ -23,14 +22,10 @@ export class FolderController {
       const { name, color, id } = req.body;
       const userId = getUserIdFromRequest(req);
       const folder = await FolderModel.createFolder(name, userId, color, id);
-      const folders = await getFoldersByUser(userId);
-      const fileTree = await FileTreeService.createFullFileTree(userId);
 
       res.status(200).json({
         success: true,
-        folder,
-        folders,
-        fileTree
+        folder
       });
     } catch (e) {
       console.log(e);
