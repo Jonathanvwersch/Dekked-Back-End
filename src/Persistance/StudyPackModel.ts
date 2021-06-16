@@ -16,13 +16,14 @@ export async function createStudyPack(
   binder_id: string,
   name: string,
   owner_id: string,
-  color: string
+  color: string,
+  id?: string
 ): Promise<StudyPackInterface> {
   const now = new Date();
   try {
     const study_pack: StudyPackInterface[] = await db
       .table('study_packs')
-      .insert({ binder_id, name, owner_id, color }, ['*']);
+      .insert({ binder_id, name, owner_id, color, id }, ['*']);
     return study_pack[0];
   } catch (err) {
     console.log(err);

@@ -13,7 +13,8 @@ declare global {
 async function createFolder(
   name: string,
   owner_id: string,
-  color: string
+  color: string,
+  id?: string
 ): Promise<FolderInterface> {
   try {
     const now = new Date();
@@ -23,7 +24,8 @@ async function createFolder(
         owner_id,
         color,
         date_created: now,
-        date_modified: now
+        date_modified: now,
+        id
       })
       .returning('id');
 
