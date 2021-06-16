@@ -31,8 +31,8 @@ export class BinderController {
   ): Promise<express.Response<any>> {
     try {
       const userId = getUserIdFromRequest(req);
-      const { folder_id, name, color } = req.body;
-      const response = await createBinder(folder_id, name, userId, color);
+      const { folder_id, name, color, id } = req.body;
+      const response = await createBinder(folder_id, name, userId, color, id);
       return res.status(200).json({
         success: true,
         data: {

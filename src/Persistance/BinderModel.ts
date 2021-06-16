@@ -16,15 +16,15 @@ export async function createBinder(
   folder_id: string,
   name: string,
   owner_id: string,
-  color: string
+  color: string,
+  id?: string
 ): Promise<BinderInterface> {
   try {
     const now = new Date();
     const binders: BinderInterface[] = await db
       .table('binders')
-      .insert({ folder_id, name, owner_id, color })
+      .insert({ folder_id, name, owner_id, color, id })
       .returning('*');
-    console.log('binders', binders);
     return binders[0];
   } catch (err) {
     console.error(err);
