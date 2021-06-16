@@ -36,11 +36,15 @@ export class StudyPackController {
       const userId = getUserIdFromRequest(req);
       const { binder_id, name, color, id } = req.body;
       const response = await createStudyPack(binder_id, name, userId, color, id);
+      const studyPacks = await getStudyPacksByUserId(userId);
+      const fileTree = await FileTreeService.createFullFileTree(userId);
       await PageService.createPage(response.id, undefined, userId);
       return res.status(200).json({
         success: true,
         data: {
-          study_pack: response
+          study_pack: response,
+          studyPacks,
+          fileTree
         }
       });
     } catch (e) {

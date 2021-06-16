@@ -33,7 +33,6 @@ export async function createBinder(
 }
 
 export async function getBindersByUserId(user_id: string) {
-  console.log(user_id);
   try {
     const binder: BinderInterface[] = await db
       .table('binders')

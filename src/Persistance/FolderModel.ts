@@ -36,7 +36,7 @@ async function createFolder(
   }
 }
 
-async function getFoldersByUser(owner_id: string): Promise<FolderInterface[]> {
+export async function getFoldersByUser(owner_id: string): Promise<FolderInterface[]> {
   try {
     const response: FolderInterface[] = await db('folders').select('*').where({ owner_id });
     return response;

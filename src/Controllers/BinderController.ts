@@ -33,14 +33,14 @@ export class BinderController {
     try {
       const userId = getUserIdFromRequest(req);
       const { folder_id, name, color, id } = req.body;
-      const response = await createBinder(folder_id, name, userId, color, id);
+      const binder = await createBinder(folder_id, name, userId, color, id);
       const binders = await getBindersByUserId(userId);
       const fileTree = await FileTreeService.createFullFileTree(userId);
 
       return res.status(200).json({
         success: true,
         data: {
-          binder: response,
+          binder,
           binders,
           fileTree
         }
