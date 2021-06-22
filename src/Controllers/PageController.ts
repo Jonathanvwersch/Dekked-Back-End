@@ -121,6 +121,7 @@ export class PageController {
       const { study_pack_id } = req.params;
 
       const response = await PageService.getPageByStudyPackIdAsync(study_pack_id);
+      console.log(response);
       return res.status(200).json({
         success: true,
         data: {
