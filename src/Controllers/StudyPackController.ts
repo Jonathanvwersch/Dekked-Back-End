@@ -35,7 +35,7 @@ export class StudyPackController {
       const { binder_id, name, color, id } = req.body;
       const response = await createStudyPack(binder_id, name, userId, color, id);
 
-      await PageService.createPage(response.id, undefined, userId);
+      await PageService.createPage(id, undefined, userId);
       return res.status(200).json({
         success: true,
         data: {
