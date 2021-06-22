@@ -5,7 +5,15 @@ import FolderModel from '../Persistance/FolderModel';
 interface FileTree {
   [instance_id: string]: {
     type: string;
+    id: string;
+    owner_id: string;
+    color: string;
+    name: string;
     children: FileTree;
+    date_created?: Date;
+    date_modified?: Date;
+    folder_id?: string;
+    binder_id?: string;
   };
 }
 
@@ -26,6 +34,11 @@ function createBindersObject(binders: BinderInterface[], study_packs: StudyPackI
   binders.forEach((val) => {
     bindersObject[val.id] = {
       type: 'binder',
+      folder_id: val.folder_id,
+      id: val.id,
+      name: val.name,
+      owner_id: val.owner_id,
+      color: val.color,
       children: {}
     };
   });
@@ -34,7 +47,15 @@ function createBindersObject(binders: BinderInterface[], study_packs: StudyPackI
     const binder_id = study_pack.binder_id;
     const study_pack_id = study_pack.id;
     if (bindersObject[binder_id]) {
-      bindersObject[binder_id].children[study_pack_id] = { type: 'study_pack', children: {} };
+      bindersObject[binder_id].children[study_pack_id] = {
+        type: 'study_pack',
+        binder_id: binder_id,
+        id: study_pack_id,
+        owner_id: study_pack.owner_id,
+        name: study_pack.name,
+        color: study_pack.color,
+        children: {}
+      };
     }
   });
 
@@ -47,6 +68,12 @@ function createFolderHierarchyObject(folders: FolderInterface[]) {
     if (!folderHierarchy[folder.id]) {
       folderHierarchy[folder.id] = {
         type: 'folder',
+        id: folder.id,
+        color: folder.color,
+        date_created: folder.date_created,
+        date_modified: folder.date_modified,
+        name: folder.name,
+        owner_id: folder.owner_id,
         children: {}
       };
     }

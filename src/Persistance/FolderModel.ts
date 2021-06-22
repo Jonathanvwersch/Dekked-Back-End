@@ -7,6 +7,7 @@ declare global {
     name: string;
     date_created: Date;
     date_modified: Date;
+    color: string;
   }
 }
 
