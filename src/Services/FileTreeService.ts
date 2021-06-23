@@ -47,9 +47,11 @@ function createBindersObject(binders: BinderInterface[], study_packs: StudyPackI
     const binder_id = study_pack.binder_id;
     const study_pack_id = study_pack.id;
     if (bindersObject[binder_id]) {
+      const folderId = bindersObject?.[binder_id]?.folder_id;
       bindersObject[binder_id].children[study_pack_id] = {
         type: 'study_pack',
         binder_id: binder_id,
+        folder_id: folderId,
         id: study_pack_id,
         owner_id: study_pack.owner_id,
         name: study_pack.name,
