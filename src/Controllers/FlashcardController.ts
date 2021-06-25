@@ -95,7 +95,8 @@ export class FlashcardController {
       );
 
       return res.status(200).json({
-        success: true
+        success: true,
+        flashcards
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
