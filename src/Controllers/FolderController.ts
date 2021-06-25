@@ -40,13 +40,13 @@ export class FolderController {
     const userId = getUserIdFromRequest(req);
     const { name, color, folder_id } = req.body;
     try {
-      const folders = await FolderService.updateFolder({
+      const folder = await FolderService.updateFolder({
         name,
         color,
         folder_id,
         owner_id: userId
       });
-      return res.status(200).json({ success: true });
+      return res.status(200).json({ success: true, folder });
     } catch (e) {
       console.log(e);
       return res.status(500).json({ success: false, error: e.message });

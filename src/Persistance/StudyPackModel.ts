@@ -9,6 +9,7 @@ declare global {
     color: string;
     date_created: Date;
     date_modified: Date;
+    folder_id: string;
   }
 }
 

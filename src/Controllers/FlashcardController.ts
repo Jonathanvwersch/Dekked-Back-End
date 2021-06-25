@@ -50,9 +50,14 @@ export class FlashcardController {
         back_blocks,
         back_draft_keys
       );
+
+      const flashcards = await FlashcardService.getFullFlashcardsByStudyPackId(
+        study_pack_id,
+        userId
+      );
       return res.status(200).json({
         success: true,
-        data: { flashcard_id: response }
+        data: { flashcards }
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
