@@ -61,12 +61,13 @@ async function saveFlashcard(
 ) {
   await saveBlocks(front_blocks, flash_card_id, front_draft_keys, owner_id);
   await saveBlocks(back_blocks, flash_card_id, back_draft_keys, owner_id);
-  await FlashcardModel.updateFlashcard({
+  const flashcard = await FlashcardModel.updateFlashcard({
     id: flash_card_id,
     owner_id,
     back_ordering: back_draft_keys,
     front_ordering: front_draft_keys
   });
+  return flashcard;
 }
 
 async function deleteFlashcard(owner_id: string, id: string) {

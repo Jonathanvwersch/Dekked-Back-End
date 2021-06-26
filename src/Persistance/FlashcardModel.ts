@@ -75,7 +75,7 @@ async function updateFlashcard({
   block_link?: string;
 }) {
   try {
-    await db('flashcards')
+    const flashcard: FlashcardInterface | undefined = await db('flashcards')
       .update({
         back_ordering,
         front_ordering,
@@ -83,7 +83,11 @@ async function updateFlashcard({
         date_modified: new Date()
       })
       .where({ id, owner_id })
-      .returning('*');
+      .select('*')
+      .where({ id, owner_id })
+      .first();
+
+    return flashcard;
   } catch (error) {
     console.log(error);
     throw new Error('Error updating flashcard');
