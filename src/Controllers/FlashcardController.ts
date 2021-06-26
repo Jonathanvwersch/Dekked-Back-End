@@ -1,4 +1,6 @@
 import express from 'express';
+import BlockModel from '../Persistance/BlockModel';
+import { getOrganizedBlocks } from '../Services/BlockService';
 import FlashcardService from '../Services/FlashcardService';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 
@@ -83,9 +85,15 @@ export class FlashcardController {
         back_draft_keys
       );
 
+      const fullFlashcard = {
+        flashcard,
+        front_blocks,
+        back_blocks
+      };
+
       return res.status(200).json({
         success: true,
-        flashcard
+        fullFlashcard
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });

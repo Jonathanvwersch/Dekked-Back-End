@@ -67,7 +67,7 @@ async function saveFlashcard(
     back_ordering: back_draft_keys,
     front_ordering: front_draft_keys
   });
-  return flashcard;
+  return flashcard[0];
 }
 
 async function deleteFlashcard(owner_id: string, id: string) {
