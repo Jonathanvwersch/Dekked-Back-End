@@ -84,9 +84,8 @@ async function updateFlashcard({
       })
       .where({ id, owner_id })
       .select('*')
-      .where({ id, owner_id })
-      .first();
-
+      .where({ id, owner_id });
+    console.log(flashcard);
     return flashcard;
   } catch (error) {
     console.log(error);
