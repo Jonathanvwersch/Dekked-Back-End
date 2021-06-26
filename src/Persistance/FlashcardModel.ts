@@ -85,7 +85,7 @@ async function updateFlashcard({
       .where({ id, owner_id })
       .returning('*');
 
-    return flashcard?.filter((card) => card.id === id);
+    return flashcard;
   } catch (error) {
     console.log(error);
     throw new Error('Error updating flashcard');
