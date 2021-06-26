@@ -72,15 +72,9 @@ export class FlashcardController {
       const userId = getUserIdFromRequest(req);
       const { flash_card_id } = req.params;
 
-      const {
-        front_blocks,
-        front_draft_keys,
-        back_blocks,
-        back_draft_keys,
-        study_pack_id
-      } = req.body;
+      const { front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
 
-      await FlashcardService.saveFlashcard(
+      const flashcard = await FlashcardService.saveFlashcard(
         flash_card_id,
         userId,
         front_blocks,
@@ -89,14 +83,9 @@ export class FlashcardController {
         back_draft_keys
       );
 
-      const flashcards = await FlashcardService.getFullFlashcardsByStudyPackId(
-        study_pack_id,
-        userId
-      );
-
       return res.status(200).json({
         success: true,
-        flashcards
+        flashcard
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });

@@ -82,7 +82,8 @@ async function updateFlashcard({
         block_link,
         date_modified: new Date()
       })
-      .where({ id, owner_id });
+      .where({ id, owner_id })
+      .returning('*');
   } catch (error) {
     console.log(error);
     throw new Error('Error updating flashcard');
