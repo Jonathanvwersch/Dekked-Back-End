@@ -43,7 +43,7 @@ export class FlashcardController {
         back_draft_keys
       } = req.body;
 
-      const response = await FlashcardService.createFlashcard(
+      const flashcard = await FlashcardService.createFlashcard(
         study_pack_id,
         userId,
         block_link,
@@ -54,7 +54,7 @@ export class FlashcardController {
       );
 
       const fullFlashcard = {
-        response,
+        flashcard,
         front_blocks,
         back_blocks
       };
