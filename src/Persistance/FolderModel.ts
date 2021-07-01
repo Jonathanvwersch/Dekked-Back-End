@@ -58,8 +58,12 @@ async function updateFolder({
   folder_id: string;
   owner_id: string;
 }) {
+  const now = new Date();
+
   try {
-    await db('folders').update({ name, color }).where({ id: folder_id, owner_id });
+    await db('folders')
+      .update({ name, color, date_modified: now })
+      .where({ id: folder_id, owner_id });
   } catch (err) {
     console.log(err);
     throw Error('There was an error updating folder');

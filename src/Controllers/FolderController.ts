@@ -39,6 +39,7 @@ export class FolderController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { name, color, folder_id } = req.body;
+
     try {
       const folder = await FolderService.updateFolder({
         name,
@@ -46,6 +47,7 @@ export class FolderController {
         folder_id,
         owner_id: userId
       });
+
       return res.status(200).json({ success: true, folder });
     } catch (e) {
       console.log(e);

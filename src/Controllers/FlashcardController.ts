@@ -1,6 +1,4 @@
 import express from 'express';
-import BlockModel from '../Persistance/BlockModel';
-import { getOrganizedBlocks } from '../Services/BlockService';
 import FlashcardService from '../Services/FlashcardService';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
 
