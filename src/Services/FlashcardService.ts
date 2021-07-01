@@ -20,10 +20,11 @@ async function createFlashcard(
     front_draft_keys,
     back_draft_keys
   });
+
   if (result.length) {
-    await saveBlocks(front_blocks ?? [], result[0], front_draft_keys ?? [], owner_id);
-    await saveBlocks(back_blocks ?? [], result[0], back_draft_keys ?? [], owner_id);
-    return result;
+    await saveBlocks(front_blocks ?? [], result[0]?.id, front_draft_keys ?? [], owner_id);
+    await saveBlocks(back_blocks ?? [], result[0]?.id, back_draft_keys ?? [], owner_id);
+    return result[0];
   } else {
     throw new Error('There was an error creating flashcard');
   }

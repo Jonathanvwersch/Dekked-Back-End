@@ -53,13 +53,15 @@ export class FlashcardController {
         back_draft_keys
       );
 
-      const flashcards = await FlashcardService.getFullFlashcardsByStudyPackId(
-        study_pack_id,
-        userId
-      );
+      const fullFlashcard = {
+        response,
+        front_blocks,
+        back_blocks
+      };
+
       return res.status(200).json({
         success: true,
-        data: { flashcards }
+        fullFlashcard
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });

@@ -28,7 +28,7 @@ async function createFlashcard({
 }) {
   try {
     const now = new Date();
-    const creationResponse: string = await db('flashcards')
+    const creationResponse: FlashcardInterface[] = await db('flashcards')
       .insert({
         owner_id,
         study_pack_id,
@@ -38,7 +38,7 @@ async function createFlashcard({
         front_ordering: front_draft_keys ?? [],
         back_ordering: back_draft_keys ?? []
       })
-      .returning('id');
+      .returning('*');
 
     return creationResponse;
   } catch (error) {
