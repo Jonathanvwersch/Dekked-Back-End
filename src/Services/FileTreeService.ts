@@ -29,7 +29,7 @@ function createBindersObject(
   let bindersObject: FileTreeInterface = {};
 
   binders.forEach((binder) => {
-    bindersObject[val.id] = {
+    bindersObject[binder.id] = {
       type: FILETREE_TYPES.BINDER,
       ...binder,
       children: {},
