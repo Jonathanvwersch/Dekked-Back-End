@@ -1,5 +1,5 @@
 import { UserInterface } from '../types';
-import db from './database';
+import db from '../db/database';
 
 export async function getUserById(id: string) {
   try {

@@ -1,5 +1,4 @@
-import { compareSync } from 'bcryptjs';
-import express from 'express';
+import { compareSync } from "bcryptjs";
 
 export function comparePass(userPassword: string, databasePassword: string) {
   return compareSync(userPassword, databasePassword);

@@ -1,4 +1,4 @@
-import db from './database';
+import db from '../db/database';
 
 declare global {
   interface DeckInterface {

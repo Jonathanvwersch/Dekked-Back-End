@@ -1,5 +1,5 @@
 import { PageInterface } from '../types';
-import db from './database';
+import db from '../db/database';
 
 async function createPage(
   study_pack_id: string,

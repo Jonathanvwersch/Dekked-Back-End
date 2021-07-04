@@ -1,5 +1,5 @@
 import { BinderInterface } from '../types';
-import db from './database';
+import db from '../db/database';
 
 export async function createBinder(
   folder_id: string,
