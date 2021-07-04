@@ -2,6 +2,7 @@ import { genSaltSync, hashSync } from 'bcryptjs';
 import { createNewUser, getUserByEmail } from '../Persistance/UserModel';
 import jwt from 'jsonwebtoken';
 import { compareSync } from 'bcryptjs';
+import { UserInterface } from '../types';
 
 export function comparePass(userPassword: string, databasePassword: string) {
   return compareSync(userPassword, databasePassword);
@@ -68,9 +69,10 @@ export async function createUser(
       return {
         success: false,
         code: 400,
-        message: 'Email is already in use'
+        message: 'Email address is already in use'
       };
     }
+
     const salt = genSaltSync();
     const hash = hashSync(password, salt);
 

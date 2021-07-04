@@ -29,9 +29,10 @@ export class BinderController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { folder_id, name, color, id } = req.body;
+
     try {
-      const userId = getUserIdFromRequest(req);
-      const { folder_id, name, color, id } = req.body;
       const binder = await createBinder(folder_id, name, userId, color, id);
 
       return res.status(200).json({
@@ -51,6 +52,7 @@ export class BinderController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { name, color, binder_id } = req.body;
+
     try {
       await BinderService.updateBinder({
         name,
@@ -71,6 +73,7 @@ export class BinderController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { binder_id } = req.body;
+
     try {
       await BinderService.deleteBinder({
         binder_id,

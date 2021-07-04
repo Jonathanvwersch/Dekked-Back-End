@@ -3,7 +3,6 @@ import { getUserById, updateUser } from '../Persistance/UserModel';
 async function getUserByIdAsync(userId: string) {
   try {
     const user = await getUserById(userId);
-
     return {
       id: user.id,
       email_address: user.email_address,

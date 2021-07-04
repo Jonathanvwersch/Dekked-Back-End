@@ -1,4 +1,5 @@
 import PageModel from '../Persistance/PageModel';
+import { BlockInterface } from '../types';
 import BlockService from './BlockService';
 async function getPageByStudyPackIdAsync(study_pack_id: string) {
   try {

@@ -1,4 +1,5 @@
 import StudyPackModel from '../Persistance/StudyPackModel';
+import { StudyPackInterface } from '../types';
 import PageService from './PageService';
 
 export function createStudyPackObject(study_packs: StudyPackInterface[]) {

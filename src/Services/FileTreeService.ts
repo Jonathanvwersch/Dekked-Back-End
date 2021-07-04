@@ -1,21 +1,13 @@
 import { getStudyPacksByUserId } from '../Persistance/StudyPackModel';
 import { getBindersByUserId } from '../Persistance/BinderModel';
 import FolderModel from '../Persistance/FolderModel';
-
-interface FileTree {
-  [instance_id: string]: {
-    type: string;
-    id: string;
-    owner_id: string;
-    color: string;
-    name: string;
-    children: FileTree;
-    date_created?: Date;
-    date_modified?: Date;
-    folder_id?: string;
-    binder_id?: string;
-  };
-}
+import {
+  BinderInterface,
+  FileTreeInterface,
+  FILETREE_TYPES,
+  FolderInterface,
+  StudyPackInterface
+} from '../types';
 
 function createFolderObject(folders: FolderInterface[]): { [key: string]: FolderInterface } {
   let folderObject: { [key: string]: FolderInterface } = {};
@@ -29,11 +21,11 @@ function createFolderObject(folders: FolderInterface[]): { [key: string]: Folder
 }
 
 function createBindersObject(binders: BinderInterface[], study_packs: StudyPackInterface[]) {
-  let bindersObject: FileTree = {};
+  let bindersObject: FileTreeInterface = {};
 
   binders.forEach((val) => {
     bindersObject[val.id] = {
-      type: 'binder',
+      type: FILETREE_TYPES.BINDER,
       folder_id: val.folder_id,
       id: val.id,
       name: val.name,
@@ -49,7 +41,7 @@ function createBindersObject(binders: BinderInterface[], study_packs: StudyPackI
     if (bindersObject[binder_id]) {
       const folderId = bindersObject?.[binder_id]?.folder_id;
       bindersObject[binder_id].children[study_pack_id] = {
-        type: 'study_pack',
+        type: FILETREE_TYPES.STUDY_PACK,
         binder_id: binder_id,
         folder_id: folderId,
         id: study_pack_id,
@@ -65,11 +57,11 @@ function createBindersObject(binders: BinderInterface[], study_packs: StudyPackI
 }
 
 function createFolderHierarchyObject(folders: FolderInterface[]) {
-  let folderHierarchy: FileTree = {};
+  let folderHierarchy: FileTreeInterface = {};
   folders.forEach((folder) => {
     if (!folderHierarchy[folder.id]) {
       folderHierarchy[folder.id] = {
-        type: 'folder',
+        type: FILETREE_TYPES.FOLDER,
         id: folder.id,
         color: folder.color,
         date_created: folder.date_created,
@@ -85,9 +77,9 @@ function createFolderHierarchyObject(folders: FolderInterface[]) {
 }
 
 function createFullHierarchyObject(
-  binders_mapping: FileTree,
+  binders_mapping: FileTreeInterface,
   binders: BinderInterface[],
-  folder_hierarchy: FileTree
+  folder_hierarchy: FileTreeInterface
 ) {
   let hierarchy = { ...folder_hierarchy };
 
@@ -109,12 +101,6 @@ async function createFullFileTree(user_id: string) {
 
   return full_hierarchy;
 }
-
-// createFullFileTree('f6dccc9d-4f97-4775-b5a6-eafda9738123');
-
-// test('330831bf-2fc0-42f8-8a48-be7c711fa0cc', [
-// '0e52d15d-ee1f-48c7-bdde-b5ec7e05946b'
-// ]);
 
 export default {
   createFullFileTree,

@@ -1,16 +1,5 @@
+import { BinderInterface } from '../types';
 import db from './database';
-
-declare global {
-  interface BinderInterface {
-    id: string;
-    owner_id: string;
-    folder_id: string;
-    name: string;
-    color: string;
-    date_created: Date;
-    date_modified: Date;
-  }
-}
 
 export async function createBinder(
   folder_id: string,
@@ -19,11 +8,12 @@ export async function createBinder(
   color: string,
   id?: string
 ): Promise<BinderInterface> {
+  const now = new Date();
+
   try {
-    const now = new Date();
     const binders: BinderInterface[] = await db
       .table('binders')
-      .insert({ folder_id, name, owner_id, color, id })
+      .insert({ folder_id, name, owner_id, color, id, date_created: now, date_modified: now })
       .returning('*');
     return binders[0];
   } catch (err) {
@@ -41,7 +31,7 @@ export async function getBindersByUserId(user_id: string) {
     return binder;
   } catch (err) {
     console.log(err);
-    throw new Error('Error getting binders by user id');
+    throw new Error('There was an error getting the binders by user id');
   }
 }
 
@@ -55,7 +45,7 @@ export async function getBinderById(id: string) {
     return binder;
   } catch (err) {
     console.log(err);
-    throw Error('Error getting binder by id');
+    throw Error('There was an error getting the binders by binder id');
   }
 }
 
@@ -70,8 +60,11 @@ export async function updateBinder({
   color?: string;
   name?: string;
 }) {
+  const now = new Date();
   try {
-    await db('binders').update({ name, color }).where({ id: binder_id, owner_id });
+    await db('binders')
+      .update({ name, color, date_modified: now })
+      .where({ id: binder_id, owner_id });
   } catch (err) {
     console.log(err);
     throw Error('There was an error updating binder');
@@ -99,7 +92,6 @@ export async function getBindersByFolderId(owner_id: string, folder_id: string) 
       .table('binders')
       .select('*')
       .where({ owner_id, folder_id });
-
     return binders;
   } catch (err) {
     console.log(err);

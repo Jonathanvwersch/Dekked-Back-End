@@ -86,14 +86,6 @@ app.get(
   fileTreeController.getFileTree
 );
 
-// Folders
-// app.put(
-//   '/folders/move',
-//   passport.authenticate('jwt', {
-//     session: false
-//   }),
-//   (req, res) => folderController.moveFolder(req, res)
-// );
 app.put(
   '/folder',
   passport.authenticate('jwt', {
@@ -148,7 +140,8 @@ app.get('/decks/:folder_id', (req, res) => deckController.getDecksInFolder(req, 
 app.get('/study/spaced-repetition', (req, res) =>
   studyController.getSpacedRepetitionCards(req, res)
 );
-//Binders
+
+// Binders
 app.get(
   '/binders',
   passport.authenticate('jwt', {
@@ -244,7 +237,6 @@ app.get(
 );
 
 // Block
-// app.post('/block', (req, res) => blockController.createBlock(req, res));
 app.get(
   '/get-blocks-by-page/:page_id',
   passport.authenticate('jwt', {
@@ -286,4 +278,4 @@ app.delete(
   (req, res) => flashcardController.deleteFlashcard(req, res)
 );
 
-app.listen(5000, () => console.log('Server running'));
+app.listen(5000, () => console.log('Server running is up and running on port 5000'));

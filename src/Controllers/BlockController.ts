@@ -8,8 +8,9 @@ export class BlockController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
+    const { page_id } = req.params;
+
     try {
-      const { page_id } = req.params;
       const page = await PageModel.getPage(page_id);
       const blocks = await BlockModel.getBlocksByParentId(page_id);
       const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);

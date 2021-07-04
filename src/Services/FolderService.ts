@@ -1,4 +1,5 @@
 import FolderModel from '../Persistance/FolderModel';
+import { FolderInterface } from '../types';
 import BinderService from './BinderService';
 
 async function getFolderObject(user_id: string) {

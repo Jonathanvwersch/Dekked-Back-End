@@ -1,15 +1,5 @@
+import { BlockInterface } from '../types';
 import db from './database';
-
-declare global {
-  interface BlockInterface {
-    id: string;
-    draft_key: string;
-    parent_id: string;
-    content: string;
-  }
-}
-
-// Types: h1, bulleted_list, main_text...
 
 async function createBlock(
   parent_id: string,
@@ -25,7 +15,7 @@ async function createBlock(
     return response[0].id;
   }
 
-  throw new Error('Error creating block');
+  throw new Error('There was an error creating the block');
 }
 
 async function getBlock(parent_id: string, draft_key: string) {
@@ -38,22 +28,19 @@ async function getBlock(parent_id: string, draft_key: string) {
     return response[0];
   }
 
-  throw new Error('Block not found');
+  throw new Error('No block was found');
 }
 
 async function updateBlock({
-  id,
   parent_id,
   draft_key,
   content
 }: {
-  id?: string;
   parent_id: string;
   draft_key: string;
   content: string;
 }): Promise<number> {
   const response = await db.table('blocks').update({ content }).where({ draft_key, parent_id });
-
   return response;
 }
 

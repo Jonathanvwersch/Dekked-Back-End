@@ -1,17 +1,5 @@
+import { FlashcardInterface } from '../types';
 import db from './database';
-
-declare global {
-  interface FlashcardInterface {
-    id: string;
-    owner_id: string;
-    study_pack_id: string;
-    back_ordering: string[];
-    front_ordering: string[];
-    date_created: Date;
-    date_modified: Date;
-    block_link?: string;
-  }
-}
 
 async function createFlashcard({
   owner_id,
@@ -26,8 +14,9 @@ async function createFlashcard({
   front_draft_keys?: string[];
   back_draft_keys?: string[];
 }) {
+  const now = new Date();
+
   try {
-    const now = new Date();
     const creationResponse: FlashcardInterface[] = await db('flashcards')
       .insert({
         owner_id,
@@ -39,11 +28,10 @@ async function createFlashcard({
         back_ordering: back_draft_keys ?? []
       })
       .returning('*');
-
     return creationResponse;
   } catch (error) {
     console.log(error);
-    throw new Error('There was an error creating flashcard');
+    throw new Error('There was an error creating the flashcard');
   }
 }
 
@@ -53,7 +41,6 @@ async function getFlashcardsByStudyPackId(owner_id: string, study_pack_id: strin
       owner_id,
       study_pack_id
     });
-
     return flashcards;
   } catch (error) {
     console.log(error);
@@ -84,7 +71,6 @@ async function updateFlashcard({
       })
       .where({ id, owner_id })
       .returning('*');
-
     return flashcard;
   } catch (error) {
     console.log(error);
