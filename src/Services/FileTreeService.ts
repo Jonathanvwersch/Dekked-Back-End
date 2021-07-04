@@ -28,14 +28,10 @@ function createBindersObject(
 ) {
   let bindersObject: FileTreeInterface = {};
 
-  binders.forEach((val) => {
+  binders.forEach((binder) => {
     bindersObject[val.id] = {
       type: FILETREE_TYPES.BINDER,
-      folder_id: val.folder_id,
-      id: val.id,
-      name: val.name,
-      owner_id: val.owner_id,
-      color: val.color,
+      ...binder,
       children: {},
     };
   });
@@ -47,12 +43,7 @@ function createBindersObject(
       const folderId = bindersObject?.[binder_id]?.folder_id;
       bindersObject[binder_id].children[study_pack_id] = {
         type: FILETREE_TYPES.STUDY_PACK,
-        binder_id: binder_id,
-        folder_id: folderId,
-        id: study_pack_id,
-        owner_id: study_pack.owner_id,
-        name: study_pack.name,
-        color: study_pack.color,
+        ...study_pack,
         children: {},
       };
     }
@@ -67,12 +58,7 @@ function createFolderHierarchyObject(folders: FolderInterface[]) {
     if (!folderHierarchy[folder.id]) {
       folderHierarchy[folder.id] = {
         type: FILETREE_TYPES.FOLDER,
-        id: folder.id,
-        color: folder.color,
-        date_created: folder.date_created,
-        date_modified: folder.date_modified,
-        name: folder.name,
-        owner_id: folder.owner_id,
+        ...folder,
         children: {},
       };
     }
