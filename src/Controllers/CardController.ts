@@ -9,8 +9,6 @@ export class CardController {
   ): Promise<express.Response<any>> {
     const { type, cardData }: { type?: string; cardData?: ClassicCardInterface } = req.body;
 
-    console.log(req.body);
-
     try {
       if (type && cardData && cardData) {
         if (type === 'classic') {

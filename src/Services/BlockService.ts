@@ -1,4 +1,5 @@
 import BlockModel from '../Persistance/BlockModel';
+import { BlockInterface } from '../types';
 
 export async function checkBlockExists(parent_id: string, draft_key: string) {
   try {
@@ -15,8 +16,8 @@ async function saveOrCreateBlock(
   parent_id: string,
   owner_id: string
 ) {
-  const exists = await checkBlockExists(parent_id, draft_key);
-  if (exists) {
+  const doesBlockExist = await checkBlockExists(parent_id, draft_key);
+  if (doesBlockExist) {
     const response = await BlockModel.updateBlock({ parent_id, draft_key, content: block });
     return response;
   } else {
@@ -31,7 +32,6 @@ export async function saveBlocks(
   draft_keys: string[],
   owner_id: string
 ) {
-  console.log(blocks, parent_id, draft_keys);
   for (let i = 0; i < blocks.length; i++) {
     await saveOrCreateBlock(blocks[i], draft_keys[i], parent_id, owner_id);
   }

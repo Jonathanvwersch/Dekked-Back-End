@@ -1,13 +1,6 @@
-import db from './database';
-declare global {
-  interface UserInterface {
-    id: string;
-    email_address: string;
-    first_name: string;
-    last_name: string;
-    password: string;
-  }
-}
+import { UserInterface } from '../types';
+import db from '../db/database';
+
 export async function getUserById(id: string) {
   try {
     const user: UserInterface = await db.table('users').where({ id }).first();
@@ -19,7 +12,6 @@ export async function getUserById(id: string) {
 
 export async function getUserByEmail(email_address: string) {
   try {
-    console.log(email_address);
     const user: UserInterface = await db.table('users').where({ email_address }).first();
     return user;
   } catch (err) {

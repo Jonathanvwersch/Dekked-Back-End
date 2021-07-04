@@ -14,7 +14,6 @@ export class StudyPackController {
     try {
       const studyPacks = await getStudyPacksByUserId(userId);
       const studyPackObject = createStudyPackObject(studyPacks);
-
       return res.status(200).json({
         success: true,
         data: {
@@ -30,11 +29,11 @@ export class StudyPackController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    try {
-      const userId = getUserIdFromRequest(req);
-      const { binder_id, name, color, id } = req.body;
-      const response = await createStudyPack(binder_id, name, userId, color, id);
+    const userId = getUserIdFromRequest(req);
+    const { binder_id, name, color, id } = req.body;
 
+    try {
+      const response = await createStudyPack(binder_id, name, userId, color, id);
       await PageService.createPage(id, undefined, userId);
       return res.status(200).json({
         success: true,
@@ -53,6 +52,7 @@ export class StudyPackController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { name, color, study_pack_id } = req.body;
+
     try {
       await StudyPackService.updateStudyPack({
         name,
@@ -73,6 +73,7 @@ export class StudyPackController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { study_pack_id } = req.body;
+    
     try {
       await StudyPackService.deleteStudyPack({
         study_pack_id,

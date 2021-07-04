@@ -8,6 +8,7 @@ export class FileTreeController {
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+
     try {
       const fileTree = await FileTreeService.createFullFileTree(userId);
       return res.status(200).json({

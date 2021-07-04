@@ -1,17 +1,5 @@
-import db from './database';
-
-declare global {
-  interface StudyPackInterface {
-    id: string;
-    owner_id: string;
-    binder_id: string;
-    name: string;
-    color: string;
-    date_created: Date;
-    date_modified: Date;
-    folder_id: string;
-  }
-}
+import { BinderInterface, StudyPackInterface } from '../types';
+import db from '../db/database';
 
 export async function createStudyPack(
   binder_id: string,
@@ -21,10 +9,13 @@ export async function createStudyPack(
   id?: string
 ): Promise<StudyPackInterface> {
   const now = new Date();
+
   try {
     const study_pack: StudyPackInterface[] = await db
       .table('study_packs')
-      .insert({ binder_id, name, owner_id, color, id }, ['*']);
+      .insert({ binder_id, name, owner_id, color, id, date_created: now, date_modified: now }, [
+        '*'
+      ]);
     return study_pack[0];
   } catch (err) {
     console.log(err);
@@ -83,8 +74,12 @@ export async function updateStudyPack({
   color?: string;
   name?: string;
 }) {
+  const now = new Date();
+
   try {
-    await db('study_packs').update({ name, color }).where({ id: study_pack_id, owner_id });
+    await db('study_packs')
+      .update({ name, color })
+      .where({ id: study_pack_id, owner_id, date_modified: now });
   } catch (err) {
     console.log(err);
     throw Error('There was an error updating study pack');

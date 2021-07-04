@@ -7,14 +7,14 @@ export class FlashcardController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { study_pack_id } = req.params;
+
     try {
-      const userId = getUserIdFromRequest(req);
-      const { study_pack_id } = req.params;
       const flashcards = await FlashcardService.getFullFlashcardsByStudyPackId(
         study_pack_id,
         userId
       );
-
       return res.status(200).json({
         success: true,
         data: {
@@ -30,17 +30,17 @@ export class FlashcardController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    try {
-      const userId = getUserIdFromRequest(req);
-      const {
-        study_pack_id,
-        block_link,
-        front_blocks,
-        front_draft_keys,
-        back_blocks,
-        back_draft_keys
-      } = req.body;
+    const userId = getUserIdFromRequest(req);
+    const {
+      study_pack_id,
+      block_link,
+      front_blocks,
+      front_draft_keys,
+      back_blocks,
+      back_draft_keys
+    } = req.body;
 
+    try {
       const flashcard = await FlashcardService.createFlashcard(
         study_pack_id,
         userId,
@@ -70,12 +70,11 @@ export class FlashcardController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { flash_card_id } = req.params;
+    const { front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
+
     try {
-      const userId = getUserIdFromRequest(req);
-      const { flash_card_id } = req.params;
-
-      const { front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
-
       const flashcard = await FlashcardService.saveFlashcard(
         flash_card_id,
         userId,
@@ -104,10 +103,10 @@ export class FlashcardController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    try {
-      const userId = getUserIdFromRequest(req);
-      const { flash_card_id } = req.params;
+    const userId = getUserIdFromRequest(req);
+    const { flash_card_id } = req.params;
 
+    try {
       await FlashcardService.deleteFlashcard(userId, flash_card_id);
       return res.status(200).json({
         success: true

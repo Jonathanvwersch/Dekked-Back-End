@@ -1,20 +1,10 @@
-import { DH_CHECK_P_NOT_PRIME } from 'constants';
-import db from './database';
-
-declare global {
-  interface PageInterface {
-    id: string;
-    title: string;
-    ordering: string[];
-    owner_id: string;
-    study_pack_id: string;
-  }
-}
+import { PageInterface } from '../types';
+import db from '../db/database';
 
 async function createPage(
   study_pack_id: string,
   title: string = 'Untitled',
-  owner_id: string = 'f6dccc9d-4f97-4775-b5a6-eafda9738123',
+  owner_id: string | undefined,
   ordering = []
 ): Promise<string> {
   const response: PageInterface[] = await db
@@ -24,7 +14,7 @@ async function createPage(
     return response[0].id;
   }
 
-  throw new Error('Error creating page');
+  throw new Error('Theere was an error creating the page');
 }
 
 async function getPage(id: string): Promise<PageInterface> {
@@ -33,7 +23,7 @@ async function getPage(id: string): Promise<PageInterface> {
   if (response.length) {
     return response[0];
   }
-  throw new Error('Page not found!');
+  throw new Error('The page you are looking for does not exist!');
 }
 
 async function updatePage({
@@ -43,21 +33,18 @@ async function updatePage({
   page_id: string;
   ordering?: string[];
 }): Promise<number> {
-  if (!page_id) throw new Error('Must specify page');
+  if (!page_id) throw new Error('You must specify a page Id');
   const response: number = await db('pages').update({ ordering }).where('id', page_id);
-
   return response;
 }
 
 async function getPages() {
   const response: PageInterface[] = await db('pages').select();
-  console.log(response);
   return response;
 }
 
 async function getPageByStudyPackId(study_pack_id: string) {
   const response: PageInterface[] = await db.table('pages').select('*').where({ study_pack_id });
-
   if (response.length) {
     return response[0];
   }
@@ -72,7 +59,6 @@ async function deletePage({
   owner_id: string;
 }): Promise<number> {
   const response: number = await db('pages').delete().where({ owner_id, id: page_id });
-
   return response;
 }
 

@@ -1,5 +1,4 @@
 import express from 'express';
-import passport from 'passport';
 import { createUser, login } from '../Services/AuthService';
 import UserService from '../Services/UserService';
 import { getUserIdFromRequest } from '../utils/passport/authHelpers';
@@ -9,9 +8,9 @@ export class UserController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    try {
-      const { first_name, last_name, password, email_address } = req.body;
+    const { first_name, last_name, password, email_address } = req.body;
 
+    try {
       const response: any = await createUser(first_name, last_name, email_address, password);
       if (response.success) {
         return res.status(200).json(response);
@@ -28,9 +27,9 @@ export class UserController {
   }
 
   public async login(req: express.Request, res: express.Response): Promise<express.Response<any>> {
-    try {
-      const { password, email_address } = req.body;
+    const { password, email_address } = req.body;
 
+    try {
       const response: any = await login(email_address, password);
       if (response.success) {
         return res.status(200).json(response);
@@ -41,7 +40,7 @@ export class UserController {
         });
       }
     } catch (e) {
-      console.log(e.message);
+      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }
@@ -51,7 +50,7 @@ export class UserController {
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    console.log(userId);
+
     try {
       const user = await UserService.getUserByIdAsync(userId);
       return res.status(200).json({
@@ -62,7 +61,6 @@ export class UserController {
       });
     } catch (error) {
       console.log(error);
-      console.log(userId);
       return res.status(500).json({ success: false, error: error.message });
     }
   }
@@ -71,9 +69,10 @@ export class UserController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { last_name, first_name, email_address } = req.body;
+
     try {
-      const userId = getUserIdFromRequest(req);
-      const { last_name, first_name, email_address } = req.body;
       await UserService.updateUserAsync({
         id: userId,
         last_name,

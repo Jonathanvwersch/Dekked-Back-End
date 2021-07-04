@@ -1,4 +1,5 @@
 import BinderModel from '../Persistance/BinderModel';
+import { BinderInterface } from '../types';
 import StudyPackService from './StudyPackService';
 
 export function createBinderObject(binders: BinderInterface[]) {
@@ -23,6 +24,7 @@ async function updateBinder({
 }) {
   await BinderModel.updateBinder({ color, name, binder_id, owner_id });
 }
+
 async function deleteBinder({ binder_id, owner_id }: { binder_id: string; owner_id: string }) {
   const study_packs = await StudyPackService.getStudyPacksByBinderId(binder_id);
 

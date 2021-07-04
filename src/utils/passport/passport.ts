@@ -1,6 +1,6 @@
-import passport, { PassportStatic } from 'passport';
+import { PassportStatic } from 'passport';
 import passportJWT from 'passport-jwt';
-import { getUserByEmail, getUserById } from '../../Persistance/UserModel';
+import { getUserByEmail } from '../../Persistance/UserModel';
 
 export const applyPassportStrategy = (passport: PassportStatic) => {
   const JWStrategy = passportJWT.Strategy;
