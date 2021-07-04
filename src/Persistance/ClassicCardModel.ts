@@ -1,4 +1,4 @@
-import db from '../db/database';
+import db from "../db/database";
 
 declare global {
   interface ClassicCardInterface {
@@ -14,23 +14,29 @@ declare global {
   }
 }
 
-async function createCard({ deck_id, question, answer }: ClassicCardInterface): Promise<String> {
-  if (!deck_id) throw new Error('Must specify a deck');
+async function createCard({
+  deck_id,
+  question,
+  answer,
+}: ClassicCardInterface): Promise<String> {
+  if (!deck_id) throw new Error("Must specify a deck");
   const response: ClassicCardInterface[] = await db
-    .table('classic_cards')
+    .table("classic_cards")
     .insert({ deck_id, question, answer })
-    .returning('*');
+    .returning("*");
   if (response[0].id) {
     return response[0].id;
   }
 
-  throw new Error('Error creating card');
+  throw new Error("Error creating card");
 }
 
 async function getCard(card_id: string): Promise<ClassicCardInterface> {
-  if (!card_id) throw new Error('Must specify card');
-  const response: ClassicCardInterface[] = await db('classic_cards').select('*').where({ card_id });
-  if (!response.length) throw new Error('Card not found');
+  if (!card_id) throw new Error("Must specify card");
+  const response: ClassicCardInterface[] = await db("classic_cards")
+    .select("*")
+    .where({ card_id });
+  if (!response.length) throw new Error("Card not found");
 
   return response[0];
 }
@@ -39,15 +45,15 @@ async function updateCard({
   card_id,
   deck_id,
   question,
-  answer
+  answer,
 }: {
   card_id: string;
   deck_id?: string;
   question?: string;
   answer?: string;
 }): Promise<number> {
-  if (!card_id) throw new Error('Must specify card');
-  const response: number = await db('classic_cards')
+  if (!card_id) throw new Error("Must specify card");
+  const response: number = await db("classic_cards")
     .update({ deck_id, question, answer })
     .where({ id: card_id });
   console.log(response);
@@ -55,23 +61,27 @@ async function updateCard({
 }
 
 async function deleteCard(card_id: string): Promise<number> {
-  if (!card_id) throw new Error('Must specify card');
-  const response = await db('classic_cards').delete().where({ id: card_id });
+  if (!card_id) throw new Error("Must specify card");
+  const response = await db("classic_cards").delete().where({ id: card_id });
   return response;
 }
 
-async function getCardsInDeck(deck_id: string): Promise<Array<ClassicCardInterface>> {
+async function getCardsInDeck(
+  deck_id: string
+): Promise<Array<ClassicCardInterface>> {
   console.log(deck_id);
-  const response: Array<ClassicCardInterface> = await db('classic_cards')
-    .select('*')
-    .where('deck_id', deck_id);
+  const response: Array<ClassicCardInterface> = await db("classic_cards")
+    .select("*")
+    .where("deck_id", deck_id);
 
   console.log(response);
   return response;
 }
 
 async function getAllCards(): Promise<Array<ClassicCardInterface>> {
-  const response: Array<ClassicCardInterface> = await db('classic_cards').select('*');
+  const response: Array<ClassicCardInterface> = await db(
+    "classic_cards"
+  ).select("*");
   return response;
 }
 
@@ -81,5 +91,5 @@ export default {
   updateCard,
   deleteCard,
   getCardsInDeck,
-  getAllCards
+  getAllCards,
 };

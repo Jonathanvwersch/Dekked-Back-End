@@ -1,4 +1,4 @@
-import db from '../db/database';
+import db from "../db/database";
 
 declare global {
   interface DeckInterface {
@@ -9,52 +9,61 @@ declare global {
 }
 
 async function createDeck({ folder_id, name }: DeckInterface): Promise<string> {
-  const response: DeckInterface[] = await db.table('decks').insert({ name, folder_id }, ['id']);
+  const response: DeckInterface[] = await db
+    .table("decks")
+    .insert({ name, folder_id }, ["id"]);
   if (response[0].id) {
     return response[0].id;
   }
 
-  throw new Error('Error creating deck');
+  throw new Error("Error creating deck");
 }
 
 async function getDeck(id: string): Promise<DeckInterface> {
-  const response: DeckInterface[] = await db.table('decks').select('*').where('id', id);
+  const response: DeckInterface[] = await db
+    .table("decks")
+    .select("*")
+    .where("id", id);
   if (response.length) {
     return response[0];
   }
-  throw new Error('Deck not found!');
+  throw new Error("Deck not found!");
 }
 
 async function getAllDecks(): Promise<DeckInterface[]> {
-  const response: DeckInterface[] = await db.table('decks').select('*');
+  const response: DeckInterface[] = await db.table("decks").select("*");
   return response;
 }
 
 async function updateDeck({
   deck_id,
   name,
-  folder_id
+  folder_id,
 }: {
   deck_id: string;
   name?: string;
   folder_id?: string;
 }): Promise<number> {
-  if (!deck_id) throw new Error('Must specify deck');
-  const response: number = await db('decks').update({ folder_id, name }).where({ id: deck_id });
+  if (!deck_id) throw new Error("Must specify deck");
+  const response: number = await db("decks")
+    .update({ folder_id, name })
+    .where({ id: deck_id });
   console.log(response);
   return response;
 }
 
 async function deleteDeck(deck_id: string): Promise<number> {
-  const response = await db('decks').delete().where({ id: deck_id });
+  const response = await db("decks").delete().where({ id: deck_id });
   return response;
 }
 
-async function getDecksInFolder(folder_id: string): Promise<Array<DeckInterface>> {
+async function getDecksInFolder(
+  folder_id: string
+): Promise<Array<DeckInterface>> {
   console.log(folder_id);
-  const response: Array<DeckInterface> = await db('decks')
-    .select('*')
-    .where('folder_id', folder_id);
+  const response: Array<DeckInterface> = await db("decks")
+    .select("*")
+    .where("folder_id", folder_id);
 
   console.log(response);
   return response;
@@ -69,5 +78,5 @@ export default {
   deleteDeck,
   updateDeck,
   getDecksInFolder,
-  getAllDecks
+  getAllDecks,
 };

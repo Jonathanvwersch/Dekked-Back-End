@@ -17,25 +17,6 @@ const FolderModel_1 = __importDefault(require("../Persistance/FolderModel"));
 const authHelpers_1 = require("../utils/passport/authHelpers");
 const FolderService_1 = __importDefault(require("../Services/FolderService"));
 class FolderController {
-    createFolder(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const userId = authHelpers_1.getUserIdFromRequest(req);
-            try {
-                console.log('CREATING FOLDER');
-                const { name, color } = req.body;
-                const response = yield FolderModel_1.default.createFolder(name, userId, color);
-                console.log(response);
-                res.status(200).json({
-                    success: true,
-                    data: response
-                });
-            }
-            catch (e) {
-                console.log(e);
-                res.status(400).json({ success: false, error: e.message });
-            }
-        });
-    }
     getFolders(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = authHelpers_1.getUserIdFromRequest(req);
@@ -49,18 +30,35 @@ class FolderController {
             }
         });
     }
+    createFolder(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { name, color, id } = req.body;
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            try {
+                const folder = yield FolderModel_1.default.createFolder(name, userId, color, id);
+                res.status(200).json({
+                    success: true,
+                    folder
+                });
+            }
+            catch (e) {
+                console.log(e);
+                res.status(400).json({ success: false, error: e.message });
+            }
+        });
+    }
     updateFolder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userId = authHelpers_1.getUserIdFromRequest(req);
             const { name, color, folder_id } = req.body;
             try {
-                const folders = yield FolderService_1.default.updateFolder({
+                const folder = yield FolderService_1.default.updateFolder({
                     name,
                     color,
                     folder_id,
                     owner_id: userId
                 });
-                return res.status(200).json({ success: true });
+                return res.status(200).json({ success: true, folder });
             }
             catch (e) {
                 console.log(e);

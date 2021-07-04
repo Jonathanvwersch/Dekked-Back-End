@@ -35,6 +35,7 @@ const BlockModel_1 = __importDefault(require("../Persistance/BlockModel"));
 const FlashcardModel_1 = __importDefault(require("../Persistance/FlashcardModel"));
 const BlockService_1 = __importStar(require("./BlockService"));
 function createFlashcard(study_pack_id, owner_id, block_link, front_blocks, front_draft_keys, back_blocks, back_draft_keys) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield FlashcardModel_1.default.createFlashcard({
             owner_id,
@@ -44,9 +45,9 @@ function createFlashcard(study_pack_id, owner_id, block_link, front_blocks, fron
             back_draft_keys
         });
         if (result.length) {
-            yield BlockService_1.saveBlocks(front_blocks !== null && front_blocks !== void 0 ? front_blocks : [], result[0], front_draft_keys !== null && front_draft_keys !== void 0 ? front_draft_keys : [], owner_id);
-            yield BlockService_1.saveBlocks(back_blocks !== null && back_blocks !== void 0 ? back_blocks : [], result[0], back_draft_keys !== null && back_draft_keys !== void 0 ? back_draft_keys : [], owner_id);
-            return result;
+            yield BlockService_1.saveBlocks(front_blocks !== null && front_blocks !== void 0 ? front_blocks : [], (_a = result[0]) === null || _a === void 0 ? void 0 : _a.id, front_draft_keys !== null && front_draft_keys !== void 0 ? front_draft_keys : [], owner_id);
+            yield BlockService_1.saveBlocks(back_blocks !== null && back_blocks !== void 0 ? back_blocks : [], (_b = result[0]) === null || _b === void 0 ? void 0 : _b.id, back_draft_keys !== null && back_draft_keys !== void 0 ? back_draft_keys : [], owner_id);
+            return result[0];
         }
         else {
             throw new Error('There was an error creating flashcard');
@@ -79,12 +80,13 @@ function saveFlashcard(flash_card_id, owner_id, front_blocks, front_draft_keys, 
     return __awaiter(this, void 0, void 0, function* () {
         yield BlockService_1.saveBlocks(front_blocks, flash_card_id, front_draft_keys, owner_id);
         yield BlockService_1.saveBlocks(back_blocks, flash_card_id, back_draft_keys, owner_id);
-        yield FlashcardModel_1.default.updateFlashcard({
+        const flashcard = yield FlashcardModel_1.default.updateFlashcard({
             id: flash_card_id,
             owner_id,
             back_ordering: back_draft_keys,
             front_ordering: front_draft_keys
         });
+        return flashcard[0];
     });
 }
 function deleteFlashcard(owner_id, id) {

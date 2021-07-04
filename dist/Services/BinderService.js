@@ -23,12 +23,12 @@ function createBinderObject(binders) {
     return binderObject;
 }
 exports.createBinderObject = createBinderObject;
-function updateBinder({ color, name, binder_id, owner_id }) {
+function updateBinder({ color, name, binder_id, owner_id, }) {
     return __awaiter(this, void 0, void 0, function* () {
         yield BinderModel_1.default.updateBinder({ color, name, binder_id, owner_id });
     });
 }
-function deleteBinder({ binder_id, owner_id }) {
+function deleteBinder({ binder_id, owner_id, }) {
     return __awaiter(this, void 0, void 0, function* () {
         const study_packs = yield StudyPackService_1.default.getStudyPacksByBinderId(binder_id);
         yield Promise.all(study_packs.map((val) => __awaiter(this, void 0, void 0, function* () { return StudyPackService_1.default.deleteStudyPack({ study_pack_id: val.id, owner_id }); })));
@@ -44,5 +44,5 @@ exports.default = {
     createBinderObject,
     updateBinder,
     deleteBinder,
-    getBindersByFolderId
+    getBindersByFolderId,
 };

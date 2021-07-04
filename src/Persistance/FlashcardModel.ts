@@ -1,12 +1,12 @@
-import { FlashcardInterface } from '../types';
-import db from '../db/database';
+import { FlashcardInterface } from "../types";
+import db from "../db/database";
 
 async function createFlashcard({
   owner_id,
   study_pack_id,
   block_link,
   front_draft_keys,
-  back_draft_keys
+  back_draft_keys,
 }: {
   owner_id: string;
   study_pack_id: string;
@@ -17,7 +17,7 @@ async function createFlashcard({
   const now = new Date();
 
   try {
-    const creationResponse: FlashcardInterface[] = await db('flashcards')
+    const creationResponse: FlashcardInterface[] = await db("flashcards")
       .insert({
         owner_id,
         study_pack_id,
@@ -25,26 +25,31 @@ async function createFlashcard({
         date_created: now,
         date_modified: now,
         front_ordering: front_draft_keys ?? [],
-        back_ordering: back_draft_keys ?? []
+        back_ordering: back_draft_keys ?? [],
       })
-      .returning('*');
+      .returning("*");
     return creationResponse;
   } catch (error) {
     console.log(error);
-    throw new Error('There was an error creating the flashcard');
+    throw new Error("There was an error creating the flashcard");
   }
 }
 
-async function getFlashcardsByStudyPackId(owner_id: string, study_pack_id: string) {
+async function getFlashcardsByStudyPackId(
+  owner_id: string,
+  study_pack_id: string
+) {
   try {
-    const flashcards: FlashcardInterface[] = await db('flashcards').select('*').where({
-      owner_id,
-      study_pack_id
-    });
+    const flashcards: FlashcardInterface[] = await db("flashcards")
+      .select("*")
+      .where({
+        owner_id,
+        study_pack_id,
+      });
     return flashcards;
   } catch (error) {
     console.log(error);
-    throw new Error('There was an error fetching flashcards by study pack id');
+    throw new Error("There was an error fetching flashcards by study pack id");
   }
 }
 
@@ -53,7 +58,7 @@ async function updateFlashcard({
   owner_id,
   back_ordering,
   front_ordering,
-  block_link
+  block_link,
 }: {
   id: string;
   owner_id: string;
@@ -62,31 +67,37 @@ async function updateFlashcard({
   block_link?: string;
 }) {
   try {
-    const flashcard: FlashcardInterface[] | undefined = await db('flashcards')
+    const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
       .update({
         back_ordering,
         front_ordering,
         block_link,
-        date_modified: new Date()
+        date_modified: new Date(),
       })
       .where({ id, owner_id })
-      .returning('*');
+      .returning("*");
     return flashcard;
   } catch (error) {
     console.log(error);
-    throw new Error('Error updating flashcard');
+    throw new Error("Error updating flashcard");
   }
 }
 
-async function deleteFlashcard({ owner_id, id }: { owner_id: string; id: string }) {
+async function deleteFlashcard({
+  owner_id,
+  id,
+}: {
+  owner_id: string;
+  id: string;
+}) {
   try {
-    await db('flashcards').delete('*').where({
+    await db("flashcards").delete("*").where({
       owner_id,
-      id
+      id,
     });
   } catch (error) {
     console.log(error);
-    throw new Error('There was an error deleting flashcard');
+    throw new Error("There was an error deleting flashcard");
   }
 }
 
@@ -94,5 +105,5 @@ export default {
   createFlashcard,
   getFlashcardsByStudyPackId,
   updateFlashcard,
-  deleteFlashcard
+  deleteFlashcard,
 };

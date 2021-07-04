@@ -12,54 +12,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("./database"));
-function createPage(study_pack_id, title = 'Untitled', owner_id = 'f6dccc9d-4f97-4775-b5a6-eafda9738123', ordering = []) {
+const database_1 = __importDefault(require("../db/database"));
+function createPage(study_pack_id, title = "Untitled", owner_id, ordering = []) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield database_1.default
-            .table('pages')
-            .insert({ title, ordering, owner_id, study_pack_id }, ['id']);
+            .table("pages")
+            .insert({ title, ordering, owner_id, study_pack_id }, ["id"]);
         if (response[0].id) {
             return response[0].id;
         }
-        throw new Error('Error creating page');
+        throw new Error("Theere was an error creating the page");
     });
 }
 function getPage(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default.table('pages').select('*').where('id', id);
+        const response = yield database_1.default
+            .table("pages")
+            .select("*")
+            .where("id", id);
         if (response.length) {
             return response[0];
         }
-        throw new Error('Page not found!');
+        throw new Error("The page you are looking for does not exist!");
     });
 }
-function updatePage({ page_id, title, ordering }) {
+function updatePage({ page_id, ordering, }) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!page_id)
-            throw new Error('Must specify page');
-        const response = yield database_1.default('pages').update({ ordering }).where('id', page_id);
+            throw new Error("You must specify a page Id");
+        const response = yield database_1.default("pages")
+            .update({ ordering })
+            .where("id", page_id);
         return response;
     });
 }
 function getPages() {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default('pages').select();
-        console.log(response);
+        const response = yield database_1.default("pages").select();
         return response;
     });
 }
 function getPageByStudyPackId(study_pack_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default.table('pages').select('*').where({ study_pack_id });
+        const response = yield database_1.default
+            .table("pages")
+            .select("*")
+            .where({ study_pack_id });
         if (response.length) {
             return response[0];
         }
-        throw new Error('Page not found!');
+        throw new Error("Page not found!");
     });
 }
-function deletePage({ page_id, owner_id }) {
+function deletePage({ page_id, owner_id, }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default('pages').delete().where({ owner_id, id: page_id });
+        const response = yield database_1.default("pages")
+            .delete()
+            .where({ owner_id, id: page_id });
         return response;
     });
 }
@@ -69,5 +78,5 @@ exports.default = {
     updatePage,
     getPages,
     getPageByStudyPackId,
-    deletePage
+    deletePage,
 };

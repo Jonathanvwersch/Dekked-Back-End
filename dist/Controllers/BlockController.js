@@ -19,8 +19,8 @@ const BlockService_1 = require("../Services/BlockService");
 class BlockController {
     getBlocksByPage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { page_id } = req.params;
             try {
-                const { page_id } = req.params;
                 const page = yield PageModel_1.default.getPage(page_id);
                 const blocks = yield BlockModel_1.default.getBlocksByParentId(page_id);
                 const organizedBlocks = BlockService_1.getOrganizedBlocks(page.ordering, blocks);

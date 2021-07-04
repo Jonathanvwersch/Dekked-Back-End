@@ -57,11 +57,11 @@ class StudyPackController {
     }
     createStudyPack(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { binder_id, name, color, id } = req.body;
             try {
-                const userId = authHelpers_1.getUserIdFromRequest(req);
-                const { binder_id, name, color } = req.body;
-                const response = yield StudyPackModel_1.createStudyPack(binder_id, name, userId, color);
-                yield PageService_1.default.createPage(response.id, undefined, userId);
+                const response = yield StudyPackModel_1.createStudyPack(binder_id, name, userId, color, id);
+                yield PageService_1.default.createPage(id, undefined, userId);
                 return res.status(200).json({
                     success: true,
                     data: {

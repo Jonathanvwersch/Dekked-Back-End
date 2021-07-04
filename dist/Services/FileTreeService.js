@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const StudyPackModel_1 = require("../Persistance/StudyPackModel");
 const BinderModel_1 = require("../Persistance/BinderModel");
 const FolderModel_1 = __importDefault(require("../Persistance/FolderModel"));
+const types_1 = require("../types");
 function createFolderObject(folders) {
     let folderObject = {};
     for (let i = 0; i < folders.length; i++) {
@@ -29,15 +30,31 @@ function createBindersObject(binders, study_packs) {
     let bindersObject = {};
     binders.forEach((val) => {
         bindersObject[val.id] = {
-            type: 'binder',
+            type: types_1.FILETREE_TYPES.BINDER,
+            folder_id: val.folder_id,
+            id: val.id,
+            name: val.name,
+            owner_id: val.owner_id,
+            color: val.color,
             children: {}
         };
     });
     study_packs.forEach((study_pack) => {
+        var _a;
         const binder_id = study_pack.binder_id;
         const study_pack_id = study_pack.id;
         if (bindersObject[binder_id]) {
-            bindersObject[binder_id].children[study_pack_id] = { type: 'study_pack', children: {} };
+            const folderId = (_a = bindersObject === null || bindersObject === void 0 ? void 0 : bindersObject[binder_id]) === null || _a === void 0 ? void 0 : _a.folder_id;
+            bindersObject[binder_id].children[study_pack_id] = {
+                type: types_1.FILETREE_TYPES.STUDY_PACK,
+                binder_id: binder_id,
+                folder_id: folderId,
+                id: study_pack_id,
+                owner_id: study_pack.owner_id,
+                name: study_pack.name,
+                color: study_pack.color,
+                children: {}
+            };
         }
     });
     return bindersObject;
@@ -47,7 +64,13 @@ function createFolderHierarchyObject(folders) {
     folders.forEach((folder) => {
         if (!folderHierarchy[folder.id]) {
             folderHierarchy[folder.id] = {
-                type: 'folder',
+                type: types_1.FILETREE_TYPES.FOLDER,
+                id: folder.id,
+                color: folder.color,
+                date_created: folder.date_created,
+                date_modified: folder.date_modified,
+                name: folder.name,
+                owner_id: folder.owner_id,
                 children: {}
             };
         }
@@ -74,10 +97,6 @@ function createFullFileTree(user_id) {
         return full_hierarchy;
     });
 }
-// createFullFileTree('f6dccc9d-4f97-4775-b5a6-eafda9738123');
-// test('330831bf-2fc0-42f8-8a48-be7c711fa0cc', [
-// '0e52d15d-ee1f-48c7-bdde-b5ec7e05946b'
-// ]);
 exports.default = {
     createFullFileTree,
     createFolderObject

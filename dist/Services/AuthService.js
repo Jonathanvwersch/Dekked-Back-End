@@ -52,6 +52,7 @@ function login(email_address, password) {
                     token,
                     first_name: user.first_name,
                     last_name: user.last_name,
+                    email_address: email_address,
                     id: user.id
                 }
             };
@@ -74,7 +75,7 @@ function createUser(first_name, last_name, email_address, password) {
                 return {
                     success: false,
                     code: 400,
-                    message: 'Email is already in use'
+                    message: 'Email address is already in use'
                 };
             }
             const salt = bcryptjs_1.genSaltSync();

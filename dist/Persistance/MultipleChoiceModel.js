@@ -12,18 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("./database"));
+const database_1 = __importDefault(require("../db/database"));
 function createNewMultipleChoice(question, answer, choices, notes, deck_id) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield database_1.default
-            .table('multiple_choice')
-            .insert({ question, answer, choices, notes, deck_id }, ['id']);
+            .table("multiple_choice")
+            .insert({ question, answer, choices, notes, deck_id }, ["id"]);
         return response[0];
     });
 }
 function getAllCardsInDeck(deck_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default('multiple_choice').select('*').where({ deck_id: deck_id });
+        const response = yield database_1.default("multiple_choice")
+            .select("*")
+            .where({ deck_id: deck_id });
         return response;
     });
 }

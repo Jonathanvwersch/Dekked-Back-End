@@ -13,37 +13,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBindersByFolderId = exports.deleteBinder = exports.updateBinder = exports.getBinderById = exports.getBindersByUserId = exports.createBinder = void 0;
-const database_1 = __importDefault(require("./database"));
-function createBinder(folder_id, name, owner_id, color) {
+const database_1 = __importDefault(require("../db/database"));
+function createBinder(folder_id, name, owner_id, color, id) {
     return __awaiter(this, void 0, void 0, function* () {
+        const now = new Date();
         try {
-            const now = new Date();
-            const binder = yield database_1.default
-                .table('binders')
-                .insert({ folder_id, name, owner_id, color }, ['*']);
-            console.log(binder);
-            return binder[0];
+            const binders = yield database_1.default
+                .table("binders")
+                .insert({
+                folder_id,
+                name,
+                owner_id,
+                color,
+                id,
+                date_created: now,
+                date_modified: now,
+            })
+                .returning("*");
+            return binders[0];
         }
         catch (err) {
-            console.log(err);
-            throw new Error('There was an error creating binder');
+            console.error(err);
+            throw new Error("There was an error creating the binder");
         }
     });
 }
 exports.createBinder = createBinder;
 function getBindersByUserId(user_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(user_id);
         try {
             const binder = yield database_1.default
-                .table('binders')
-                .select('*')
+                .table("binders")
+                .select("*")
                 .where({ owner_id: user_id });
             return binder;
         }
         catch (err) {
             console.log(err);
-            throw new Error('Error getting binders by user id');
+            throw new Error("There was an error getting the binders by user id");
         }
     });
 }
@@ -52,39 +59,42 @@ function getBinderById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const binder = yield database_1.default
-                .table('binders')
-                .select('*')
+                .table("binders")
+                .select("*")
                 .where({ id })
                 .first();
             return binder;
         }
         catch (err) {
             console.log(err);
-            throw Error('Error getting binder by id');
+            throw Error("There was an error getting the binders by binder id");
         }
     });
 }
 exports.getBinderById = getBinderById;
-function updateBinder({ binder_id, owner_id, color, name }) {
+function updateBinder({ binder_id, owner_id, color, name, }) {
     return __awaiter(this, void 0, void 0, function* () {
+        const now = new Date();
         try {
-            yield database_1.default('binders').update({ name, color }).where({ id: binder_id, owner_id });
+            yield database_1.default("binders")
+                .update({ name, color, date_modified: now })
+                .where({ id: binder_id, owner_id });
         }
         catch (err) {
             console.log(err);
-            throw Error('There was an error updating binder');
+            throw Error("There was an error updating binder");
         }
     });
 }
 exports.updateBinder = updateBinder;
-function deleteBinder({ binder_id, owner_id }) {
+function deleteBinder({ binder_id, owner_id, }) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield database_1.default('binders').delete('*').where({ id: binder_id, owner_id });
+            yield database_1.default("binders").delete("*").where({ id: binder_id, owner_id });
         }
         catch (err) {
             console.log(err);
-            throw Error('There was an error deleting binder');
+            throw Error("There was an error deleting binder");
         }
     });
 }
@@ -93,14 +103,14 @@ function getBindersByFolderId(owner_id, folder_id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const binders = yield database_1.default
-                .table('binders')
-                .select('*')
+                .table("binders")
+                .select("*")
                 .where({ owner_id, folder_id });
             return binders;
         }
         catch (err) {
             console.log(err);
-            throw Error('There was an error fetching the binders');
+            throw Error("There was an error fetching the binders");
         }
     });
 }
@@ -111,5 +121,5 @@ exports.default = {
     getBinderById,
     getBindersByUserId,
     deleteBinder,
-    getBindersByFolderId
+    getBindersByFolderId,
 };

@@ -12,52 +12,59 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("./database"));
+const database_1 = __importDefault(require("../db/database"));
 function createDeck({ folder_id, name }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default.table('decks').insert({ name, folder_id }, ['id']);
+        const response = yield database_1.default
+            .table("decks")
+            .insert({ name, folder_id }, ["id"]);
         if (response[0].id) {
             return response[0].id;
         }
-        throw new Error('Error creating deck');
+        throw new Error("Error creating deck");
     });
 }
 function getDeck(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default.table('decks').select('*').where('id', id);
+        const response = yield database_1.default
+            .table("decks")
+            .select("*")
+            .where("id", id);
         if (response.length) {
             return response[0];
         }
-        throw new Error('Deck not found!');
+        throw new Error("Deck not found!");
     });
 }
 function getAllDecks() {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default.table('decks').select('*');
+        const response = yield database_1.default.table("decks").select("*");
         return response;
     });
 }
-function updateDeck({ deck_id, name, folder_id }) {
+function updateDeck({ deck_id, name, folder_id, }) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!deck_id)
-            throw new Error('Must specify deck');
-        const response = yield database_1.default('decks').update({ folder_id, name }).where({ id: deck_id });
+            throw new Error("Must specify deck");
+        const response = yield database_1.default("decks")
+            .update({ folder_id, name })
+            .where({ id: deck_id });
         console.log(response);
         return response;
     });
 }
 function deleteDeck(deck_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield database_1.default('decks').delete().where({ id: deck_id });
+        const response = yield database_1.default("decks").delete().where({ id: deck_id });
         return response;
     });
 }
 function getDecksInFolder(folder_id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(folder_id);
-        const response = yield database_1.default('decks')
-            .select('*')
-            .where('folder_id', folder_id);
+        const response = yield database_1.default("decks")
+            .select("*")
+            .where("folder_id", folder_id);
         console.log(response);
         return response;
     });
@@ -71,5 +78,5 @@ exports.default = {
     deleteDeck,
     updateDeck,
     getDecksInFolder,
-    getAllDecks
+    getAllDecks,
 };

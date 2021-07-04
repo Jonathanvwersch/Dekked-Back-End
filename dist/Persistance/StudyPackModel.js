@@ -13,14 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateStudyPack = exports.getStudyPacksByUserId = exports.getStudyPacksByBinderId = exports.getStudyPackById = exports.createStudyPack = void 0;
-const database_1 = __importDefault(require("./database"));
-function createStudyPack(binder_id, name, owner_id, color) {
+const database_1 = __importDefault(require("../db/database"));
+function createStudyPack(binder_id, name, owner_id, color, id) {
     return __awaiter(this, void 0, void 0, function* () {
         const now = new Date();
         try {
             const study_pack = yield database_1.default
                 .table('study_packs')
-                .insert({ binder_id, name, owner_id, color }, ['*']);
+                .insert({ binder_id, name, owner_id, color, id, date_created: now, date_modified: now }, [
+                '*'
+            ]);
             return study_pack[0];
         }
         catch (err) {
@@ -81,8 +83,11 @@ function getStudyPacksByUserId(user_id) {
 exports.getStudyPacksByUserId = getStudyPacksByUserId;
 function updateStudyPack({ study_pack_id, owner_id, color, name }) {
     return __awaiter(this, void 0, void 0, function* () {
+        const now = new Date();
         try {
-            yield database_1.default('study_packs').update({ name, color }).where({ id: study_pack_id, owner_id });
+            yield database_1.default('study_packs')
+                .update({ name, color })
+                .where({ id: study_pack_id, owner_id, date_modified: now });
         }
         catch (err) {
             console.log(err);

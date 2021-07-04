@@ -28,8 +28,8 @@ function checkBlockExists(parent_id, draft_key) {
 exports.checkBlockExists = checkBlockExists;
 function saveOrCreateBlock(block, draft_key, parent_id, owner_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const exists = yield checkBlockExists(parent_id, draft_key);
-        if (exists) {
+        const doesBlockExist = yield checkBlockExists(parent_id, draft_key);
+        if (doesBlockExist) {
             const response = yield BlockModel_1.default.updateBlock({ parent_id, draft_key, content: block });
             return response;
         }
@@ -41,7 +41,6 @@ function saveOrCreateBlock(block, draft_key, parent_id, owner_id) {
 }
 function saveBlocks(blocks, parent_id, draft_keys, owner_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(blocks, parent_id, draft_keys);
         for (let i = 0; i < blocks.length; i++) {
             yield saveOrCreateBlock(blocks[i], draft_keys[i], parent_id, owner_id);
         }

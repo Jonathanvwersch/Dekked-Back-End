@@ -1,5 +1,5 @@
-import { BinderInterface } from '../types';
-import db from '../db/database';
+import { BinderInterface } from "../types";
+import db from "../db/database";
 
 export async function createBinder(
   folder_id: string,
@@ -12,40 +12,48 @@ export async function createBinder(
 
   try {
     const binders: BinderInterface[] = await db
-      .table('binders')
-      .insert({ folder_id, name, owner_id, color, id, date_created: now, date_modified: now })
-      .returning('*');
+      .table("binders")
+      .insert({
+        folder_id,
+        name,
+        owner_id,
+        color,
+        id,
+        date_created: now,
+        date_modified: now,
+      })
+      .returning("*");
     return binders[0];
   } catch (err) {
     console.error(err);
-    throw new Error('There was an error creating the binder');
+    throw new Error("There was an error creating the binder");
   }
 }
 
 export async function getBindersByUserId(user_id: string) {
   try {
     const binder: BinderInterface[] = await db
-      .table('binders')
-      .select('*')
+      .table("binders")
+      .select("*")
       .where({ owner_id: user_id });
     return binder;
   } catch (err) {
     console.log(err);
-    throw new Error('There was an error getting the binders by user id');
+    throw new Error("There was an error getting the binders by user id");
   }
 }
 
 export async function getBinderById(id: string) {
   try {
     const binder: BinderInterface | undefined = await db
-      .table('binders')
-      .select('*')
+      .table("binders")
+      .select("*")
       .where({ id })
       .first();
     return binder;
   } catch (err) {
     console.log(err);
-    throw Error('There was an error getting the binders by binder id');
+    throw Error("There was an error getting the binders by binder id");
   }
 }
 
@@ -53,7 +61,7 @@ export async function updateBinder({
   binder_id,
   owner_id,
   color,
-  name
+  name,
 }: {
   binder_id: string;
   owner_id: string;
@@ -62,40 +70,43 @@ export async function updateBinder({
 }) {
   const now = new Date();
   try {
-    await db('binders')
+    await db("binders")
       .update({ name, color, date_modified: now })
       .where({ id: binder_id, owner_id });
   } catch (err) {
     console.log(err);
-    throw Error('There was an error updating binder');
+    throw Error("There was an error updating binder");
   }
 }
 
 export async function deleteBinder({
   binder_id,
-  owner_id
+  owner_id,
 }: {
   binder_id: string;
   owner_id: string;
 }) {
   try {
-    await db('binders').delete('*').where({ id: binder_id, owner_id });
+    await db("binders").delete("*").where({ id: binder_id, owner_id });
   } catch (err) {
     console.log(err);
-    throw Error('There was an error deleting binder');
+    throw Error("There was an error deleting binder");
   }
 }
 
-export async function getBindersByFolderId(owner_id: string, folder_id: string) {
+export async function getBindersByFolderId(
+  owner_id: string,
+  folder_id: string
+) {
   try {
     const binders: BinderInterface[] = await db
-      .table('binders')
-      .select('*')
+      .table("binders")
+      .select("*")
       .where({ owner_id, folder_id });
     return binders;
   } catch (err) {
     console.log(err);
-    throw Error('There was an error fetching the binders');
+    throw Error("There was an error fetching the binders");
   }
 }
 
@@ -105,5 +116,5 @@ export default {
   getBinderById,
   getBindersByUserId,
   deleteBinder,
-  getBindersByFolderId
+  getBindersByFolderId,
 };

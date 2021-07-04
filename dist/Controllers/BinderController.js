@@ -53,14 +53,14 @@ class BinderController {
     }
     createBinder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { folder_id, name, color, id } = req.body;
             try {
-                const userId = authHelpers_1.getUserIdFromRequest(req);
-                const { folder_id, name, color } = req.body;
-                const response = yield BinderModel_1.createBinder(folder_id, name, userId, color);
+                const binder = yield BinderModel_1.createBinder(folder_id, name, userId, color, id);
                 return res.status(200).json({
                     success: true,
                     data: {
-                        binder: response
+                        binder
                     }
                 });
             }

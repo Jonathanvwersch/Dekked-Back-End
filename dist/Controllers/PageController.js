@@ -19,27 +19,10 @@ const BlockService_1 = require("../Services/BlockService");
 const PageService_1 = __importDefault(require("../Services/PageService"));
 const authHelpers_1 = require("../utils/passport/authHelpers");
 class PageController {
-    // public async createPage(
-    //   req: express.Request,
-    //   res: express.Response
-    // ): Promise<express.Response<any>> {
-    //   try {
-    //     const { title } = req.body;
-    //     console.log('HERE');
-    //     const response = await PageModel.createPage(title);
-    //     return res.status(200).json({
-    //       success: true,
-    //       data: { page_id: response }
-    //     });
-    //   } catch (e) {
-    //     console.log(e);
-    //     return res.status(500).json({ success: false, error: e.message });
-    //   }
-    // }
     getFullPage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { page_id } = req.params;
             try {
-                const { page_id } = req.params;
                 const page = yield PageModel_1.default.getPage(page_id);
                 const blocks = yield BlockModel_1.default.getBlocksByParentId(page_id);
                 const organizedBlocks = BlockService_1.getOrganizedBlocks(page.ordering, blocks);
@@ -55,8 +38,8 @@ class PageController {
     }
     getPageMeta(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { page_id } = req.params;
             try {
-                const { page_id } = req.params;
                 const response = yield PageModel_1.default.getPage(page_id);
                 return res.status(200).json({
                     success: true,
@@ -70,11 +53,10 @@ class PageController {
     }
     saveFullPage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { page_id } = req.params;
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { blocks, draft_keys } = req.body;
             try {
-                console.log('HERER');
-                const { page_id } = req.params;
-                const userId = authHelpers_1.getUserIdFromRequest(req);
-                const { blocks, draft_keys } = req.body;
                 yield BlockService_1.saveBlocks(blocks, page_id, draft_keys, userId);
                 yield PageModel_1.default.updatePage({ page_id, ordering: draft_keys });
                 return res.status(200).json({ success: true });
@@ -117,8 +99,8 @@ class PageController {
     }
     getPageByStudyPackId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { study_pack_id } = req.params;
             try {
-                const { study_pack_id } = req.params;
                 const response = yield PageService_1.default.getPageByStudyPackIdAsync(study_pack_id);
                 return res.status(200).json({
                     success: true,

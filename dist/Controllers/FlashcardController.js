@@ -18,9 +18,9 @@ const authHelpers_1 = require("../utils/passport/authHelpers");
 class FlashcardController {
     getFullFlashcardsByStudyPackId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { study_pack_id } = req.params;
             try {
-                const userId = authHelpers_1.getUserIdFromRequest(req);
-                const { study_pack_id } = req.params;
                 const flashcards = yield FlashcardService_1.default.getFullFlashcardsByStudyPackId(study_pack_id, userId);
                 return res.status(200).json({
                     success: true,
@@ -36,13 +36,18 @@ class FlashcardController {
     }
     createFlashCard(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { study_pack_id, block_link, front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
             try {
-                const userId = authHelpers_1.getUserIdFromRequest(req);
-                const { study_pack_id, linked_block, front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
-                const response = yield FlashcardService_1.default.createFlashcard(study_pack_id, userId, linked_block, front_blocks, front_draft_keys, back_blocks, back_draft_keys);
+                const flashcard = yield FlashcardService_1.default.createFlashcard(study_pack_id, userId, block_link, front_blocks, front_draft_keys, back_blocks, back_draft_keys);
+                const fullFlashcard = {
+                    flashcard,
+                    front_blocks,
+                    back_blocks
+                };
                 return res.status(200).json({
                     success: true,
-                    data: { flashcard_id: response }
+                    fullFlashcard
                 });
             }
             catch (error) {
@@ -52,14 +57,19 @@ class FlashcardController {
     }
     saveFullFlashcard(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { flash_card_id } = req.params;
+            const { front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
             try {
-                const userId = authHelpers_1.getUserIdFromRequest(req);
-                const { flash_card_id } = req.params;
-                const { front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
-                console.log(front_blocks, front_draft_keys, back_blocks, back_draft_keys);
-                yield FlashcardService_1.default.saveFlashcard(flash_card_id, userId, front_blocks, front_draft_keys, back_blocks, back_draft_keys);
+                const flashcard = yield FlashcardService_1.default.saveFlashcard(flash_card_id, userId, front_blocks, front_draft_keys, back_blocks, back_draft_keys);
+                const fullFlashcard = {
+                    flashcard,
+                    front_blocks,
+                    back_blocks
+                };
                 return res.status(200).json({
-                    success: true
+                    success: true,
+                    fullFlashcard
                 });
             }
             catch (error) {
@@ -69,9 +79,9 @@ class FlashcardController {
     }
     deleteFlashcard(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const userId = authHelpers_1.getUserIdFromRequest(req);
+            const { flash_card_id } = req.params;
             try {
-                const userId = authHelpers_1.getUserIdFromRequest(req);
-                const { flash_card_id } = req.params;
                 yield FlashcardService_1.default.deleteFlashcard(userId, flash_card_id);
                 return res.status(200).json({
                     success: true

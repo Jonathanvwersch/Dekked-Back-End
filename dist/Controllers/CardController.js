@@ -18,7 +18,6 @@ class CardController {
     createCard(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { type, cardData } = req.body;
-            console.log(req.body);
             try {
                 if (type && cardData && cardData) {
                     if (type === 'classic') {

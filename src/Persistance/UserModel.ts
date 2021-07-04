@@ -1,9 +1,9 @@
-import { UserInterface } from '../types';
-import db from '../db/database';
+import { UserInterface } from "../types";
+import db from "../db/database";
 
 export async function getUserById(id: string) {
   try {
-    const user: UserInterface = await db.table('users').where({ id }).first();
+    const user: UserInterface = await db.table("users").where({ id }).first();
     return user;
   } catch (err) {
     throw err;
@@ -12,7 +12,10 @@ export async function getUserById(id: string) {
 
 export async function getUserByEmail(email_address: string) {
   try {
-    const user: UserInterface = await db.table('users').where({ email_address }).first();
+    const user: UserInterface = await db
+      .table("users")
+      .where({ email_address })
+      .first();
     return user;
   } catch (err) {
     console.log(err);
@@ -27,7 +30,9 @@ export async function createNewUser(
   password: string
 ) {
   try {
-    await db.table('users').insert({ email_address, first_name, last_name, password });
+    await db
+      .table("users")
+      .insert({ email_address, first_name, last_name, password });
     const user: UserInterface = await getUserByEmail(email_address);
     return user;
   } catch (error) {
@@ -40,7 +45,7 @@ export async function updateUser({
   id,
   first_name,
   last_name,
-  email_address
+  email_address,
 }: {
   id: string;
   first_name?: string;
@@ -48,9 +53,12 @@ export async function updateUser({
   email_address?: string;
 }) {
   try {
-    await db.table('users').update({ email_address, first_name, last_name }).where({ id });
+    await db
+      .table("users")
+      .update({ email_address, first_name, last_name })
+      .where({ id });
   } catch (error) {
     console.log(error);
-    throw new Error('Error updating user');
+    throw new Error("Error updating user");
   }
 }
