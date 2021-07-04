@@ -97,7 +97,7 @@ app.get(
 // Folders
 
 app.put(
-  `/${FILETREE_TYPES.FOLDER}`,
+  `/folder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -105,7 +105,7 @@ app.put(
 );
 
 app.post(
-  `/${FILETREE_TYPES.FOLDER}`,
+  `/folder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -113,7 +113,7 @@ app.post(
 );
 
 app.delete(
-  `/${FILETREE_TYPES.FOLDER}`,
+  `/folder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -121,7 +121,7 @@ app.delete(
 );
 
 app.get(
-  `/${FILETREE_TYPES.FOLDER}s`,
+  `/folders`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -162,7 +162,7 @@ app.get("/study/spaced-repetition", (req, res) =>
 
 // Binders
 app.get(
-  `/${FILETREE_TYPES.BINDER}`,
+  `/binders`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -170,7 +170,7 @@ app.get(
 );
 
 app.post(
-  `/${FILETREE_TYPES.BINDER}`,
+  `/binder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -178,7 +178,7 @@ app.post(
 );
 
 app.put(
-  `/${FILETREE_TYPES.BINDER}`,
+  `/binder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -186,7 +186,7 @@ app.put(
 );
 
 app.delete(
-  `/${FILETREE_TYPES.BINDER}`,
+  `/binder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -197,7 +197,7 @@ app.delete(
 
 // Study Packs
 app.get(
-  `/${FILETREE_TYPES.STUDY_PACK}`,
+  `/study-packs`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -205,7 +205,7 @@ app.get(
 );
 
 app.post(
-  `/${FILETREE_TYPES.STUDY_PACK}`,
+  `/study-pack`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -213,15 +213,7 @@ app.post(
 );
 
 app.put(
-  `/${FILETREE_TYPES.STUDY_PACK}`,
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  studyPackController.updateStudyPack
-);
-
-app.put(
-  `/${FILETREE_TYPES.STUDY_PACK}`,
+  `/study-pack`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -229,7 +221,7 @@ app.put(
 );
 
 app.delete(
-  `/${FILETREE_TYPES.STUDY_PACK}`,
+  `/study-pack`,
   passport.authenticate("jwt", {
     session: false,
   }),
