@@ -1,7 +1,7 @@
-import BlockModel from '../Persistance/BlockModel';
-import FlashcardModel from '../Persistance/FlashcardModel';
-import { BlockInterface } from '../types';
-import BlockService, { getOrganizedBlocks, saveBlocks } from './BlockService';
+import BlockModel from "../Persistance/BlockModel";
+import FlashcardModel from "../Persistance/FlashcardModel";
+import { BlockInterface } from "../types";
+import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 
 async function createFlashcard(
   study_pack_id: string,
@@ -17,37 +17,56 @@ async function createFlashcard(
     study_pack_id,
     block_link,
     front_draft_keys,
-    back_draft_keys
+    back_draft_keys,
   });
 
   if (result.length) {
-    await saveBlocks(front_blocks ?? [], result[0]?.id, front_draft_keys ?? [], owner_id);
-    await saveBlocks(back_blocks ?? [], result[0]?.id, back_draft_keys ?? [], owner_id);
+    await saveBlocks(
+      front_blocks ?? [],
+      result[0]?.id,
+      front_draft_keys ?? [],
+      owner_id
+    );
+    await saveBlocks(
+      back_blocks ?? [],
+      result[0]?.id,
+      back_draft_keys ?? [],
+      owner_id
+    );
     return result[0];
   } else {
-    throw new Error('There was an error creating flashcard');
+    throw new Error("There was an error creating flashcard");
   }
 }
 
-async function getFullFlashcardsByStudyPackId(study_pack_id: string, owner_id: string) {
+async function getFullFlashcardsByStudyPackId(
+  study_pack_id: string,
+  owner_id: string
+) {
   try {
-    const flashcards = await FlashcardModel.getFlashcardsByStudyPackId(owner_id, study_pack_id);
+    const flashcards = await FlashcardModel.getFlashcardsByStudyPackId(
+      owner_id,
+      study_pack_id
+    );
     const fullFlashcards = await Promise.all(
       flashcards.map(async (val) => {
         const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
-        const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
+        const front_blocks = getOrganizedBlocks(
+          val.front_ordering,
+          blocksInCard
+        );
         const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
         return {
           flashcard: val,
           front_blocks,
-          back_blocks
+          back_blocks,
         };
       })
     );
     return fullFlashcards;
   } catch (error) {
     console.log(error);
-    throw Error('There was an error getting flashcards by studypack id');
+    throw Error("There was an error getting flashcards by studypack id");
   }
 }
 
@@ -65,7 +84,7 @@ async function saveFlashcard(
     id: flash_card_id,
     owner_id,
     back_ordering: back_draft_keys,
-    front_ordering: front_draft_keys
+    front_ordering: front_draft_keys,
   });
   return flashcard[0];
 }
@@ -74,15 +93,17 @@ async function deleteFlashcard(owner_id: string, id: string) {
   try {
     const blocks = await BlockService.getBlocksInParent(id);
     await Promise.all(
-      blocks.map(async (val: BlockInterface) => BlockService.deleteBlock(val.id, owner_id))
+      blocks.map(async (val: BlockInterface) =>
+        BlockService.deleteBlock(val.id, owner_id)
+      )
     );
     await FlashcardModel.deleteFlashcard({
       owner_id,
-      id
+      id,
     });
   } catch (error) {
     console.log(error);
-    throw Error('There was an error deleting flashcard');
+    throw Error("There was an error deleting flashcard");
   }
 }
 
@@ -90,5 +111,5 @@ export default {
   createFlashcard,
   getFullFlashcardsByStudyPackId,
   saveFlashcard,
-  deleteFlashcard
+  deleteFlashcard,
 };

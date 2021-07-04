@@ -1,15 +1,17 @@
-import { getStudyPacksByUserId } from '../Persistance/StudyPackModel';
-import { getBindersByUserId } from '../Persistance/BinderModel';
-import FolderModel from '../Persistance/FolderModel';
+import { getStudyPacksByUserId } from "../Persistance/StudyPackModel";
+import { getBindersByUserId } from "../Persistance/BinderModel";
+import FolderModel from "../Persistance/FolderModel";
 import {
   BinderInterface,
   FileTreeInterface,
   FILETREE_TYPES,
   FolderInterface,
-  StudyPackInterface
-} from '../types';
+  StudyPackInterface,
+} from "../types";
 
-function createFolderObject(folders: FolderInterface[]): { [key: string]: FolderInterface } {
+function createFolderObject(
+  folders: FolderInterface[]
+): { [key: string]: FolderInterface } {
   let folderObject: { [key: string]: FolderInterface } = {};
   for (let i = 0; i < folders.length; i++) {
     const prop: string = folders[i].id;
@@ -20,7 +22,10 @@ function createFolderObject(folders: FolderInterface[]): { [key: string]: Folder
   return folderObject;
 }
 
-function createBindersObject(binders: BinderInterface[], study_packs: StudyPackInterface[]) {
+function createBindersObject(
+  binders: BinderInterface[],
+  study_packs: StudyPackInterface[]
+) {
   let bindersObject: FileTreeInterface = {};
 
   binders.forEach((val) => {
@@ -31,7 +36,7 @@ function createBindersObject(binders: BinderInterface[], study_packs: StudyPackI
       name: val.name,
       owner_id: val.owner_id,
       color: val.color,
-      children: {}
+      children: {},
     };
   });
 
@@ -48,7 +53,7 @@ function createBindersObject(binders: BinderInterface[], study_packs: StudyPackI
         owner_id: study_pack.owner_id,
         name: study_pack.name,
         color: study_pack.color,
-        children: {}
+        children: {},
       };
     }
   });
@@ -68,7 +73,7 @@ function createFolderHierarchyObject(folders: FolderInterface[]) {
         date_modified: folder.date_modified,
         name: folder.name,
         owner_id: folder.owner_id,
-        children: {}
+        children: {},
       };
     }
   });
@@ -85,7 +90,8 @@ function createFullHierarchyObject(
 
   binders.forEach((binder) => {
     if (hierarchy[binder.folder_id]) {
-      hierarchy[binder.folder_id].children[binder.id] = binders_mapping[binder.id];
+      hierarchy[binder.folder_id].children[binder.id] =
+        binders_mapping[binder.id];
     }
   });
   return folder_hierarchy;
@@ -97,12 +103,16 @@ async function createFullFileTree(user_id: string) {
   const binders = await getBindersByUserId(user_id);
   const folder_hierarchy = createFolderHierarchyObject(folders);
   const binder_hierachy = createBindersObject(binders, study_packs);
-  const full_hierarchy = createFullHierarchyObject(binder_hierachy, binders, folder_hierarchy);
+  const full_hierarchy = createFullHierarchyObject(
+    binder_hierachy,
+    binders,
+    folder_hierarchy
+  );
 
   return full_hierarchy;
 }
 
 export default {
   createFullFileTree,
-  createFolderObject
+  createFolderObject,
 };

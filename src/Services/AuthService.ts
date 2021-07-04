@@ -1,16 +1,16 @@
-import { genSaltSync, hashSync } from 'bcryptjs';
-import { createNewUser, getUserByEmail } from '../Persistance/UserModel';
-import jwt from 'jsonwebtoken';
-import { compareSync } from 'bcryptjs';
-import { UserInterface } from '../types';
+import { genSaltSync, hashSync } from "bcryptjs";
+import { createNewUser, getUserByEmail } from "../Persistance/UserModel";
+import jwt from "jsonwebtoken";
+import { compareSync } from "bcryptjs";
+import { UserInterface } from "../types";
 
 export function comparePass(userPassword: string, databasePassword: string) {
   return compareSync(userPassword, databasePassword);
 }
 
 function genToken(user: UserInterface) {
-  const token = jwt.sign({ email_address: user.email_address }, 'testing123', {
-    expiresIn: 10000000
+  const token = jwt.sign({ email_address: user.email_address }, "testing123", {
+    expiresIn: 10000000,
   });
 
   return token;
@@ -23,7 +23,7 @@ export async function login(email_address: string, password: string) {
       return {
         success: false,
         code: 404,
-        message: 'Incorrect email'
+        message: "Incorrect email",
       };
     }
 
@@ -31,7 +31,7 @@ export async function login(email_address: string, password: string) {
       return {
         success: false,
         code: 401,
-        message: 'Incorrect password'
+        message: "Incorrect password",
       };
     }
 
@@ -44,14 +44,14 @@ export async function login(email_address: string, password: string) {
         first_name: user.first_name,
         last_name: user.last_name,
         email_address: email_address,
-        id: user.id
-      }
+        id: user.id,
+      },
     };
   } catch (err) {
     return {
       success: false,
       code: 500,
-      message: 'Internal server error'
+      message: "Internal server error",
     };
   }
 }
@@ -69,14 +69,19 @@ export async function createUser(
       return {
         success: false,
         code: 400,
-        message: 'Email address is already in use'
+        message: "Email address is already in use",
       };
     }
 
     const salt = genSaltSync();
     const hash = hashSync(password, salt);
 
-    const user = await createNewUser(email_address, first_name, last_name, hash);
+    const user = await createNewUser(
+      email_address,
+      first_name,
+      last_name,
+      hash
+    );
     const token = genToken(user);
 
     return {
@@ -85,14 +90,14 @@ export async function createUser(
         token,
         first_name: user.first_name,
         last_name: user.last_name,
-        id: user.id
-      }
+        id: user.id,
+      },
     };
   } catch (err) {
     return {
       success: false,
       message: err,
-      code: 500
+      code: 500,
     };
   }
 }

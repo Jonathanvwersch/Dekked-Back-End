@@ -1,5 +1,5 @@
-import BlockModel from '../Persistance/BlockModel';
-import { BlockInterface } from '../types';
+import BlockModel from "../Persistance/BlockModel";
+import { BlockInterface } from "../types";
 
 export async function checkBlockExists(parent_id: string, draft_key: string) {
   try {
@@ -18,10 +18,19 @@ async function saveOrCreateBlock(
 ) {
   const doesBlockExist = await checkBlockExists(parent_id, draft_key);
   if (doesBlockExist) {
-    const response = await BlockModel.updateBlock({ parent_id, draft_key, content: block });
+    const response = await BlockModel.updateBlock({
+      parent_id,
+      draft_key,
+      content: block,
+    });
     return response;
   } else {
-    const response = await BlockModel.createBlock(parent_id, draft_key, block, owner_id);
+    const response = await BlockModel.createBlock(
+      parent_id,
+      draft_key,
+      block,
+      owner_id
+    );
     return response;
   }
 }
@@ -37,7 +46,10 @@ export async function saveBlocks(
   }
 }
 
-export function getOrganizedBlocks(ordering: string[], blocks: BlockInterface[]): BlockInterface[] {
+export function getOrganizedBlocks(
+  ordering: string[],
+  blocks: BlockInterface[]
+): BlockInterface[] {
   let orderingMap: any = {};
 
   blocks.forEach((val) => (orderingMap[val.draft_key] = val.content));
@@ -59,5 +71,5 @@ export async function getBlocksInParent(parent_id: string) {
 
 export default {
   getBlocksInParent,
-  deleteBlock
+  deleteBlock,
 };
