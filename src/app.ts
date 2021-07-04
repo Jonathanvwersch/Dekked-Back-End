@@ -14,7 +14,6 @@ import { FileTreeController } from "./Controllers/FileTreeController";
 import { BinderController } from "./Controllers/BinderController";
 import { StudyPackController } from "./Controllers/StudyPackController";
 import { FlashcardController } from "./Controllers/FlashcardController";
-import { FILETREE_TYPES } from "./types";
 
 const app = express();
 applyPassportStrategy(passport);
