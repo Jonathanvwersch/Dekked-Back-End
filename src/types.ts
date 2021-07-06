@@ -1,3 +1,8 @@
+export enum FlashcardStatus {
+  NEW = "new",
+  GRADUATED = "graduated",
+}
+
 export interface BinderInterface {
   id: string;
   owner_id: string;
@@ -24,6 +29,11 @@ export interface FlashcardInterface {
   date_created: Date;
   date_modified: Date;
   block_link?: string;
+  status?: FlashcardStatus;
+  quality?: number;
+  ease_factor?: number;
+  failed_attempts?: number;
+  interval?: number;
 }
 
 export interface FolderInterface {
@@ -78,7 +88,7 @@ export interface FileTreeInterface {
 }
 
 export enum FILETREE_TYPES {
-  FOLDER = 'folder',
-  BINDER = 'binder',
-  STUDY_PACK = 'study_pack'
+  FOLDER = "folder",
+  BINDER = "binder",
+  STUDY_PACK = "study_pack",
 }
