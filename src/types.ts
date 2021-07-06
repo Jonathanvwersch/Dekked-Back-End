@@ -90,5 +90,5 @@ export interface FileTreeInterface {
 export enum FILETREE_TYPES {
   FOLDER = "folder",
   BINDER = "binder",
-  STUDY_PACK = "study_set",
+  STUDY_SET = "study-set",
 }

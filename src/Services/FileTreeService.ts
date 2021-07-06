@@ -42,7 +42,7 @@ function createBindersObject(
     if (bindersObject[binder_id]) {
       const folderId = bindersObject?.[binder_id]?.folder_id;
       bindersObject[binder_id].children[study_set_id] = {
-        type: FILETREE_TYPES.STUDY_PACK,
+        type: FILETREE_TYPES.STUDY_SET,
         ...study_set,
         children: {},
       };
