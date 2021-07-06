@@ -1,41 +1,39 @@
-import { BinderInterface, StudyPackInterface } from "../types";
+import { BinderInterface, StudySetInterface } from "../types";
 import db from "../db/database";
 
-export async function createStudyPack(
+export async function createStudySet(
   binder_id: string,
   name: string,
   owner_id: string,
   color: string,
   id?: string
-): Promise<StudyPackInterface> {
+): Promise<StudySetInterface> {
   const now = new Date();
 
   try {
-    const study_pack: StudyPackInterface[] = await db
-      .table("study_packs")
-      .insert(
-        {
-          binder_id,
-          name,
-          owner_id,
-          color,
-          id,
-          date_created: now,
-          date_modified: now,
-        },
-        ["*"]
-      );
-    return study_pack[0];
+    const study_set: StudySetInterface[] = await db.table("study_sets").insert(
+      {
+        binder_id,
+        name,
+        owner_id,
+        color,
+        id,
+        date_created: now,
+        date_modified: now,
+      },
+      ["*"]
+    );
+    return study_set[0];
   } catch (err) {
     console.log(err);
     throw new Error("There was an error creating binder");
   }
 }
 
-export async function getStudyPackById(id: string) {
+export async function getStudySetById(id: string) {
   try {
     const binder: BinderInterface | undefined = await db
-      .table("study_packs")
+      .table("study_sets")
       .select("*")
       .where({ id })
       .first();
@@ -46,23 +44,23 @@ export async function getStudyPackById(id: string) {
   }
 }
 
-export async function getStudyPacksByBinderId(binder_id: string) {
+export async function getStudySetsByBinderId(binder_id: string) {
   try {
-    const study_packs: StudyPackInterface[] = await db
-      .table("study_packs")
+    const study_sets: StudySetInterface[] = await db
+      .table("study_sets")
       .select("*")
       .where({ binder_id });
-    return study_packs;
+    return study_sets;
   } catch (err) {
     console.log(err);
     throw Error("Error getting study pack by binder id");
   }
 }
 
-export async function getStudyPacksByUserId(user_id: string) {
+export async function getStudySetsByUserId(user_id: string) {
   try {
-    const binders: StudyPackInterface[] = await db
-      .table("study_packs")
+    const binders: StudySetInterface[] = await db
+      .table("study_sets")
       .select("*")
       .where({ owner_id: user_id });
     return binders;
@@ -72,13 +70,13 @@ export async function getStudyPacksByUserId(user_id: string) {
   }
 }
 
-export async function updateStudyPack({
-  study_pack_id,
+export async function updateStudySet({
+  study_set_id,
   owner_id,
   color,
   name,
 }: {
-  study_pack_id: string;
+  study_set_id: string;
   owner_id: string;
   color?: string;
   name?: string;
@@ -86,33 +84,33 @@ export async function updateStudyPack({
   const now = new Date();
 
   try {
-    await db("study_packs")
+    await db("study_sets")
       .update({ name, color })
-      .where({ id: study_pack_id, owner_id, date_modified: now });
+      .where({ id: study_set_id, owner_id, date_modified: now });
   } catch (err) {
     console.log(err);
     throw Error("There was an error updating study pack");
   }
 }
 
-async function deleteStudyPack({
-  study_pack_id,
+async function deleteStudySet({
+  study_set_id,
   owner_id,
 }: {
-  study_pack_id: string;
+  study_set_id: string;
   owner_id: string;
 }) {
   try {
-    await db("study_packs").delete("*").where({ id: study_pack_id, owner_id });
+    await db("study_sets").delete("*").where({ id: study_set_id, owner_id });
   } catch (err) {
     console.log(err);
     throw Error("There was an error deleting study pack");
   }
 }
 export default {
-  createStudyPack,
-  getStudyPackById,
-  getStudyPacksByBinderId,
-  updateStudyPack,
-  deleteStudyPack,
+  createStudySet,
+  getStudySetById,
+  getStudySetsByBinderId,
+  updateStudySet,
+  deleteStudySet,
 };

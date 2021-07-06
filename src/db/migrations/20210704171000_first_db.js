@@ -5,7 +5,7 @@ exports.up = function (knex) {
       table.dateTime("date_modified");
     })
 
-    .table("study_packs", (table) => {
+    .table("study_sets", (table) => {
       table.dateTime("date_created");
       table.dateTime("date_modified");
     });
@@ -17,7 +17,7 @@ exports.down = function (knex) {
       table.dropColumn("date_created");
       table.dropColumn("date_modified");
     })
-    .table("study_packs", function (table) {
+    .table("study_sets", function (table) {
       table.dropColumn("date_created");
       table.dropColumn("date_modified");
     });

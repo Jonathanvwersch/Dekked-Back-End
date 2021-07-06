@@ -23,7 +23,7 @@ export interface BlockInterface {
 export interface FlashcardInterface {
   id: string;
   owner_id: string;
-  study_pack_id: string;
+  study_set_id: string;
   back_ordering: string[];
   front_ordering: string[];
   date_created: Date;
@@ -50,10 +50,10 @@ export interface PageInterface {
   title: string;
   ordering: string[];
   owner_id: string;
-  study_pack_id: string;
+  study_set_id: string;
 }
 
-export interface StudyPackInterface {
+export interface StudySetInterface {
   id: string;
   owner_id: string;
   binder_id: string;
@@ -90,5 +90,5 @@ export interface FileTreeInterface {
 export enum FILETREE_TYPES {
   FOLDER = "folder",
   BINDER = "binder",
-  STUDY_PACK = "study_pack",
+  STUDY_PACK = "study_set",
 }

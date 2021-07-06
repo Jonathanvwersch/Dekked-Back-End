@@ -1,4 +1,4 @@
-import { getStudyPacksByUserId } from "../Persistance/StudyPackModel";
+import { getStudySetsByUserId } from "../Persistance/StudySetModel";
 import { getBindersByUserId } from "../Persistance/BinderModel";
 import FolderModel from "../Persistance/FolderModel";
 import {
@@ -6,7 +6,7 @@ import {
   FileTreeInterface,
   FILETREE_TYPES,
   FolderInterface,
-  StudyPackInterface,
+  StudySetInterface,
 } from "../types";
 
 function createFolderObject(
@@ -24,7 +24,7 @@ function createFolderObject(
 
 function createBindersObject(
   binders: BinderInterface[],
-  study_packs: StudyPackInterface[]
+  study_sets: StudySetInterface[]
 ) {
   let bindersObject: FileTreeInterface = {};
 
@@ -36,14 +36,14 @@ function createBindersObject(
     };
   });
 
-  study_packs.forEach((study_pack) => {
-    const binder_id = study_pack.binder_id;
-    const study_pack_id = study_pack.id;
+  study_sets.forEach((study_set) => {
+    const binder_id = study_set.binder_id;
+    const study_set_id = study_set.id;
     if (bindersObject[binder_id]) {
       const folderId = bindersObject?.[binder_id]?.folder_id;
-      bindersObject[binder_id].children[study_pack_id] = {
+      bindersObject[binder_id].children[study_set_id] = {
         type: FILETREE_TYPES.STUDY_PACK,
-        ...study_pack,
+        ...study_set,
         children: {},
       };
     }
@@ -85,10 +85,10 @@ function createFullHierarchyObject(
 
 async function createFullFileTree(user_id: string) {
   const folders = await FolderModel.getFoldersByUser(user_id);
-  const study_packs = await getStudyPacksByUserId(user_id);
+  const study_sets = await getStudySetsByUserId(user_id);
   const binders = await getBindersByUserId(user_id);
   const folder_hierarchy = createFolderHierarchyObject(folders);
-  const binder_hierachy = createBindersObject(binders, study_packs);
+  const binder_hierachy = createBindersObject(binders, study_sets);
   const full_hierarchy = createFullHierarchyObject(
     binder_hierachy,
     binders,

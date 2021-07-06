@@ -25,7 +25,7 @@ async function createTables() {
         .defaultTo(db.raw("uuid_generate_v4()"));
       table.string("title").notNullable();
       table.uuid("owner_id").notNullable();
-      table.uuid("study_pack_id").notNullable();
+      table.uuid("study_set_id").notNullable();
       table.specificType("ordering", "text []").notNullable();
     });
   }
@@ -74,8 +74,8 @@ async function createTables() {
     });
   }
 
-  if (!(await db.schema.hasTable("study_packs"))) {
-    await db.schema.createTable("study_packs", (table) => {
+  if (!(await db.schema.hasTable("study_sets"))) {
+    await db.schema.createTable("study_sets", (table) => {
       table
         .uuid("id")
         .primary()
@@ -98,7 +98,7 @@ async function createTables() {
         .unique()
         .defaultTo(db.raw("uuid_generate_v4()"));
       table.uuid("owner_id").notNullable();
-      table.uuid("study_pack_id").notNullable();
+      table.uuid("study_set_id").notNullable();
       table.specificType("back_ordering", "text []");
       table.specificType("front_ordering", "text []");
       table.dateTime("date_created").notNullable();

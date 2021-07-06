@@ -1,25 +1,25 @@
-import express from 'express';
-import FlashcardService from '../Services/FlashcardService';
-import { getUserIdFromRequest } from '../utils/passport/authHelpers';
+import express from "express";
+import FlashcardService from "../Services/FlashcardService";
+import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class FlashcardController {
-  public async getFullFlashcardsByStudyPackId(
+  public async getFullFlashcardsByStudySetId(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { study_pack_id } = req.params;
+    const { study_set_id } = req.params;
 
     try {
-      const flashcards = await FlashcardService.getFullFlashcardsByStudyPackId(
-        study_pack_id,
+      const flashcards = await FlashcardService.getFullFlashcardsByStudySetId(
+        study_set_id,
         userId
       );
       return res.status(200).json({
         success: true,
         data: {
-          flashcards
-        }
+          flashcards,
+        },
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
@@ -32,17 +32,17 @@ export class FlashcardController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const {
-      study_pack_id,
+      study_set_id,
       block_link,
       front_blocks,
       front_draft_keys,
       back_blocks,
-      back_draft_keys
+      back_draft_keys,
     } = req.body;
 
     try {
       const flashcard = await FlashcardService.createFlashcard(
-        study_pack_id,
+        study_set_id,
         userId,
         block_link,
         front_blocks,
@@ -54,12 +54,12 @@ export class FlashcardController {
       const fullFlashcard = {
         flashcard,
         front_blocks,
-        back_blocks
+        back_blocks,
       };
 
       return res.status(200).json({
         success: true,
-        fullFlashcard
+        fullFlashcard,
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
@@ -72,7 +72,12 @@ export class FlashcardController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { flash_card_id } = req.params;
-    const { front_blocks, front_draft_keys, back_blocks, back_draft_keys } = req.body;
+    const {
+      front_blocks,
+      front_draft_keys,
+      back_blocks,
+      back_draft_keys,
+    } = req.body;
 
     try {
       const flashcard = await FlashcardService.saveFlashcard(
@@ -87,12 +92,12 @@ export class FlashcardController {
       const fullFlashcard = {
         flashcard,
         front_blocks,
-        back_blocks
+        back_blocks,
       };
 
       return res.status(200).json({
         success: true,
-        fullFlashcard
+        fullFlashcard,
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
@@ -109,7 +114,7 @@ export class FlashcardController {
     try {
       await FlashcardService.deleteFlashcard(userId, flash_card_id);
       return res.status(200).json({
-        success: true
+        success: true,
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });

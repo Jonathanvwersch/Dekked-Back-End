@@ -12,7 +12,7 @@ import { applyPassportStrategy } from "./utils/passport/passport";
 import passport from "passport";
 import { FileTreeController } from "./Controllers/FileTreeController";
 import { BinderController } from "./Controllers/BinderController";
-import { StudyPackController } from "./Controllers/StudyPackController";
+import { StudySetController } from "./Controllers/StudySetController";
 import { FlashcardController } from "./Controllers/FlashcardController";
 
 const app = express();
@@ -30,7 +30,7 @@ const blockController = new BlockController();
 const userController = new UserController();
 const fileTreeController = new FileTreeController();
 const binderController = new BinderController();
-const studyPackController = new StudyPackController();
+const studyPackController = new StudySetController();
 const flashcardController = new FlashcardController();
 
 //-----------------------------//
@@ -200,31 +200,31 @@ app.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  studyPackController.getStudyPacksByUserId
+  studyPackController.getStudySetsByUserId
 );
 
 app.post(
-  `/study-pack`,
+  `/study-set`,
   passport.authenticate("jwt", {
     session: false,
   }),
-  studyPackController.createStudyPack
+  studyPackController.createStudySet
 );
 
 app.put(
-  `/study-pack`,
+  `/study-set`,
   passport.authenticate("jwt", {
     session: false,
   }),
-  studyPackController.updateStudyPack
+  studyPackController.updateStudySet
 );
 
 app.delete(
-  `/study-pack`,
+  `/study-set`,
   passport.authenticate("jwt", {
     session: false,
   }),
-  studyPackController.deleteStudyPack
+  studyPackController.deleteStudySet
 );
 
 //-----------------------------//
@@ -245,11 +245,11 @@ app.get("/page/:page_id", (req, res) => pageController.getFullPage(req, res));
 // app.post('/page', (req, res) => pageController.createPage(req, res));
 app.patch("/page", (req, res) => pageController.updatePage(req, res));
 app.get(
-  "/get-page-by-parent-id/:study_pack_id",
+  "/get-page-by-parent-id/:study_set_id",
   passport.authenticate("jwt", {
     session: false,
   }),
-  pageController.getPageByStudyPackId
+  pageController.getPageByStudySetId
 );
 
 // Block
@@ -265,11 +265,11 @@ app.get(
 
 // Flashcards
 app.get(
-  "/get-flashcards-by-study-pack-id/:study_pack_id",
+  "/get-flashcards-by-study-set-id/:study_set_id",
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.getFullFlashcardsByStudyPackId
+  flashcardController.getFullFlashcardsByStudySetId
 );
 
 app.post(

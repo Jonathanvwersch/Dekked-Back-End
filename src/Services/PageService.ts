@@ -1,9 +1,9 @@
 import PageModel from "../Persistance/PageModel";
 import { BlockInterface } from "../types";
 import BlockService from "./BlockService";
-async function getPageByStudyPackIdAsync(study_pack_id: string) {
+async function getPageByStudySetIdAsync(study_set_id: string) {
   try {
-    const result = await PageModel.getPageByStudyPackId(study_pack_id);
+    const result = await PageModel.getPageByStudySetId(study_set_id);
     return result;
   } catch (error) {
     console.log(error);
@@ -12,12 +12,12 @@ async function getPageByStudyPackIdAsync(study_pack_id: string) {
 }
 
 async function createPage(
-  study_pack_id: string,
+  study_set_id: string,
   title?: string,
   owner_id?: string
 ) {
   try {
-    const result = await PageModel.createPage(study_pack_id, title, owner_id);
+    const result = await PageModel.createPage(study_set_id, title, owner_id);
     return result;
   } catch (error) {
     console.log(error);
@@ -41,7 +41,7 @@ async function deletePage(page_id: string, owner_id: string) {
 }
 
 export default {
-  getPageByStudyPackIdAsync,
+  getPageByStudySetIdAsync,
   createPage,
   deletePage,
 };

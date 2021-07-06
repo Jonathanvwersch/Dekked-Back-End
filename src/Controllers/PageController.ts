@@ -1,9 +1,9 @@
-import express from 'express';
-import BlockModel from '../Persistance/BlockModel';
-import PageModel from '../Persistance/PageModel';
-import { getOrganizedBlocks, saveBlocks } from '../Services/BlockService';
-import PageService from '../Services/PageService';
-import { getUserIdFromRequest } from '../utils/passport/authHelpers';
+import express from "express";
+import BlockModel from "../Persistance/BlockModel";
+import PageModel from "../Persistance/PageModel";
+import { getOrganizedBlocks, saveBlocks } from "../Services/BlockService";
+import PageService from "../Services/PageService";
+import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class PageController {
   public async getFullPage(
@@ -18,7 +18,7 @@ export class PageController {
       const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);
       return res.status(200).json({
         success: true,
-        data: { page, organizedBlocks }
+        data: { page, organizedBlocks },
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -35,7 +35,7 @@ export class PageController {
       const response = await PageModel.getPage(page_id);
       return res.status(200).json({
         success: true,
-        data: response
+        data: response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -48,7 +48,10 @@ export class PageController {
   ): Promise<express.Response<any>> {
     const { page_id } = req.params;
     const userId = getUserIdFromRequest(req);
-    const { blocks, draft_keys }: { blocks: [string]; draft_keys: [string] } = req.body;
+    const {
+      blocks,
+      draft_keys,
+    }: { blocks: [string]; draft_keys: [string] } = req.body;
 
     try {
       await saveBlocks(blocks, page_id, draft_keys, userId);
@@ -68,7 +71,7 @@ export class PageController {
       const response = await PageModel.updatePage(req.body);
       return res.status(200).json({
         success: true,
-        data: response
+        data: response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -84,27 +87,27 @@ export class PageController {
       return res.status(200).json({
         success: true,
         data: {
-          pages: response
-        }
+          pages: response,
+        },
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }
   }
 
-  public async getPageByStudyPackId(
+  public async getPageByStudySetId(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    const { study_pack_id } = req.params;
+    const { study_set_id } = req.params;
 
     try {
-      const response = await PageService.getPageByStudyPackIdAsync(study_pack_id);
+      const response = await PageService.getPageByStudySetIdAsync(study_set_id);
       return res.status(200).json({
         success: true,
         data: {
-          page: response
-        }
+          page: response,
+        },
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });

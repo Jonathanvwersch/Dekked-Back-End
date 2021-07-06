@@ -4,7 +4,7 @@ import { BlockInterface } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 
 async function createFlashcard(
-  study_pack_id: string,
+  study_set_id: string,
   owner_id: string,
   block_link?: string,
   front_blocks?: string[],
@@ -14,7 +14,7 @@ async function createFlashcard(
 ) {
   const result = await FlashcardModel.createFlashcard({
     owner_id,
-    study_pack_id,
+    study_set_id,
     block_link,
     front_draft_keys,
     back_draft_keys,
@@ -39,14 +39,14 @@ async function createFlashcard(
   }
 }
 
-async function getFullFlashcardsByStudyPackId(
-  study_pack_id: string,
+async function getFullFlashcardsByStudySetId(
+  study_set_id: string,
   owner_id: string
 ) {
   try {
-    const flashcards = await FlashcardModel.getFlashcardsByStudyPackId(
+    const flashcards = await FlashcardModel.getFlashcardsByStudySetId(
       owner_id,
-      study_pack_id
+      study_set_id
     );
     const fullFlashcards = await Promise.all(
       flashcards.map(async (val) => {
@@ -109,7 +109,7 @@ async function deleteFlashcard(owner_id: string, id: string) {
 
 export default {
   createFlashcard,
-  getFullFlashcardsByStudyPackId,
+  getFullFlashcardsByStudySetId,
   saveFlashcard,
   deleteFlashcard,
 };

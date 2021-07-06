@@ -1,6 +1,6 @@
 import BinderModel from "../Persistance/BinderModel";
 import { BinderInterface } from "../types";
-import StudyPackService from "./StudyPackService";
+import StudySetService from "./StudySetService";
 
 export function createBinderObject(binders: BinderInterface[]) {
   let binderObject: { [key: string]: BinderInterface } = {};
@@ -32,11 +32,11 @@ async function deleteBinder({
   binder_id: string;
   owner_id: string;
 }) {
-  const study_packs = await StudyPackService.getStudyPacksByBinderId(binder_id);
+  const study_sets = await StudySetService.getStudySetsByBinderId(binder_id);
 
   await Promise.all(
-    study_packs.map(async (val) =>
-      StudyPackService.deleteStudyPack({ study_pack_id: val.id, owner_id })
+    study_sets.map(async (val) =>
+      StudySetService.deleteStudySet({ study_set_id: val.id, owner_id })
     )
   );
 

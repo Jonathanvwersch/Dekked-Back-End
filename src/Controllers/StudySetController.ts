@@ -1,31 +1,36 @@
-import express from 'express';
-import { createStudyPack, getStudyPacksByUserId } from '../Persistance/StudyPackModel';
-import PageService from '../Services/PageService';
-import StudyPackService, { createStudyPackObject } from '../Services/StudyPackService';
-import { getUserIdFromRequest } from '../utils/passport/authHelpers';
+import express from "express";
+import {
+  createStudySet,
+  getStudySetsByUserId,
+} from "../Persistance/StudySetModel";
+import PageService from "../Services/PageService";
+import StudySetService, {
+  createStudySetObject,
+} from "../Services/StudySetService";
+import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
-export class StudyPackController {
-  public async getStudyPacksByUserId(
+export class StudySetController {
+  public async getStudySetsByUserId(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
 
     try {
-      const studyPacks = await getStudyPacksByUserId(userId);
-      const studyPackObject = createStudyPackObject(studyPacks);
+      const studySets = await getStudySetsByUserId(userId);
+      const studyPackObject = createStudySetObject(studySets);
       return res.status(200).json({
         success: true,
         data: {
-          studyPacks: studyPackObject
-        }
+          studySets: studyPackObject,
+        },
       });
     } catch (e) {
       return res.status(400).json({ success: false, error: e.message });
     }
   }
 
-  public async createStudyPack(
+  public async createStudySet(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
@@ -33,32 +38,32 @@ export class StudyPackController {
     const { binder_id, name, color, id } = req.body;
 
     try {
-      const response = await createStudyPack(binder_id, name, userId, color, id);
+      const response = await createStudySet(binder_id, name, userId, color, id);
       await PageService.createPage(id, undefined, userId);
       return res.status(200).json({
         success: true,
         data: {
-          study_pack: response
-        }
+          study_set: response,
+        },
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }
   }
 
-  public async updateStudyPack(
+  public async updateStudySet(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { name, color, study_pack_id } = req.body;
+    const { name, color, study_set_id } = req.body;
 
     try {
-      await StudyPackService.updateStudyPack({
+      await StudySetService.updateStudySet({
         name,
         color,
-        study_pack_id,
-        owner_id: userId
+        study_set_id,
+        owner_id: userId,
       });
       return res.status(200).json({ success: true });
     } catch (e) {
@@ -67,17 +72,17 @@ export class StudyPackController {
     }
   }
 
-  public async deleteStudyPack(
+  public async deleteStudySet(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { study_pack_id } = req.body;
-    
+    const { study_set_id } = req.body;
+
     try {
-      await StudyPackService.deleteStudyPack({
-        study_pack_id,
-        owner_id: userId
+      await StudySetService.deleteStudySet({
+        study_set_id,
+        owner_id: userId,
       });
       return res.status(200).json({ success: true });
     } catch (e) {

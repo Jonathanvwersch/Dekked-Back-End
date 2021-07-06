@@ -2,14 +2,14 @@ import { PageInterface } from "../types";
 import db from "../db/database";
 
 async function createPage(
-  study_pack_id: string,
+  study_set_id: string,
   title: string = "Untitled",
   owner_id: string | undefined,
   ordering = []
 ): Promise<string> {
   const response: PageInterface[] = await db
     .table("pages")
-    .insert({ title, ordering, owner_id, study_pack_id }, ["id"]);
+    .insert({ title, ordering, owner_id, study_set_id }, ["id"]);
   if (response[0].id) {
     return response[0].id;
   }
@@ -48,11 +48,11 @@ async function getPages() {
   return response;
 }
 
-async function getPageByStudyPackId(study_pack_id: string) {
+async function getPageByStudySetId(study_set_id: string) {
   const response: PageInterface[] = await db
     .table("pages")
     .select("*")
-    .where({ study_pack_id });
+    .where({ study_set_id });
   if (response.length) {
     return response[0];
   }
@@ -77,6 +77,6 @@ export default {
   getPage,
   updatePage,
   getPages,
-  getPageByStudyPackId,
+  getPageByStudySetId,
   deletePage,
 };

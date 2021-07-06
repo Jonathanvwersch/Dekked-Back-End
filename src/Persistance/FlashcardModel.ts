@@ -3,13 +3,13 @@ import db from "../db/database";
 
 async function createFlashcard({
   owner_id,
-  study_pack_id,
+  study_set_id,
   block_link,
   front_draft_keys,
   back_draft_keys,
 }: {
   owner_id: string;
-  study_pack_id: string;
+  study_set_id: string;
   block_link?: string;
   front_draft_keys?: string[];
   back_draft_keys?: string[];
@@ -20,7 +20,7 @@ async function createFlashcard({
     const creationResponse: FlashcardInterface[] = await db("flashcards")
       .insert({
         owner_id,
-        study_pack_id,
+        study_set_id,
         block_link,
         date_created: now,
         date_modified: now,
@@ -35,16 +35,16 @@ async function createFlashcard({
   }
 }
 
-async function getFlashcardsByStudyPackId(
+async function getFlashcardsByStudySetId(
   owner_id: string,
-  study_pack_id: string
+  study_set_id: string
 ) {
   try {
     const flashcards: FlashcardInterface[] = await db("flashcards")
       .select("*")
       .where({
         owner_id,
-        study_pack_id,
+        study_set_id,
       });
     return flashcards;
   } catch (error) {
@@ -103,7 +103,7 @@ async function deleteFlashcard({
 
 export default {
   createFlashcard,
-  getFlashcardsByStudyPackId,
+  getFlashcardsByStudySetId,
   updateFlashcard,
   deleteFlashcard,
 };
