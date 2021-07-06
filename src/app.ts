@@ -196,7 +196,7 @@ app.delete(
 
 // Study Packs
 app.get(
-  `/study-packs`,
+  `/study-sets`,
   passport.authenticate("jwt", {
     session: false,
   }),
