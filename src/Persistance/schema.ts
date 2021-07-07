@@ -23,7 +23,6 @@ async function createTables() {
         .primary()
         .unique()
         .defaultTo(db.raw("uuid_generate_v4()"));
-      table.string("title").notNullable();
       table.uuid("owner_id").notNullable();
       table.uuid("study_set_id").notNullable();
       table.specificType("ordering", "text []").notNullable();

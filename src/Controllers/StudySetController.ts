@@ -39,7 +39,7 @@ export class StudySetController {
 
     try {
       const response = await createStudySet(binder_id, name, userId, color, id);
-      await PageService.createPage(id, undefined, userId);
+      await PageService.createPage(id, userId);
       return res.status(200).json({
         success: true,
         data: {

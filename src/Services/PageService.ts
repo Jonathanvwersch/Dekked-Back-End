@@ -11,13 +11,9 @@ async function getPageByStudySetIdAsync(study_set_id: string) {
   }
 }
 
-async function createPage(
-  study_set_id: string,
-  title?: string,
-  owner_id?: string
-) {
+async function createPage(study_set_id: string, owner_id?: string) {
   try {
-    const result = await PageModel.createPage(study_set_id, title, owner_id);
+    const result = await PageModel.createPage(study_set_id, owner_id);
     return result;
   } catch (error) {
     console.log(error);

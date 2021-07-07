@@ -3,13 +3,12 @@ import db from "../db/database";
 
 async function createPage(
   study_set_id: string,
-  title: string = "Untitled",
   owner_id: string | undefined,
   ordering = []
 ): Promise<string> {
   const response: PageInterface[] = await db
     .table("pages")
-    .insert({ title, ordering, owner_id, study_set_id }, ["id"]);
+    .insert({ ordering, owner_id, study_set_id }, ["id"]);
   if (response[0].id) {
     return response[0].id;
   }
