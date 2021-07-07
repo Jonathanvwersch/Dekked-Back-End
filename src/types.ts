@@ -20,6 +20,24 @@ export interface BlockInterface {
   content: string;
 }
 
+export interface FlashcardInterface {
+  id: string;
+  owner_id: string;
+  study_set_id: string;
+  back_ordering: string[];
+  front_ordering: string[];
+  date_created: Date;
+  date_modified: Date;
+  block_link?: string;
+  status?: FlashcardStatus;
+  quality?: number;
+  ease_factor?: number;
+  failed_attempts?: number;
+  interval?: number;
+  front_blocks: string[];
+  back_blocks: string[];
+}
+
 export interface FolderInterface {
   id: string;
   owner_id: string;
@@ -31,9 +49,11 @@ export interface FolderInterface {
 
 export interface PageInterface {
   id: string;
+  title: string;
   ordering: string[];
   owner_id: string;
   study_set_id: string;
+  page: PageInterface;
 }
 
 export interface StudySetInterface {
@@ -45,7 +65,6 @@ export interface StudySetInterface {
   date_created: Date;
   date_modified: Date;
   folder_id: string;
-  page: PageInterface;
 }
 
 export interface UserInterface {

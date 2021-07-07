@@ -1,5 +1,6 @@
 import express from "express";
 import FlashcardService from "../Services/FlashcardService";
+import { FlashcardInterface } from "../types";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class FlashcardController {
@@ -89,8 +90,8 @@ export class FlashcardController {
         back_draft_keys
       );
 
-      const fullFlashcard = {
-        flashcard,
+      const fullFlashcard: FlashcardInterface = {
+        ...flashcard,
         front_blocks,
         back_blocks,
       };
