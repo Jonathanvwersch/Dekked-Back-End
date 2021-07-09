@@ -85,8 +85,8 @@ export async function updateStudySet({
 
   try {
     await db("study_sets")
-      .update({ name, color })
-      .where({ id: study_set_id, owner_id, date_modified: now });
+      .update({ name, color, date_modified: now })
+      .where({ id: study_set_id, owner_id });
   } catch (err) {
     console.log(err);
     throw Error("There was an error updating study pack");
