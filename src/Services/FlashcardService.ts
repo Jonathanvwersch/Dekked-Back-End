@@ -1,6 +1,6 @@
 import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
-import { BlockInterface } from "../types";
+import { BlockInterface, FlashcardInterface } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 
 async function createFlashcard(
@@ -57,7 +57,7 @@ async function getFullFlashcardsByStudySetId(
         );
         const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
         return {
-          flashcard: val,
+          ...val,
           front_blocks,
           back_blocks,
         };
