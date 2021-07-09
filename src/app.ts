@@ -23,7 +23,6 @@ app.use(cors());
 
 const folderController = new FolderController();
 const deckController = new DeckController();
-const cardController = new CardController();
 const studyController = new StudyController();
 const pageController = new PageController();
 const blockController = new BlockController();
@@ -72,7 +71,7 @@ app.get(
   userController.getUser
 );
 
-app.put(
+app.patch(
   "/user",
   passport.authenticate("jwt", {
     session: false,
@@ -95,7 +94,7 @@ app.get(
 
 // Folders
 
-app.put(
+app.patch(
   `/folder`,
   passport.authenticate("jwt", {
     session: false,
@@ -128,17 +127,6 @@ app.get(
 );
 
 //-----------------------------//
-
-// Card
-app.post("/card", (req, res) => cardController.createCard(req, res));
-app.get("/card/:card_id", (req, res) => cardController.getCard(req, res));
-app.patch("/card", (req, res) => cardController.updateCard(req, res));
-app.delete("/card", (req, res) => cardController.deleteCard(req, res));
-
-// Cards
-app.get("/cards/:deck_id", (req, res) =>
-  cardController.getCardsInDeck(req, res)
-);
 
 // Deck
 app.post("/deck", (req, res) => deckController.createDeck(req, res));
@@ -176,7 +164,7 @@ app.post(
   binderController.createBinder
 );
 
-app.put(
+app.patch(
   `/binder`,
   passport.authenticate("jwt", {
     session: false,
@@ -211,7 +199,7 @@ app.post(
   studyPackController.createStudySet
 );
 
-app.put(
+app.patch(
   `/study-set`,
   passport.authenticate("jwt", {
     session: false,
@@ -230,7 +218,7 @@ app.delete(
 //-----------------------------//
 
 // Pages
-app.put(
+app.patch(
   "/page/:page_id",
   passport.authenticate("jwt", {
     session: false,
@@ -242,8 +230,6 @@ app.get("/page-meta/:page_id", (req, res) =>
   pageController.getPageMeta(req, res)
 );
 app.get("/page/:page_id", (req, res) => pageController.getFullPage(req, res));
-// app.post('/page', (req, res) => pageController.createPage(req, res));
-app.patch("/page", (req, res) => pageController.updatePage(req, res));
 app.get(
   "/get-page-by-parent-id/:study_set_id",
   passport.authenticate("jwt", {
@@ -280,7 +266,7 @@ app.post(
   flashcardController.createFlashCard
 );
 
-app.put(
+app.patch(
   "/flashcard/:flash_card_id",
   passport.authenticate("jwt", {
     session: false,
