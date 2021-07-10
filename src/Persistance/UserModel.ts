@@ -29,10 +29,17 @@ export async function createNewUser(
   last_name: string,
   password: string
 ) {
+  const now = new Date();
+
   try {
-    await db
-      .table("users")
-      .insert({ email_address, first_name, last_name, password });
+    await db.table("users").insert({
+      email_address,
+      first_name,
+      last_name,
+      password,
+      date_created: now,
+      date_modified: now,
+    });
     const user: UserInterface = await getUserByEmail(email_address);
     return user;
   } catch (error) {
@@ -52,10 +59,12 @@ export async function updateUser({
   last_name?: string;
   email_address?: string;
 }) {
+  const now = new Date();
+
   try {
     await db
       .table("users")
-      .update({ email_address, first_name, last_name })
+      .update({ email_address, first_name, last_name, date_modified: now })
       .where({ id });
   } catch (error) {
     console.log(error);

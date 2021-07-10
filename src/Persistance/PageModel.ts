@@ -6,9 +6,18 @@ async function createPage(
   owner_id: string | undefined,
   ordering = []
 ): Promise<string> {
-  const response: PageInterface[] = await db
-    .table("pages")
-    .insert({ ordering, owner_id, study_set_id }, ["id"]);
+  const now = new Date();
+
+  const response: PageInterface[] = await db.table("pages").insert(
+    {
+      ordering,
+      owner_id,
+      study_set_id,
+      date_created: now,
+      date_modified: now,
+    },
+    ["id"]
+  );
   if (response[0].id) {
     return response[0].id;
   }
@@ -35,9 +44,11 @@ async function updatePage({
   page_id: string;
   ordering?: string[];
 }): Promise<number> {
+  const now = new Date();
+
   if (!page_id) throw new Error("You must specify a page Id");
   const response: number = await db("pages")
-    .update({ ordering })
+    .update({ ordering, date_modified: now })
     .where("id", page_id);
   return response;
 }

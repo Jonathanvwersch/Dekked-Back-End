@@ -3,6 +3,12 @@ export enum FlashcardStatus {
   GRADUATED = "graduated",
 }
 
+export enum FILETREE_TYPES {
+  FOLDER = "folder",
+  BINDER = "binder",
+  STUDY_SET = "study-set",
+}
+
 export interface BinderInterface {
   id: string;
   owner_id: string;
@@ -53,12 +59,16 @@ export interface PageInterface {
   ordering: string[];
   owner_id: string;
   study_set_id: string;
+  date_created: string;
+  date_modified: string;
 }
 
 export interface DeckInterface {
   id: string;
   owner_id: string;
   study_set_id: string;
+  date_created: string;
+  date_modified: string;
 }
 
 export interface StudySetInterface {
@@ -78,8 +88,9 @@ export interface UserInterface {
   first_name: string;
   last_name: string;
   password: string;
+  date_created: string;
+  date_modified: string;
 }
-
 export interface FileTreeInterface {
   [instance_id: string]: {
     type: string;
@@ -87,16 +98,10 @@ export interface FileTreeInterface {
     owner_id: string;
     color: string;
     name: string;
-    children: FileTreeInterface;
     date_created?: Date;
     date_modified?: Date;
     folder_id?: string;
     binder_id?: string;
+    children: FileTreeInterface;
   };
-}
-
-export enum FILETREE_TYPES {
-  FOLDER = "folder",
-  BINDER = "binder",
-  STUDY_SET = "study-set",
 }
