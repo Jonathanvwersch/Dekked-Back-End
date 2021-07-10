@@ -227,7 +227,7 @@ app.get(
 
 // Flashcards and Decks
 app.get(
-  "/get-flashcards-deck/:deck_id",
+  "/get-flashcards-by-study-set-id/:study_set_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -236,14 +236,6 @@ app.get(
 
 app.get(
   "/get-spaced-repetition-flashcards-deck/:deck_id",
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  flashcardController.getFullFlashcardsByStudySetId
-);
-
-app.get(
-  "/get-decks",
   passport.authenticate("jwt", {
     session: false,
   }),
