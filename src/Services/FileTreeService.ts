@@ -44,6 +44,7 @@ function createBindersObject(
       bindersObject[binder_id].children[study_set_id] = {
         type: FILETREE_TYPES.STUDY_SET,
         ...study_set,
+        folder_id: folderId,
         children: {},
       };
     }

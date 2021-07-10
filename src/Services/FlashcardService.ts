@@ -1,6 +1,6 @@
 import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
-import { BlockInterface, FlashcardInterface } from "../types";
+import { BlockInterface } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 
 async function createFlashcard(

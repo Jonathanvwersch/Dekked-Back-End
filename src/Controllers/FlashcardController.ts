@@ -72,7 +72,7 @@ export class FlashcardController {
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { flash_card_id } = req.params;
+    const { flashcard_id } = req.params;
     const {
       front_blocks,
       front_draft_keys,
@@ -82,7 +82,7 @@ export class FlashcardController {
 
     try {
       const flashcard = await FlashcardService.saveFlashcard(
-        flash_card_id,
+        flashcard_id,
         userId,
         front_blocks,
         front_draft_keys,
@@ -110,10 +110,10 @@ export class FlashcardController {
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { flash_card_id } = req.params;
+    const { flashcard_id } = req.params;
 
     try {
-      await FlashcardService.deleteFlashcard(userId, flash_card_id);
+      await FlashcardService.deleteFlashcard(userId, flashcard_id);
       return res.status(200).json({
         success: true,
       });

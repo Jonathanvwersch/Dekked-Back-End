@@ -33,7 +33,8 @@ export async function getFoldersByUser(
   try {
     const response: FolderInterface[] = await db("folders")
       .select("*")
-      .where({ owner_id });
+      .where({ owner_id })
+      .orderBy("date_created");
     return response;
   } catch (error) {
     console.log(error);

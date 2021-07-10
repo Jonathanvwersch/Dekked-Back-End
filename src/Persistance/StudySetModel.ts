@@ -62,7 +62,8 @@ export async function getStudySetsByUserId(user_id: string) {
     const binders: StudySetInterface[] = await db
       .table("study_sets")
       .select("*")
-      .where({ owner_id: user_id });
+      .where({ owner_id: user_id })
+      .orderBy("date_created");
     return binders;
   } catch (err) {
     console.log(err);

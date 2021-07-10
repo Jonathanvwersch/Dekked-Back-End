@@ -35,7 +35,8 @@ export async function getBindersByUserId(user_id: string) {
     const binder: BinderInterface[] = await db
       .table("binders")
       .select("*")
-      .where({ owner_id: user_id });
+      .where({ owner_id: user_id })
+      .orderBy("date_created");
     return binder;
   } catch (err) {
     console.log(err);

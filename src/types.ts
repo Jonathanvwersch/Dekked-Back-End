@@ -36,6 +36,7 @@ export interface FlashcardInterface {
   interval?: number;
   front_blocks: string[];
   back_blocks: string[];
+  deck_id: string;
 }
 
 export interface FolderInterface {
@@ -49,11 +50,15 @@ export interface FolderInterface {
 
 export interface PageInterface {
   id: string;
-  title: string;
   ordering: string[];
   owner_id: string;
   study_set_id: string;
-  page: PageInterface;
+}
+
+export interface DeckInterface {
+  id: string;
+  owner_id: string;
+  study_set_id: string;
 }
 
 export interface StudySetInterface {

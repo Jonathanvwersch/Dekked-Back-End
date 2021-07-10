@@ -1,9 +1,6 @@
 import express from "express";
 import { FolderController } from "./Controllers/FolderController";
-import { DeckController } from "./Controllers/DeckController";
-import { CardController } from "./Controllers/CardController";
 import cors from "cors";
-import { StudyController } from "./Controllers/StudyController";
 import { PageController } from "./Controllers/PageController";
 import { BlockController } from "./Controllers/BlockController";
 import { UserController } from "./Controllers/UserController";
@@ -22,8 +19,6 @@ app.use(express.json());
 app.use(cors());
 
 const folderController = new FolderController();
-const deckController = new DeckController();
-const studyController = new StudyController();
 const pageController = new PageController();
 const blockController = new BlockController();
 const userController = new UserController();
@@ -124,25 +119,6 @@ app.get(
     session: false,
   }),
   folderController.getFolders
-);
-
-//-----------------------------//
-
-// Deck
-app.post("/deck", (req, res) => deckController.createDeck(req, res));
-app.get("/deck/:deck_id", (req, res) => deckController.getDeck(req, res));
-app.patch("/deck", (req, res) => deckController.updateDeck(req, res));
-app.delete("/deck", (req, res) => deckController.deleteDeck(req, res));
-
-// Decks
-app.get("/decks", (req, res) => deckController.getAllDecks(req, res));
-app.get("/decks/:folder_id", (req, res) =>
-  deckController.getDecksInFolder(req, res)
-);
-
-// Study
-app.get("/study/spaced-repetition", (req, res) =>
-  studyController.getSpacedRepetitionCards(req, res)
 );
 
 //-----------------------------//
@@ -249,9 +225,25 @@ app.get(
 
 //-----------------------------//
 
-// Flashcards
+// Flashcards and Decks
 app.get(
-  "/get-flashcards-by-study-set-id/:study_set_id",
+  "/get-flashcards-deck/:deck_id",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  flashcardController.getFullFlashcardsByStudySetId
+);
+
+app.get(
+  "/get-spaced-repetition-flashcards-deck/:deck_id",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  flashcardController.getFullFlashcardsByStudySetId
+);
+
+app.get(
+  "/get-decks",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -267,7 +259,7 @@ app.post(
 );
 
 app.patch(
-  "/flashcard/:flash_card_id",
+  "/flashcard/:flashcard_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -275,7 +267,7 @@ app.patch(
 );
 
 app.delete(
-  "/flashcard/:flash_card_id",
+  "/flashcard/:flashcard_id",
   passport.authenticate("jwt", {
     session: false,
   }),
