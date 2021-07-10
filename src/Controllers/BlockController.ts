@@ -1,7 +1,7 @@
-import express from 'express';
-import BlockModel from '../Persistance/BlockModel';
-import PageModel from '../Persistance/PageModel';
-import { getOrganizedBlocks } from '../Services/BlockService';
+import express from "express";
+import BlockModel from "../Persistance/BlockModel";
+import PageModel from "../Persistance/PageModel";
+import { getOrganizedBlocks } from "../Services/BlockService";
 
 export class BlockController {
   public async getBlocksByPage(
@@ -17,7 +17,7 @@ export class BlockController {
 
       return res.status(200).json({
         success: true,
-        data: { blocks: organizedBlocks }
+        data: { blocks: organizedBlocks },
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });

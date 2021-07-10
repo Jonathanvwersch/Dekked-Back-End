@@ -69,9 +69,9 @@ async function getDecksInFolder(
   return response;
 }
 
-// createDeck({ folder_id: '6b13d0a1-f5af-45d7-a674-e83c81af7175', name: 'The nervous system' });
-// getDeck('cc0a3fb5-9af2-4d67-85da-9accc4ea88a2');
-// getAllDecksInFolder('d2a2f0a5-b619-4d33-8866-5dc6b7c26810');
+// createDeck({ folder_id: "6b13d0a1-f5af-45d7-a674-e83c81af7175", name: "The nervous system" });
+// getDeck("cc0a3fb5-9af2-4d67-85da-9accc4ea88a2");
+// getAllDecksInFolder("d2a2f0a5-b619-4d33-8866-5dc6b7c26810");
 export default {
   createDeck,
   getDeck,

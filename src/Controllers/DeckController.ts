@@ -1,6 +1,6 @@
-import express from 'express';
-import DeckModel from '../Persistance/DeckModel';
-import DeckService from '../Services/DeckService';
+import express from "express";
+import DeckModel from "../Persistance/DeckModel";
+import DeckService from "../Services/DeckService";
 
 export class DeckController {
   public async createDeck(
@@ -13,12 +13,15 @@ export class DeckController {
         const response = await DeckModel.createDeck({ folder_id, name });
         return res.status(200).json({
           success: true,
-          data: response
+          data: response,
         });
       } else {
         return res
           .status(400)
-          .json({ success: false, error: 'Properties not found, type and cardData not found' });
+          .json({
+            success: false,
+            error: "Properties not found, type and cardData not found",
+          });
       }
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -34,10 +37,12 @@ export class DeckController {
         const response = await DeckModel.getDeck(req.params.deck_id);
         return res.status(200).json({
           success: true,
-          data: response
+          data: response,
         });
       } else {
-        return res.status(400).json({ success: false, error: 'Property deck_id not found' });
+        return res
+          .status(400)
+          .json({ success: false, error: "Property deck_id not found" });
       }
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -50,10 +55,14 @@ export class DeckController {
   ): Promise<express.Response<any>> {
     try {
       if (!req.body.deck_id)
-        return res.status(400).json({ success: false, error: 'Property deck_id not found' });
+        return res
+          .status(400)
+          .json({ success: false, error: "Property deck_id not found" });
       const response = await DeckModel.updateDeck(req.body);
       if (!response) {
-        return res.status(404).json({ success: false, error: 'Deck not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: "Deck not found" });
       }
       return res.status(200).json({ success: true });
     } catch (e) {
@@ -67,10 +76,15 @@ export class DeckController {
   ): Promise<express.Response<any>> {
     try {
       if (!req.body.deck_id)
-        return res.status(400).json({ success: false, error: 'Property deck_id not found' });
+        return res
+          .status(400)
+          .json({ success: false, error: "Property deck_id not found" });
       const response = await DeckModel.deleteDeck(req.body.deck_id);
 
-      if (!response) return res.status(404).json({ success: false, error: 'Deck not found' });
+      if (!response)
+        return res
+          .status(404)
+          .json({ success: false, error: "Deck not found" });
 
       return res.status(200).json({ success: true });
     } catch (e) {
@@ -85,7 +99,9 @@ export class DeckController {
     try {
       console.log(req.params);
       if (!req.params.folder_id)
-        return res.status(400).json({ success: false, error: 'Property folder_id not found' });
+        return res
+          .status(400)
+          .json({ success: false, error: "Property folder_id not found" });
       const response = await DeckModel.getDecksInFolder(req.params.folder_id);
       console.log(response);
       return res.status(200).json({ success: true, data: response });

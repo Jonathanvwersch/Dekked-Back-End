@@ -1,7 +1,7 @@
-import express from 'express';
-import FolderModel from '../Persistance/FolderModel';
-import { getUserIdFromRequest } from '../utils/passport/authHelpers';
-import FolderService from '../Services/FolderService';
+import express from "express";
+import FolderModel from "../Persistance/FolderModel";
+import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import FolderService from "../Services/FolderService";
 export class FolderController {
   public async getFolders(
     req: express.Request,
@@ -26,7 +26,7 @@ export class FolderController {
       const folder = await FolderModel.createFolder(name, userId, color, id);
       res.status(200).json({
         success: true,
-        folder
+        folder,
       });
     } catch (e) {
       console.log(e);
@@ -46,7 +46,7 @@ export class FolderController {
         name,
         color,
         folder_id,
-        owner_id: userId
+        owner_id: userId,
       });
 
       return res.status(200).json({ success: true, folder });

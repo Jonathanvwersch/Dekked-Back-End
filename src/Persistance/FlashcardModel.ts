@@ -45,8 +45,7 @@ async function getFlashcardsByStudySetId(
       .where({
         owner_id,
         study_set_id,
-      })
-      .orderBy("date_created");
+      });
     return flashcards;
   } catch (error) {
     console.log(error);

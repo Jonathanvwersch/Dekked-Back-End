@@ -1,7 +1,7 @@
-import express from 'express';
-import { createUser, login } from '../Services/AuthService';
-import UserService from '../Services/UserService';
-import { getUserIdFromRequest } from '../utils/passport/authHelpers';
+import express from "express";
+import { createUser, login } from "../Services/AuthService";
+import UserService from "../Services/UserService";
+import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class UserController {
   public async register(
@@ -11,13 +11,18 @@ export class UserController {
     const { first_name, last_name, password, email_address } = req.body;
 
     try {
-      const response: any = await createUser(first_name, last_name, email_address, password);
+      const response: any = await createUser(
+        first_name,
+        last_name,
+        email_address,
+        password
+      );
       if (response.success) {
         return res.status(200).json(response);
       } else {
         return res.status(response.code).json({
           success: false,
-          message: response.message
+          message: response.message,
         });
       }
     } catch (e) {
@@ -26,7 +31,10 @@ export class UserController {
     }
   }
 
-  public async login(req: express.Request, res: express.Response): Promise<express.Response<any>> {
+  public async login(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
     const { password, email_address } = req.body;
 
     try {
@@ -36,7 +44,7 @@ export class UserController {
       } else {
         return res.status(response.code).json({
           success: false,
-          message: response.message
+          message: response.message,
         });
       }
     } catch (e) {
@@ -56,8 +64,8 @@ export class UserController {
       return res.status(200).json({
         success: true,
         data: {
-          user
-        }
+          user,
+        },
       });
     } catch (error) {
       console.log(error);
@@ -77,14 +85,14 @@ export class UserController {
         id: userId,
         last_name,
         first_name,
-        email_address
+        email_address,
       });
       return res.status(200).json({
         success: true,
         first_name,
         last_name,
         email_address,
-        userId
+        userId,
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });

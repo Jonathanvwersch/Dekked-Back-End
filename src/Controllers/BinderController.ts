@@ -1,7 +1,7 @@
-import express from 'express';
-import { createBinder, getBindersByUserId } from '../Persistance/BinderModel';
-import BinderService, { createBinderObject } from '../Services/BinderService';
-import { getUserIdFromRequest } from '../utils/passport/authHelpers';
+import express from "express";
+import { createBinder, getBindersByUserId } from "../Persistance/BinderModel";
+import BinderService, { createBinderObject } from "../Services/BinderService";
+import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class BinderController {
   public async getBindersByUserId(
@@ -17,8 +17,8 @@ export class BinderController {
       return res.status(200).json({
         success: true,
         data: {
-          binders: binderObject
-        }
+          binders: binderObject,
+        },
       });
     } catch (e) {
       return res.status(400).json({ success: false, error: e.message });
@@ -38,8 +38,8 @@ export class BinderController {
       return res.status(200).json({
         success: true,
         data: {
-          binder
-        }
+          binder,
+        },
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -58,7 +58,7 @@ export class BinderController {
         name,
         color,
         binder_id,
-        owner_id: userId
+        owner_id: userId,
       });
       return res.status(200).json({ success: true });
     } catch (e) {
@@ -77,7 +77,7 @@ export class BinderController {
     try {
       await BinderService.deleteBinder({
         binder_id,
-        owner_id: userId
+        owner_id: userId,
       });
       return res.status(200).json({ success: true });
     } catch (e) {
