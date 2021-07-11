@@ -12,7 +12,7 @@ export class FlashcardController {
     const { study_set_id } = req.params;
 
     try {
-      const flashcards = await FlashcardService.getFullFlashcardsByStudySetId(
+      const flashcards = await FlashcardService.getFullFlashcardsByDeckId(
         study_set_id,
         userId
       );
