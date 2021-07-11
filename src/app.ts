@@ -11,6 +11,7 @@ import { FileTreeController } from "./Controllers/FileTreeController";
 import { BinderController } from "./Controllers/BinderController";
 import { StudySetController } from "./Controllers/StudySetController";
 import { FlashcardController } from "./Controllers/FlashcardController";
+import { DeckController } from "./Controllers/DeckController";
 
 const app = express();
 applyPassportStrategy(passport);
@@ -22,6 +23,7 @@ const folderController = new FolderController();
 const pageController = new PageController();
 const blockController = new BlockController();
 const userController = new UserController();
+const deckController = new DeckController();
 const fileTreeController = new FileTreeController();
 const binderController = new BinderController();
 const studyPackController = new StudySetController();
@@ -201,13 +203,13 @@ app.patch(
   }),
   (req, res) => pageController.saveFullPage(req, res)
 );
-app.get("/pages", (req, res) => pageController.getPages(req, res));
+app.get("/pages", (req, res) => pageController.getPages(res));
 app.get("/page-meta/:page_id", (req, res) =>
   pageController.getPageMeta(req, res)
 );
 app.get("/page/:page_id", (req, res) => pageController.getFullPage(req, res));
 app.get(
-  "/get-page-by-parent-id/:study_set_id",
+  "/get-page-by-study-set-id/:study_set_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -226,6 +228,14 @@ app.get(
 //-----------------------------//
 
 // Flashcards and Decks
+app.get(
+  "/get-deck-by-study-set-id/:study_set_id",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  deckController.getDeckByStudySetId
+);
+
 app.get(
   "/get-flashcards-by-deck-id/:deck_id",
   passport.authenticate("jwt", {
