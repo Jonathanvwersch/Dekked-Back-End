@@ -7,10 +7,12 @@ async function createFlashcard({
   block_link,
   front_draft_keys,
   back_draft_keys,
+  deck_id,
 }: {
   owner_id: string;
   study_set_id: string;
   block_link?: string;
+  deck_id: string;
   front_draft_keys?: string[];
   back_draft_keys?: string[];
 }) {
@@ -21,6 +23,7 @@ async function createFlashcard({
       .insert({
         owner_id,
         study_set_id,
+        deck_id,
         block_link,
         date_created: now,
         date_modified: now,
@@ -35,16 +38,13 @@ async function createFlashcard({
   }
 }
 
-async function getFlashcardsByStudySetId(
-  owner_id: string,
-  study_set_id: string
-) {
+async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
   try {
     const flashcards: FlashcardInterface[] = await db("flashcards")
       .select("*")
       .where({
         owner_id,
-        study_set_id,
+        deck_id,
       });
     return flashcards;
   } catch (error) {
@@ -103,7 +103,7 @@ async function deleteFlashcard({
 
 export default {
   createFlashcard,
-  getFlashcardsByStudySetId,
+  getFlashcardsByDeckId,
   updateFlashcard,
   deleteFlashcard,
 };

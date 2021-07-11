@@ -227,7 +227,7 @@ app.get(
 
 // Flashcards and Decks
 app.get(
-  "/get-flashcards-by-study-set-id/:study_set_id",
+  "/get-flashcards-by-deck-id/:deck_id",
   passport.authenticate("jwt", {
     session: false,
   }),

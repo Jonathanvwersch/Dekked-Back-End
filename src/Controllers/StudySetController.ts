@@ -3,6 +3,7 @@ import {
   createStudySet,
   getStudySetsByUserId,
 } from "../Persistance/StudySetModel";
+import DeckService from "../Services/DeckService";
 import PageService from "../Services/PageService";
 import StudySetService, {
   createStudySetObject,
@@ -40,6 +41,7 @@ export class StudySetController {
     try {
       const response = await createStudySet(binder_id, name, userId, color, id);
       await PageService.createPage(id, userId);
+      await DeckService.createDeck(id, userId);
       return res.status(200).json({
         success: true,
         data: {

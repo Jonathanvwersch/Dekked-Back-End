@@ -78,10 +78,7 @@ export class PageController {
     }
   }
 
-  public async getPages(
-    req: express.Request,
-    res: express.Response
-  ): Promise<express.Response<any>> {
+  public async getPages(res: express.Response): Promise<express.Response<any>> {
     try {
       const response = await PageModel.getPages();
       return res.status(200).json({

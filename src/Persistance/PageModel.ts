@@ -22,7 +22,7 @@ async function createPage(
     return response[0].id;
   }
 
-  throw new Error("Theere was an error creating the page");
+  throw new Error("There was an error creating the page");
 }
 
 async function getPage(id: string): Promise<PageInterface> {
