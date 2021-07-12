@@ -39,12 +39,14 @@ export class FlashcardController {
       front_draft_keys,
       back_blocks,
       back_draft_keys,
+      deck_id,
     } = req.body;
 
     try {
       const flashcard = await FlashcardService.createFlashcard(
         study_set_id,
         userId,
+        deck_id,
         block_link,
         front_blocks,
         front_draft_keys,
