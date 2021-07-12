@@ -49,7 +49,7 @@ async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
     return flashcards;
   } catch (error) {
     console.log(error);
-    throw new Error("There was an error fetching flashcards by study pack id");
+    throw new Error("There was an error fetching flashcards by deck id");
   }
 }
 

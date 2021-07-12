@@ -19,7 +19,7 @@ async function createDeck(
     return response[0].id;
   }
 
-  throw new Error("There was an error creating the page");
+  throw new Error("There was an error creating the deck");
 }
 
 async function getDeckByStudySetId(study_set_id: string) {

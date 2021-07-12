@@ -241,7 +241,7 @@ app.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.getFullFlashcardsByStudySetId
+  flashcardController.getFullFlashcardsByDeckId
 );
 
 app.get(
@@ -249,7 +249,7 @@ app.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.getFullFlashcardsByStudySetId
+  flashcardController.getFullFlashcardsByDeckId
 );
 
 app.post(

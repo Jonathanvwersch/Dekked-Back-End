@@ -4,16 +4,16 @@ import { FlashcardInterface } from "../types";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class FlashcardController {
-  public async getFullFlashcardsByStudySetId(
+  public async getFullFlashcardsByDeckId(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { study_set_id } = req.params;
+    const { deck_id } = req.params;
 
     try {
       const flashcards = await FlashcardService.getFullFlashcardsByDeckId(
-        study_set_id,
+        deck_id,
         userId
       );
       return res.status(200).json({

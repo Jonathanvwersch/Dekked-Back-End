@@ -65,7 +65,7 @@ async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
     return fullFlashcards;
   } catch (error) {
     console.log(error);
-    throw Error("There was an error getting flashcards by studypack id");
+    throw Error("There was an error getting flashcards by deck id");
   }
 }
 
