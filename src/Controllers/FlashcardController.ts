@@ -55,7 +55,7 @@ export class FlashcardController {
       );
 
       const fullFlashcard = {
-        flashcard,
+        ...flashcard,
         front_blocks,
         back_blocks,
       };

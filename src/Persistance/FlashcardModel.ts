@@ -19,7 +19,7 @@ async function createFlashcard({
   const now = new Date();
 
   try {
-    const creationResponse: FlashcardInterface[] = await db("flashcards")
+    const flashcard: FlashcardInterface[] = await db("flashcards")
       .insert({
         owner_id,
         study_set_id,
@@ -31,7 +31,7 @@ async function createFlashcard({
         back_ordering: back_draft_keys ?? [],
       })
       .returning("*");
-    return creationResponse;
+    return flashcard;
   } catch (error) {
     console.log(error);
     throw new Error("There was an error creating the flashcard");
