@@ -26,6 +26,28 @@ export class FlashcardController {
       return res.status(500).json({ success: false, error: error.message });
     }
   }
+  public async getSpacedRepetitionDeckByDeckId(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+    const { deck_id } = req.params;
+
+    try {
+      const flashcards = await FlashcardService.getSpacedRepetitionDeckByDeckId(
+        deck_id,
+        userId
+      );
+      return res.status(200).json({
+        success: true,
+        data: {
+          flashcards,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  }
 
   public async createFlashCard(
     req: express.Request,
@@ -80,6 +102,7 @@ export class FlashcardController {
       front_draft_keys,
       back_blocks,
       back_draft_keys,
+      quality,
     } = req.body;
 
     try {

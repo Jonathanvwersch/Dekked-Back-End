@@ -9,6 +9,13 @@ export enum FILETREE_TYPES {
   STUDY_SET = "study-set",
 }
 
+export enum FlashcardQuality {
+  AGAIN = "Again",
+  HARD = "Hard",
+  GOOD = "Good",
+  EASY = "Easy",
+}
+
 export interface BinderInterface {
   id: string;
   owner_id: string;

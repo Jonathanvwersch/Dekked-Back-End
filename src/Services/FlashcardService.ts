@@ -69,6 +69,44 @@ async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
   }
 }
 
+async function getSpacedRepetitionDeckByDeckId(
+  deck_id: string,
+  owner_id: string
+) {
+  try {
+    const flashcards = await FlashcardModel.getFlashcardsByDeckId(
+      owner_id,
+      deck_id
+    );
+    const fullFlashcards = await Promise.all(
+      flashcards
+        .filter((flashcard) => !flashcard?.interval || flashcard?.interval < 1)
+        .map(async (val) => {
+          const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
+          const front_blocks = getOrganizedBlocks(
+            val.front_ordering,
+            blocksInCard
+          );
+          const back_blocks = getOrganizedBlocks(
+            val.back_ordering,
+            blocksInCard
+          );
+          return {
+            ...val,
+            front_blocks,
+            back_blocks,
+          };
+        })
+    );
+    return fullFlashcards;
+  } catch (error) {
+    console.log(error);
+    throw Error(
+      "There was an error getting spaced repetition flashcards by deck id"
+    );
+  }
+}
+
 async function saveFlashcard(
   flash_card_id: string,
   owner_id: string,
@@ -111,4 +149,5 @@ export default {
   getFullFlashcardsByDeckId,
   saveFlashcard,
   deleteFlashcard,
+  getSpacedRepetitionDeckByDeckId,
 };

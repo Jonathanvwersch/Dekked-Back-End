@@ -245,11 +245,11 @@ app.get(
 );
 
 app.get(
-  "/get-spaced-repetition-flashcards-deck/:deck_id",
+  "/get-sr-flashcards-by-deck-id/:deck_id",
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.getFullFlashcardsByDeckId
+  flashcardController.getSpacedRepetitionDeckByDeckId
 );
 
 app.post(
