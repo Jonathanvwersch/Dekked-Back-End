@@ -113,8 +113,7 @@ async function saveFlashcard(
   front_blocks: [string],
   front_draft_keys: [string],
   back_blocks: [string],
-  back_draft_keys: [string],
-  quality: FlashcardQuality
+  back_draft_keys: [string]
 ) {
   front_draft_keys &&
     front_blocks &&
@@ -127,7 +126,6 @@ async function saveFlashcard(
     owner_id,
     back_ordering: back_draft_keys,
     front_ordering: front_draft_keys,
-    quality: quality,
   });
   return flashcard[0];
 }
