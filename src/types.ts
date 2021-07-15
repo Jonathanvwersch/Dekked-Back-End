@@ -10,12 +10,10 @@ export enum FILETREE_TYPES {
 }
 
 export enum FlashcardQuality {
-  AGAIN = "Again",
-  HARD = "Hard",
-  GOOD = "Good",
-  EASY = "Easy",
+  REPEAT = "Repeat",
+  REMEMBERED = "Remembered",
+  EASILY_REMEMBERED = "Easily remembered",
 }
-
 export interface BinderInterface {
   id: string;
   owner_id: string;

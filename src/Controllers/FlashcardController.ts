@@ -112,7 +112,8 @@ export class FlashcardController {
         front_blocks,
         front_draft_keys,
         back_blocks,
-        back_draft_keys
+        back_draft_keys,
+        quality
       );
 
       const fullFlashcard: FlashcardInterface = {

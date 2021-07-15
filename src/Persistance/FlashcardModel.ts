@@ -78,12 +78,14 @@ async function updateFlashcard({
   back_ordering,
   front_ordering,
   block_link,
+  quality,
 }: {
   id: string;
   owner_id: string;
   back_ordering?: string[];
   front_ordering?: string[];
   block_link?: string;
+  quality?: string;
 }) {
   try {
     const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
@@ -92,6 +94,7 @@ async function updateFlashcard({
         front_ordering,
         block_link,
         date_modified: new Date(),
+        quality,
       })
       .where({ id, owner_id })
       .returning("*");

@@ -1,6 +1,6 @@
 import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
-import { BlockInterface } from "../types";
+import { BlockInterface, FlashcardQuality } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 
 async function createFlashcard(
@@ -113,15 +113,21 @@ async function saveFlashcard(
   front_blocks: [string],
   front_draft_keys: [string],
   back_blocks: [string],
-  back_draft_keys: [string]
+  back_draft_keys: [string],
+  quality: FlashcardQuality
 ) {
-  await saveBlocks(front_blocks, flash_card_id, front_draft_keys, owner_id);
-  await saveBlocks(back_blocks, flash_card_id, back_draft_keys, owner_id);
+  front_draft_keys &&
+    front_blocks &&
+    (await saveBlocks(front_blocks, flash_card_id, front_draft_keys, owner_id));
+  back_blocks &&
+    back_draft_keys &&
+    (await saveBlocks(back_blocks, flash_card_id, back_draft_keys, owner_id));
   const flashcard = await FlashcardModel.updateFlashcard({
     id: flash_card_id,
     owner_id,
     back_ordering: back_draft_keys,
     front_ordering: front_draft_keys,
+    quality: quality,
   });
   return flashcard[0];
 }
