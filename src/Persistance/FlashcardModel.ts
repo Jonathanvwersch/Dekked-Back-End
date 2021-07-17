@@ -1,4 +1,8 @@
-import { FlashcardInterface } from "../types";
+import {
+  FlashcardInterface,
+  FlashcardLearningStatus,
+  FlashcardStatus,
+} from "../types";
 import db from "../db/database";
 
 async function createFlashcard({
@@ -78,6 +82,12 @@ async function updateFlashcard({
   back_ordering,
   front_ordering,
   block_link,
+  interval,
+  learning_status,
+  ease_factor,
+  status,
+  failed_consecutive_attempts,
+  due_date,
   quality,
 }: {
   id: string;
@@ -85,15 +95,28 @@ async function updateFlashcard({
   back_ordering?: string[];
   front_ordering?: string[];
   block_link?: string;
-  quality?: string;
+  interval?: number;
+  learning_status?: FlashcardLearningStatus;
+  status?: FlashcardStatus;
+  ease_factor?: number;
+  failed_consecutive_attempts?: number;
+  due_date?: Date;
+  quality?: number;
 }) {
+  const now = new Date();
   try {
     const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
       .update({
         back_ordering,
         front_ordering,
         block_link,
-        date_modified: new Date(),
+        date_modified: now,
+        interval,
+        learning_status,
+        ease_factor,
+        status,
+        failed_consecutive_attempts,
+        due_date,
         quality,
       })
       .where({ id, owner_id })

@@ -1,6 +1,11 @@
 import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
-import { BlockInterface, FlashcardQuality } from "../types";
+import {
+  BlockInterface,
+  FlashcardLearningStatus,
+  FlashcardQuality,
+  FlashcardStatus,
+} from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 
 async function createFlashcard(
@@ -107,25 +112,56 @@ async function getSpacedRepetitionDeckByDeckId(
   }
 }
 
-async function saveFlashcard(
-  flash_card_id: string,
-  owner_id: string,
-  front_blocks: [string],
-  front_draft_keys: [string],
-  back_blocks: [string],
-  back_draft_keys: [string]
-) {
+async function saveFlashcard({
+  id,
+  owner_id,
+  front_blocks,
+  front_draft_keys,
+  back_blocks,
+  back_draft_keys,
+  block_link,
+  interval,
+  learning_status,
+  ease_factor,
+  status,
+  failed_consecutive_attempts,
+  due_date,
+  quality,
+}: {
+  id: string;
+  owner_id: string;
+  front_blocks?: [string];
+  front_draft_keys?: [string];
+  back_blocks?: [string];
+  back_draft_keys?: [string];
+  block_link?: string;
+  interval?: number;
+  learning_status?: FlashcardLearningStatus;
+  status?: FlashcardStatus;
+  ease_factor?: number;
+  failed_consecutive_attempts?: number;
+  due_date?: Date;
+  quality?: number;
+}) {
   front_draft_keys &&
     front_blocks &&
-    (await saveBlocks(front_blocks, flash_card_id, front_draft_keys, owner_id));
+    (await saveBlocks(front_blocks, id, front_draft_keys, owner_id));
   back_blocks &&
     back_draft_keys &&
-    (await saveBlocks(back_blocks, flash_card_id, back_draft_keys, owner_id));
+    (await saveBlocks(back_blocks, id, back_draft_keys, owner_id));
   const flashcard = await FlashcardModel.updateFlashcard({
-    id: flash_card_id,
+    id,
     owner_id,
     back_ordering: back_draft_keys,
     front_ordering: front_draft_keys,
+    interval,
+    learning_status,
+    status,
+    ease_factor,
+    failed_consecutive_attempts,
+    due_date,
+    block_link,
+    quality,
   });
   return flashcard[0];
 }

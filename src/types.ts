@@ -1,6 +1,8 @@
 export enum FlashcardStatus {
-  NEW = "new",
-  GRADUATED = "graduated",
+  NEW = "New",
+  NEW_1 = "New_1",
+  NEW_2 = "New_2",
+  GRADUATED = "Graduated",
 }
 
 export enum FILETREE_TYPES {
@@ -13,6 +15,13 @@ export enum FlashcardQuality {
   REPEAT = "Repeat",
   REMEMBERED = "Remembered",
   EASILY_REMEMBERED = "Easily remembered",
+}
+
+export enum FlashcardLearningStatus {
+  NEW = "New",
+  LEARNING = "Learning",
+  LEARNED = "Learned",
+  DUE = "Due",
 }
 export interface BinderInterface {
   id: string;
@@ -39,15 +48,17 @@ export interface FlashcardInterface {
   front_ordering: string[];
   date_created: Date;
   date_modified: Date;
-  block_link?: string;
-  status?: FlashcardStatus;
-  quality?: number;
-  ease_factor?: number;
-  failed_attempts?: number;
-  interval?: number;
+  status: FlashcardStatus;
+  learning_status: FlashcardLearningStatus;
+  ease_factor: number;
+  failed_consecutive_attempts: number;
+  interval: number;
   front_blocks: string[];
   back_blocks: string[];
+  due_date: Date;
   deck_id: string;
+  block_link?: string;
+  quality?: number;
 }
 
 export interface FolderInterface {
