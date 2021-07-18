@@ -49,7 +49,8 @@ async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
       .where({
         owner_id,
         deck_id,
-      });
+      })
+      .orderBy("date_created", "asc");
     return flashcards;
   } catch (error) {
     console.log(error);
