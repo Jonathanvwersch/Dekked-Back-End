@@ -5,6 +5,7 @@ import {
   FlashcardLearningStatus,
   FlashcardStatus,
 } from "../types";
+import { isDateInPast } from "../utils/dates/isDateInPast";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 
 async function createFlashcard(
@@ -84,7 +85,11 @@ async function getSpacedRepetitionDeckByDeckId(
     );
     const fullFlashcards = await Promise.all(
       flashcards
-        .filter((flashcard) => !flashcard?.interval || flashcard?.interval < 1)
+        .filter(
+          (flashcard) =>
+            !flashcard?.interval ||
+            isDateInPast(new Date(flashcard.due_date), new Date())
+        )
         .map(async (val) => {
           const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
           const front_blocks = getOrganizedBlocks(
