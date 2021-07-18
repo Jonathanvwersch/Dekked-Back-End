@@ -143,6 +143,7 @@ export class FlashcardController {
             status,
             id,
             owner_id,
+            learning_status,
           });
 
           const fullFlashcard: FlashcardInterface = {
