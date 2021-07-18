@@ -85,6 +85,9 @@ export interface DeckInterface {
   study_set_id: string;
   date_created: string;
   date_modified: string;
+  easy_bonus: number;
+  interval_modifier: number;
+  new_interval: number;
 }
 
 export interface StudySetInterface {
