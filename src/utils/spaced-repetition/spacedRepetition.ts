@@ -13,16 +13,17 @@ export const spacedRepetition = (
 ) => {
   currentFlashcard.interval = interval;
   currentFlashcard.learning_status = learning_status;
+
   const today = new Date();
-  const nextDueDate = (currentFlashcard.due_date = new Date(
-    currentFlashcard.due_date?.getDate() || today.getDate() + interval
-  ));
+
+  const nextDueDate = new Date(
+    currentFlashcard.due_date?.setUTCDate(today.getUTCDate() + interval)
+  );
 
   if (currentFlashcard?.status === FlashcardStatus.NEW) {
     currentFlashcard.due_date = today;
     if (quality === FlashcardQuality.REPEAT) {
       currentFlashcard.failed_consecutive_attempts += 1;
-      currentFlashcard.learning_status = FlashcardLearningStatus.LEARNING;
       currentFlashcard.interval = 0;
       currentFlashcard.due_date = today;
     } else {
@@ -34,7 +35,6 @@ export const spacedRepetition = (
         currentFlashcard.status = FlashcardStatus.GRADUATED;
       }
       // quality is remembered
-      currentFlashcard.learning_status = FlashcardLearningStatus.LEARNED;
       currentFlashcard.failed_consecutive_attempts = 0;
       currentFlashcard.due_date = nextDueDate;
     }
@@ -48,16 +48,14 @@ export const spacedRepetition = (
         }
       }
       currentFlashcard.failed_consecutive_attempts += 1;
-      currentFlashcard.learning_status = FlashcardLearningStatus.LEARNING;
       currentFlashcard.interval = 0;
       currentFlashcard.due_date = today;
+    } else {
+      if (quality === FlashcardQuality.EASILY_REMEMBERED) {
+        currentFlashcard.ease_factor += 15;
+      }
+      currentFlashcard.due_date = nextDueDate;
+      currentFlashcard.failed_consecutive_attempts = 0;
     }
-  } else {
-    if (quality === FlashcardQuality.EASILY_REMEMBERED) {
-      currentFlashcard.ease_factor += 15;
-    }
-    currentFlashcard.due_date = nextDueDate;
-    currentFlashcard.learning_status = FlashcardLearningStatus.LEARNED;
-    currentFlashcard.failed_consecutive_attempts = 0;
   }
 };
