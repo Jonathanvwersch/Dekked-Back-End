@@ -3,7 +3,6 @@ import FlashcardModel from "../Persistance/FlashcardModel";
 import {
   BlockInterface,
   FlashcardLearningStatus,
-  FlashcardQuality,
   FlashcardStatus,
 } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";

@@ -15,7 +15,7 @@ export const spacedRepetition = (
   currentFlashcard.learning_status = learning_status;
   const today = new Date();
   const nextDueDate = (currentFlashcard.due_date = new Date(
-    currentFlashcard.due_date.getDate() + interval
+    currentFlashcard.due_date?.getDate() || today.getDate() + interval
   ));
 
   if (currentFlashcard?.status === FlashcardStatus.NEW) {

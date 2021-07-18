@@ -97,7 +97,6 @@ export class FlashcardController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    const owner_id = getUserIdFromRequest(req);
     const { flashcard_id: id } = req.params;
     const {
       front_blocks,
@@ -107,49 +106,58 @@ export class FlashcardController {
       quality,
       interval,
       learning_status,
+      owner_id,
     } = req.body;
 
     if (quality) {
-      const flashcard: FlashcardInterface[] | undefined = await db
-        .table("flashcards")
-        .select("*")
-        .where({ id, owner_id })
-        .returning("*");
-
-      const currentFlashcard = flashcard[0];
-      spacedRepetition(currentFlashcard, quality, interval, learning_status);
-
-      const {
-        ease_factor,
-        failed_consecutive_attempts,
-        due_date,
-        interval: new_interval,
-        status,
-      } = currentFlashcard;
+      let flashcard: FlashcardInterface[] | undefined;
 
       try {
-        const flashcard = await FlashcardService.saveFlashcard({
+        flashcard = await db
+          .table("flashcards")
+          .select("*")
+          .where({ id, owner_id })
+          .returning("*");
+      } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+      }
+
+      if (flashcard) {
+        const currentFlashcard = flashcard?.[0];
+        spacedRepetition(currentFlashcard, quality, interval, learning_status);
+
+        const {
           ease_factor,
           failed_consecutive_attempts,
           due_date,
           interval: new_interval,
           status,
-          id,
-          owner_id,
-        });
+        } = currentFlashcard;
 
-        const fullFlashcard: FlashcardInterface = {
-          ...flashcard,
-          front_blocks,
-          back_blocks,
-        };
+        try {
+          const flashcard = await FlashcardService.saveFlashcard({
+            ease_factor,
+            failed_consecutive_attempts,
+            due_date,
+            interval: new_interval,
+            status,
+            id,
+            owner_id,
+          });
 
-        return res.status(200).json({
-          success: true,
-          fullFlashcard,
-        });
-      } catch (error) {
-        return res.status(500).json({ success: false, error: error.message });
+          const fullFlashcard: FlashcardInterface = {
+            ...flashcard,
+            front_blocks,
+            back_blocks,
+          };
+
+          return res.status(200).json({
+            success: true,
+            fullFlashcard,
+          });
+        } catch (error) {
+          return res.status(500).json({ success: false, error: error.message });
+        }
       }
     }
 
