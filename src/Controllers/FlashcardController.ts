@@ -1,12 +1,7 @@
 import express from "express";
 import db from "../db/database";
 import FlashcardService from "../Services/FlashcardService";
-import {
-  FlashcardInterface,
-  FlashcardLearningStatus,
-  FlashcardQuality,
-  FlashcardStatus,
-} from "../types";
+import { FlashcardInterface } from "../types";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 import { spacedRepetition } from "../utils/spaced-repetition/spacedRepetition";
 
@@ -115,15 +110,8 @@ export class FlashcardController {
     } = req.body;
 
     if (quality) {
-      try {
-        await db("flashcards")
-          .select("*")
-          .where({ id, owner_id })
-          .returning("*");
-      } catch (e) {
-        console.log(e);
-      }
-      const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
+      const flashcard: FlashcardInterface[] | undefined = await db
+        .table("flashcards")
         .select("*")
         .where({ id, owner_id })
         .returning("*");
