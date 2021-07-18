@@ -115,9 +115,17 @@ export class FlashcardController {
     } = req.body;
 
     if (quality) {
+      try {
+        await db("flashcards")
+          .select("*")
+          .where({ id, owner_id })
+          .returning("*");
+      } catch (e) {
+        console.log(e);
+      }
       const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
         .select("*")
-        .where({ id, owner_id: owner_id })
+        .where({ id, owner_id })
         .returning("*");
 
       const currentFlashcard = flashcard[0];
