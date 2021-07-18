@@ -13,9 +13,10 @@ export const spacedRepetition = (
 ) => {
   currentFlashcard.interval = interval;
   const today = new Date();
+  currentFlashcard.due_date = today;
 
   const nextDueDate = new Date(
-    (new Date(currentFlashcard.due_date) || today)?.setUTCDate(
+    new Date(currentFlashcard.due_date)?.setUTCDate(
       today.getUTCDate() + interval
     )
   );
@@ -57,7 +58,6 @@ export const spacedRepetition = (
       }
       currentFlashcard.failed_consecutive_attempts += 1;
       currentFlashcard.interval = 0;
-      currentFlashcard.due_date = today;
     } else {
       if (quality === FlashcardQuality.EASILY_REMEMBERED) {
         currentFlashcard.ease_factor += 15;
@@ -66,5 +66,4 @@ export const spacedRepetition = (
       currentFlashcard.failed_consecutive_attempts = 0;
     }
   }
-  currentFlashcard.learning_status = learning_status;
 };

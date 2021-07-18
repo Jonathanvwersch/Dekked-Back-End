@@ -88,6 +88,7 @@ async function getSpacedRepetitionDeckByDeckId(
         .filter(
           (flashcard) =>
             !flashcard?.interval ||
+            !flashcard.due_date ||
             isDateInPast(new Date(flashcard.due_date), new Date())
         )
         .map(async (val) => {
