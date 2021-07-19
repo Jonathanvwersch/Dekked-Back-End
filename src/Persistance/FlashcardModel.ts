@@ -69,7 +69,7 @@ async function getSpacedRepetitionDeckByDeckId(
         owner_id,
         deck_id,
       })
-      .andWhere("interval", "<", 0);
+      .orderBy("due_date", "asc");
     return flashcards;
   } catch (error) {
     console.log(error);

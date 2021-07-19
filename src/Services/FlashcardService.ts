@@ -79,7 +79,7 @@ async function getSpacedRepetitionDeckByDeckId(
   owner_id: string
 ) {
   try {
-    const flashcards = await FlashcardModel.getFlashcardsByDeckId(
+    const flashcards = await FlashcardModel.getSpacedRepetitionDeckByDeckId(
       owner_id,
       deck_id
     );
