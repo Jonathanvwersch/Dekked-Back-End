@@ -1,5 +1,5 @@
 import express from "express";
-import { getUserById } from "../Persistance/UserModel";
+import { getUserByEmail, getUserById } from "../Persistance/UserModel";
 import { createUser, genToken, login } from "../Services/AuthService";
 import UserService from "../Services/UserService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
@@ -62,7 +62,7 @@ export class UserController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    const { token, id, first_name, last_name, email_address } = req.body;
+    const { token, first_name, last_name, email_address } = req.body;
 
     try {
       const response: any = await googleOAuth.verifyIdToken({
@@ -71,7 +71,7 @@ export class UserController {
       });
       const { email_verified } = response.payload;
       if (email_verified) {
-        const user = await getUserById(id);
+        const user = await getUserByEmail(email_address);
         // if user already exists, generate a token and send that back to client
         if (user?.id) {
           const token = genToken(user);
@@ -82,7 +82,6 @@ export class UserController {
               first_name,
               last_name,
               email_address,
-              id: user.id,
             },
           });
         }
