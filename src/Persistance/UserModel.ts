@@ -27,7 +27,7 @@ export async function createNewUser(
   email_address: string,
   first_name: string,
   last_name: string,
-  password: string
+  password?: string
 ) {
   const now = new Date();
 

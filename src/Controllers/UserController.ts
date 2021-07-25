@@ -1,8 +1,13 @@
 import express from "express";
-import { createUser, login } from "../Services/AuthService";
+import { getUserById } from "../Persistance/UserModel";
+import { createUser, genToken, login } from "../Services/AuthService";
 import UserService from "../Services/UserService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+const { OAuth2Client } = require("google-auth-library");
 
+const googleClientId = `${process.env.GOOGLE_CLIENT_ID}.apps.googleusercontent.com`;
+
+const googleOAuth = new OAuth2Client(googleClientId);
 export class UserController {
   public async register(
     req: express.Request,
@@ -42,6 +47,68 @@ export class UserController {
       if (response.success) {
         return res.status(200).json(response);
       } else {
+        return res.status(response.code).json({
+          success: false,
+          message: response.message,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
+  public async googleAuthentication(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const { token, id, first_name, last_name, email_address } = req.body;
+
+    try {
+      const response: any = await googleOAuth.verifyIdToken({
+        idToken: token,
+        audience: googleClientId,
+      });
+      const { email_verified } = response.payload;
+      if (email_verified) {
+        const user = await getUserById(id);
+        // if user already exists, generate a token and send that back to client
+        if (user?.id) {
+          const token = genToken(user);
+          return res.status(200).json({
+            success: true,
+            data: {
+              token,
+              first_name,
+              last_name,
+              email_address,
+              id: user.id,
+            },
+          });
+        }
+        // if user does not exist, we need to create an entry in database for new user
+        else {
+          try {
+            const response: any = await createUser(
+              first_name,
+              last_name,
+              email_address
+            );
+            if (response.success) {
+              return res.status(200).json(response);
+            } else {
+              return res.status(response.code).json({
+                success: false,
+                message: response.message,
+              });
+            }
+          } catch (e) {
+            console.log(e.message);
+            return res.status(500).json({ success: false, error: e.message });
+          }
+        }
+      } else {
+        console.log(res);
         return res.status(response.code).json({
           success: false,
           message: response.message,

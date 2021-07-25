@@ -8,7 +8,7 @@ export function comparePass(userPassword: string, databasePassword: string) {
   return compareSync(userPassword, databasePassword);
 }
 
-function genToken(user: UserInterface) {
+export function genToken(user: UserInterface) {
   const token = jwt.sign({ email_address: user.email_address }, "testing123", {
     expiresIn: 10000000,
   });
@@ -60,7 +60,7 @@ export async function createUser(
   first_name: string,
   last_name: string,
   email_address: string,
-  password: string
+  password?: string
 ) {
   try {
     const foundUser = await getUserByEmail(email_address);
@@ -74,7 +74,7 @@ export async function createUser(
     }
 
     const salt = genSaltSync();
-    const hash = hashSync(password, salt);
+    const hash = password ? hashSync(password, salt) : undefined;
 
     const user = await createNewUser(
       email_address,
@@ -82,6 +82,7 @@ export async function createUser(
       last_name,
       hash
     );
+
     const token = genToken(user);
 
     return {

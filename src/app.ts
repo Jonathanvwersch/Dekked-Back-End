@@ -40,6 +40,10 @@ app.post("/login", (req, res) => {
   userController.login(req, res);
 });
 
+app.post("/auth/google", (req, res) => {
+  userController.googleAuthentication(req, res);
+});
+
 app.get(
   "/auth",
   passport.authenticate("jwt", {
