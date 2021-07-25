@@ -5,7 +5,7 @@ import UserService from "../Services/UserService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 const { OAuth2Client } = require("google-auth-library");
 
-const googleClientId = `${process.env.GOOGLE_CLIENT_ID}.apps.googleusercontent.com`;
+const googleClientId = `281383698502-ho9b8tv17243fcjjcvdslondg6820oko.apps.googleusercontent.com`;
 
 const googleOAuth = new OAuth2Client(googleClientId);
 export class UserController {
