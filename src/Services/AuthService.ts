@@ -91,6 +91,7 @@ export async function createUser(
         token,
         first_name: user.first_name,
         last_name: user.last_name,
+        email_address: user.email_address,
         id: user.id,
       },
     };
