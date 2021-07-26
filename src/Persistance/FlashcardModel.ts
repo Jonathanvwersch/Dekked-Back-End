@@ -62,6 +62,8 @@ async function getSpacedRepetitionDeckByDeckId(
   owner_id: string,
   deck_id: string
 ) {
+  const now = new Date();
+
   try {
     const flashcards: FlashcardInterface[] = await db("flashcards")
       .select("*")
@@ -69,11 +71,36 @@ async function getSpacedRepetitionDeckByDeckId(
         owner_id,
         deck_id,
       })
+      .andWhere(function () {
+        this.whereNull("due_date").orWhere("due_date", "<=", now);
+      })
       .orderBy("due_date", "asc");
     return flashcards;
   } catch (error) {
     console.log(error);
     throw new Error("There was an error fetching flashcards by deck id");
+  }
+}
+
+async function getAllDueDecks(owner_id: string) {
+  const now = new Date();
+
+  try {
+    const flashcards: FlashcardInterface[] = await db("flashcards")
+      .select("*")
+      .where({
+        owner_id,
+      })
+      .andWhere(function () {
+        this.whereNull("due_date").orWhere("due_date", "<=", now);
+      });
+
+    return flashcards;
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      "There was an error fetching the spaced repetition flashcards by deck id"
+    );
   }
 }
 
@@ -153,4 +180,5 @@ export default {
   updateFlashcard,
   deleteFlashcard,
   getSpacedRepetitionDeckByDeckId,
+  getAllDueDecks,
 };

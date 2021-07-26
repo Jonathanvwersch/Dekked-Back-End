@@ -2,11 +2,14 @@ import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
 import {
   BlockInterface,
+  DeckInterface,
+  DueSpacedRepetitionDecks,
+  FlashcardInterface,
   FlashcardLearningStatus,
   FlashcardStatus,
 } from "../types";
-import { isDateInPast } from "../utils/dates/isDateInPast";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
+import { getDeckByStudySetIdAsync } from "./DeckService";
 
 async function createFlashcard(
   study_set_id: string,
@@ -84,31 +87,50 @@ async function getSpacedRepetitionDeckByDeckId(
       deck_id
     );
     const fullFlashcards = await Promise.all(
-      flashcards
-        .filter(
-          (flashcard) =>
-            !flashcard?.interval ||
-            !flashcard.due_date ||
-            isDateInPast(new Date(flashcard.due_date), new Date())
-        )
-        .map(async (val) => {
-          const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
-          const front_blocks = getOrganizedBlocks(
-            val.front_ordering,
-            blocksInCard
-          );
-          const back_blocks = getOrganizedBlocks(
-            val.back_ordering,
-            blocksInCard
-          );
-          return {
-            ...val,
-            front_blocks,
-            back_blocks,
-          };
-        })
+      flashcards.map(async (val) => {
+        const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
+        const front_blocks = getOrganizedBlocks(
+          val.front_ordering,
+          blocksInCard
+        );
+        const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
+        return {
+          ...val,
+          front_blocks,
+          back_blocks,
+        };
+      })
     );
     return fullFlashcards;
+  } catch (error) {
+    console.log(error);
+    throw Error(
+      "There was an error getting spaced repetition flashcards by deck id"
+    );
+  }
+}
+
+async function getAllDueDecks(owner_id: string) {
+  const allDueDecks: DueSpacedRepetitionDecks = {};
+  try {
+    const allDueFlashcards = await FlashcardModel.getAllDueDecks(owner_id);
+
+    await Promise.all(
+      allDueFlashcards?.map(async (flashcard: FlashcardInterface) => {
+        if (!allDueDecks?.[flashcard.deck_id]) {
+          const deck: DeckInterface = await getDeckByStudySetIdAsync(
+            flashcard.study_set_id
+          );
+          allDueDecks[flashcard.deck_id] = {
+            study_set_id: flashcard.study_set_id,
+            name: deck.name,
+            number_of_cards: 0,
+          };
+        }
+        allDueDecks[flashcard.deck_id].number_of_cards += 1;
+      })
+    );
+    return allDueDecks;
   } catch (error) {
     console.log(error);
     throw Error(
@@ -195,4 +217,5 @@ export default {
   saveFlashcard,
   deleteFlashcard,
   getSpacedRepetitionDeckByDeckId,
+  getAllDueDecks,
 };

@@ -28,6 +28,7 @@ export class FlashcardController {
       return res.status(500).json({ success: false, error: error.message });
     }
   }
+
   public async getSpacedRepetitionDeckByDeckId(
     req: express.Request,
     res: express.Response
@@ -44,6 +45,25 @@ export class FlashcardController {
         success: true,
         data: {
           flashcards,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  }
+
+  public async getAllDueDecks(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const userId = getUserIdFromRequest(req);
+
+    try {
+      const decks = await FlashcardService.getAllDueDecks(userId);
+      return res.status(200).json({
+        success: true,
+        data: {
+          decks,
         },
       });
     } catch (error) {

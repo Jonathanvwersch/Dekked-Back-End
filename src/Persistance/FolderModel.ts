@@ -1,7 +1,7 @@
 import { FolderInterface } from "../types";
 import db from "../db/database";
 
-async function createFolder(
+export async function createFolder(
   name: string,
   owner_id: string,
   color: string,

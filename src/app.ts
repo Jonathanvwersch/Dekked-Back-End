@@ -83,7 +83,6 @@ app.patch(
 //-----------------------------//
 
 // Filetree
-
 app.get(
   "/file-tree",
   passport.authenticate("jwt", {
@@ -254,6 +253,14 @@ app.get(
     session: false,
   }),
   flashcardController.getSpacedRepetitionDeckByDeckId
+);
+
+app.get(
+  "/get-all-due-sr-decks",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  flashcardController.getAllDueDecks
 );
 
 app.post(

@@ -41,7 +41,7 @@ export class StudySetController {
     try {
       const response = await createStudySet(binder_id, name, userId, color, id);
       await PageService.createPage(id, userId);
-      await DeckService.createDeck(id, userId);
+      await DeckService.createDeck(id, name, userId);
       return res.status(200).json({
         success: true,
         data: {
@@ -67,6 +67,8 @@ export class StudySetController {
         study_set_id,
         owner_id: userId,
       });
+
+      await DeckService.updateDeck(name, study_set_id, userId);
       return res.status(200).json({ success: true });
     } catch (e) {
       console.log(e);

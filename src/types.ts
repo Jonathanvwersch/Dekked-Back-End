@@ -88,6 +88,15 @@ export interface DeckInterface {
   easy_bonus: number;
   interval_modifier: number;
   new_interval: number;
+  name: string;
+}
+
+export interface DueSpacedRepetitionDecks {
+  [deck_id: string]: {
+    study_set_id: string;
+    name: string;
+    number_of_cards: number;
+  };
 }
 
 export interface StudySetInterface {
