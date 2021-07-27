@@ -1,4 +1,4 @@
-import {  StudySetInterface } from "../types";
+import { StudySetInterface } from "../types";
 import db from "../db/database";
 
 export async function createStudySet(
@@ -26,7 +26,7 @@ export async function createStudySet(
     return study_set[0];
   } catch (err) {
     console.log(err);
-    throw new Error("There was an error creating the study set);
+    throw new Error("There was an error creating the study set");
   }
 }
 
