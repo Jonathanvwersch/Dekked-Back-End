@@ -125,9 +125,24 @@ async function getAllDueDecks(owner_id: string) {
             study_set_id: flashcard.study_set_id,
             name: deck.name,
             number_of_cards: 0,
+            number_of_new_cards: 0,
+            number_of_learning_cards: 0,
+            number_of_learned_cards: 0,
           };
         }
         allDueDecks[flashcard.deck_id].number_of_cards += 1;
+        if (flashcard.learning_status === FlashcardLearningStatus.NEW) {
+          allDueDecks[flashcard.deck_id].number_of_new_cards += 1;
+        } else if (
+          flashcard.learning_status === FlashcardLearningStatus.LEARNING
+        ) {
+          allDueDecks[flashcard.deck_id].number_of_learning_cards += 1;
+        } else if (
+          flashcard.learning_status === FlashcardLearningStatus.LEARNED ||
+          flashcard.learning_status === FlashcardLearningStatus.DUE
+        ) {
+          allDueDecks[flashcard.deck_id].number_of_learned_cards += 1;
+        }
       })
     );
     return allDueDecks;

@@ -96,6 +96,9 @@ export interface DueSpacedRepetitionDecks {
     study_set_id: string;
     name: string;
     number_of_cards: number;
+    number_of_new_cards: number;
+    number_of_learning_cards: number;
+    number_of_learned_cards: number;
   };
 }
 
