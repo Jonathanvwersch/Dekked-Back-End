@@ -1,4 +1,4 @@
-import { BinderInterface, StudySetInterface } from "../types";
+import {  StudySetInterface } from "../types";
 import db from "../db/database";
 
 export async function createStudySet(
@@ -26,18 +26,18 @@ export async function createStudySet(
     return study_set[0];
   } catch (err) {
     console.log(err);
-    throw new Error("There was an error creating binder");
+    throw new Error("There was an error creating the study set);
   }
 }
 
 export async function getStudySetById(id: string) {
   try {
-    const binder: BinderInterface | undefined = await db
+    const studySet: StudySetInterface | undefined = await db
       .table("study_sets")
       .select("*")
       .where({ id })
       .first();
-    return binder;
+    return studySet;
   } catch (err) {
     console.log(err);
     throw Error("Error getting study pack by id");
@@ -59,12 +59,12 @@ export async function getStudySetsByBinderId(binder_id: string) {
 
 export async function getStudySetsByUserId(user_id: string) {
   try {
-    const binders: StudySetInterface[] = await db
+    const studySets: StudySetInterface[] = await db
       .table("study_sets")
       .select("*")
       .where({ owner_id: user_id })
       .orderBy("date_created");
-    return binders;
+    return studySets;
   } catch (err) {
     console.log(err);
     throw Error("Error getting study pack by user id");

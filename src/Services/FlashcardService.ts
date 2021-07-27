@@ -1,5 +1,6 @@
 import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
+import { getStudySetById } from "../Persistance/StudySetModel";
 import {
   BlockInterface,
   DeckInterface,
@@ -7,6 +8,7 @@ import {
   FlashcardInterface,
   FlashcardLearningStatus,
   FlashcardStatus,
+  StudySetInterface,
 } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
 import { getDeckByStudySetIdAsync } from "./DeckService";
@@ -121,9 +123,13 @@ async function getAllDueDecks(owner_id: string) {
           const deck: DeckInterface = await getDeckByStudySetIdAsync(
             flashcard.study_set_id
           );
+          const studySet: StudySetInterface | undefined = await getStudySetById(
+            flashcard.study_set_id
+          );
           allDueDecks[flashcard.deck_id] = {
             study_set_id: flashcard.study_set_id,
             name: deck.name,
+            iconColor: studySet?.color,
             number_of_cards: 0,
             number_of_new_cards: 0,
             number_of_learning_cards: 0,

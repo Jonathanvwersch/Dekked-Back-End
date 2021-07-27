@@ -95,6 +95,7 @@ export interface DueSpacedRepetitionDecks {
   [deck_id: string]: {
     study_set_id: string;
     name: string;
+    iconColor: string | undefined;
     number_of_cards: number;
     number_of_new_cards: number;
     number_of_learning_cards: number;
