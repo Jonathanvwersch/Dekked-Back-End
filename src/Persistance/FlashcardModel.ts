@@ -58,6 +58,24 @@ async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
   }
 }
 
+async function getFlashcardsByStudySetId(
+  owner_id: string,
+  study_set_id: string
+) {
+  try {
+    const flashcards: FlashcardInterface[] = await db("flashcards")
+      .select("*")
+      .where({
+        owner_id,
+        study_set_id,
+      });
+    return flashcards;
+  } catch (error) {
+    console.log(error);
+    throw new Error("There was an error fetching flashcards by deck id");
+  }
+}
+
 async function getSpacedRepetitionDeckByDeckId(
   owner_id: string,
   deck_id: string
@@ -201,5 +219,6 @@ export default {
   deleteFlashcardByStudySetId,
   deleteFlashcard,
   getSpacedRepetitionDeckByDeckId,
+  getFlashcardsByStudySetId,
   getAllDueDecks,
 };

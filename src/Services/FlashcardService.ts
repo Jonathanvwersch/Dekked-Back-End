@@ -79,6 +79,22 @@ async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
   }
 }
 
+async function getFlashcardsByStudySetId(
+  study_set_id: string,
+  owner_id: string
+) {
+  try {
+    const flashcards = await FlashcardModel.getFlashcardsByStudySetId(
+      owner_id,
+      study_set_id
+    );
+    return flashcards;
+  } catch (error) {
+    console.log(error);
+    throw Error("There was an error getting flashcards by deck id");
+  }
+}
+
 async function getSpacedRepetitionDeckByDeckId(
   deck_id: string,
   owner_id: string
@@ -232,11 +248,41 @@ async function deleteFlashcard(owner_id: string, id: string) {
   }
 }
 
+async function deleteFlashcardByStudySetId(
+  owner_id: string,
+  study_set_id: string
+) {
+  try {
+    const flashcards = await getFlashcardsByStudySetId(study_set_id, owner_id);
+
+    // delete text blocks associated with flashcards
+    await Promise.all(
+      flashcards.map(async (flashcard) => {
+        const blocks = await BlockService.getBlocksInParent(flashcard.id);
+        blocks.map(async (val: BlockInterface) =>
+          BlockService.deleteBlock(val.id, owner_id)
+        );
+      })
+    );
+
+    // then delete flashcards
+    await FlashcardModel.deleteFlashcardByStudySetId({
+      owner_id,
+      study_set_id,
+    });
+  } catch (error) {
+    console.log(error);
+    throw Error("There was an error deleting flashcard");
+  }
+}
+
 export default {
   createFlashcard,
   getFullFlashcardsByDeckId,
   saveFlashcard,
   deleteFlashcard,
+  deleteFlashcardByStudySetId,
+  getFlashcardsByStudySetId,
   getSpacedRepetitionDeckByDeckId,
   getAllDueDecks,
 };
