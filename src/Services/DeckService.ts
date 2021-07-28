@@ -1,5 +1,4 @@
 import DeckModel from "../Persistance/DeckModel";
-import FlashcardModel from "../Persistance/FlashcardModel";
 import FlashcardService from "./FlashcardService";
 
 async function createDeck(

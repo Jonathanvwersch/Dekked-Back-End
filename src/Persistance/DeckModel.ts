@@ -7,16 +7,16 @@ async function createDeck(
   owner_id: string | undefined
 ): Promise<string> {
   const now = new Date();
-  const response: DeckInterface[] = await db.table("decks").insert(
-    {
+  const response: DeckInterface[] = await db
+    .table("decks")
+    .insert({
       owner_id,
       study_set_id,
       name,
       date_created: now,
       date_modified: now,
-    },
-    ["id"]
-  );
+    })
+    .returning("*");
   if (response[0].id) {
     return response[0].id;
   }
