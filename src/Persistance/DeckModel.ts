@@ -42,6 +42,15 @@ async function updateDeck(
   throw new Error("There was an error updating the deck");
 }
 
+async function deleteDeck(study_set_id: string, owner_id: string) {
+  try {
+    await db.table("decks").delete("*").where({ study_set_id, owner_id });
+  } catch (e) {
+    console.log(e);
+    throw new Error("There was an error deleting the deck");
+  }
+}
+
 async function getDeckByStudySetId(study_set_id: string) {
   const response: DeckInterface[] = await db
     .table("decks")
@@ -54,6 +63,7 @@ async function getDeckByStudySetId(study_set_id: string) {
 }
 
 export default {
+  deleteDeck,
   createDeck,
   getDeckByStudySetId,
   updateDeck,

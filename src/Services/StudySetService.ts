@@ -1,5 +1,6 @@
 import StudySetModel from "../Persistance/StudySetModel";
 import { StudySetInterface } from "../types";
+import DeckService from "./DeckService";
 import PageService from "./PageService";
 
 export function createStudySetObject(study_sets: StudySetInterface[]) {
@@ -41,9 +42,9 @@ async function deleteStudySet({
     await StudySetModel.deleteStudySet({ owner_id, study_set_id });
     const page = await PageService.getPageByStudySetIdAsync(study_set_id);
     await PageService.deletePage(page.id, owner_id);
+    await DeckService.deleteDeck(study_set_id, owner_id);
   } catch (error) {
     console.log(error);
-
     throw new Error("There was an error deleting the study pack");
   }
 }

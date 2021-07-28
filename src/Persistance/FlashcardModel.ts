@@ -174,10 +174,31 @@ async function deleteFlashcard({
   }
 }
 
+async function deleteFlashcardByStudySetId({
+  owner_id,
+  study_set_id,
+}: {
+  owner_id: string;
+  study_set_id: string;
+}) {
+  try {
+    await db("flashcards").delete("*").where({
+      owner_id,
+      study_set_id,
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      "There was an error deleting the flashcards by study set id"
+    );
+  }
+}
+
 export default {
   createFlashcard,
   getFlashcardsByDeckId,
   updateFlashcard,
+  deleteFlashcardByStudySetId,
   deleteFlashcard,
   getSpacedRepetitionDeckByDeckId,
   getAllDueDecks,

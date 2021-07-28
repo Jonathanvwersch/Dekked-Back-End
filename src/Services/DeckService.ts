@@ -1,4 +1,5 @@
 import DeckModel from "../Persistance/DeckModel";
+import FlashcardModel from "../Persistance/FlashcardModel";
 
 async function createDeck(
   study_set_id: string,
@@ -28,6 +29,19 @@ async function updateDeck(
   }
 }
 
+async function deleteDeck(study_set_id: string, owner_id: string) {
+  try {
+    await DeckModel.deleteDeck(study_set_id, owner_id);
+    await FlashcardModel.deleteFlashcardByStudySetId({
+      study_set_id,
+      owner_id,
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("There was an error creating the deck");
+  }
+}
+
 export async function getDeckByStudySetIdAsync(study_set_id: string) {
   try {
     const result = await DeckModel.getDeckByStudySetId(study_set_id);
@@ -40,6 +54,7 @@ export async function getDeckByStudySetIdAsync(study_set_id: string) {
 
 export default {
   createDeck,
+  deleteDeck,
   getDeckByStudySetIdAsync,
   updateDeck,
 };
