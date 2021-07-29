@@ -166,8 +166,8 @@ async function getAllDueDecks(owner_id: string) {
           const studySet: StudySetInterface | undefined = await getStudySetById(
             deck?.[1]?.study_set_id
           );
-          if (studySet?.id || studySet?.name || studySet?.name === "") {
-            deck[1].study_set_id = studySet.id;
+          if (studySet?.color || studySet?.name || studySet?.name === "") {
+            deck[1].iconColor = studySet.color;
             deck[1].name = studySet.name;
           }
         })
