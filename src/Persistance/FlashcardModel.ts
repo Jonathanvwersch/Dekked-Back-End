@@ -100,7 +100,7 @@ async function getSpacedRepetitionDeckByDeckId(
   }
 }
 
-async function getAllDueDecks(owner_id: string) {
+async function getAllDueFlashcards(owner_id: string) {
   const now = new Date();
 
   try {
@@ -220,5 +220,5 @@ export default {
   deleteFlashcard,
   getSpacedRepetitionDeckByDeckId,
   getFlashcardsByStudySetId,
-  getAllDueDecks,
+  getAllDueFlashcards,
 };

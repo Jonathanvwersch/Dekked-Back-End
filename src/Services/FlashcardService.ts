@@ -131,42 +131,49 @@ async function getSpacedRepetitionDeckByDeckId(
 async function getAllDueDecks(owner_id: string) {
   const allDueDecks: DueSpacedRepetitionDecks = {};
   try {
-    const allDueFlashcards = await FlashcardModel.getAllDueDecks(owner_id);
+    const allDueFlashcards = await FlashcardModel.getAllDueFlashcards(owner_id);
 
-    await Promise.all(
-      allDueFlashcards?.map(async (flashcard: FlashcardInterface) => {
-        if (!allDueDecks?.[flashcard.deck_id]) {
-          const deck: DeckInterface = await getDeckByStudySetIdAsync(
-            flashcard.study_set_id
-          );
+    allDueFlashcards?.map((flashcard: FlashcardInterface) => {
+      if (!allDueDecks?.[flashcard.deck_id]) {
+        allDueDecks[flashcard.deck_id] = {
+          study_set_id: flashcard.study_set_id,
+          name: "",
+          iconColor: "",
+          number_of_cards: 0,
+          number_of_new_cards: 0,
+          number_of_learning_cards: 0,
+          number_of_learned_cards: 0,
+        };
+      }
+      allDueDecks[flashcard.deck_id].number_of_cards += 1;
+      if (flashcard.learning_status === FlashcardLearningStatus.NEW) {
+        allDueDecks[flashcard.deck_id].number_of_new_cards += 1;
+      } else if (
+        flashcard.learning_status === FlashcardLearningStatus.LEARNING
+      ) {
+        allDueDecks[flashcard.deck_id].number_of_learning_cards += 1;
+      } else if (
+        flashcard.learning_status === FlashcardLearningStatus.LEARNED ||
+        flashcard.learning_status === FlashcardLearningStatus.DUE
+      ) {
+        allDueDecks[flashcard.deck_id].number_of_learned_cards += 1;
+      }
+    });
+
+    if (Object.keys(allDueDecks).length > 0) {
+      await Promise.all(
+        Object.entries(allDueDecks).map(async (deck) => {
           const studySet: StudySetInterface | undefined = await getStudySetById(
-            flashcard.study_set_id
+            deck?.[1]?.study_set_id
           );
-          allDueDecks[flashcard.deck_id] = {
-            study_set_id: flashcard.study_set_id,
-            name: deck.name,
-            iconColor: studySet?.color,
-            number_of_cards: 0,
-            number_of_new_cards: 0,
-            number_of_learning_cards: 0,
-            number_of_learned_cards: 0,
-          };
-        }
-        allDueDecks[flashcard.deck_id].number_of_cards += 1;
-        if (flashcard.learning_status === FlashcardLearningStatus.NEW) {
-          allDueDecks[flashcard.deck_id].number_of_new_cards += 1;
-        } else if (
-          flashcard.learning_status === FlashcardLearningStatus.LEARNING
-        ) {
-          allDueDecks[flashcard.deck_id].number_of_learning_cards += 1;
-        } else if (
-          flashcard.learning_status === FlashcardLearningStatus.LEARNED ||
-          flashcard.learning_status === FlashcardLearningStatus.DUE
-        ) {
-          allDueDecks[flashcard.deck_id].number_of_learned_cards += 1;
-        }
-      })
-    );
+          if (studySet?.id || studySet?.name || studySet?.name === "") {
+            deck[1].study_set_id = studySet.id;
+            deck[1].name = studySet.name;
+          }
+        })
+      );
+    }
+
     return allDueDecks;
   } catch (error) {
     console.log(error);
