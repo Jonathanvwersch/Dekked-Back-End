@@ -31,7 +31,8 @@ module.exports = {
 
   production: {
     client: "pg",
-    connection: process.env.DB_CONNECTION,
+    connection:
+      "postgres://production_database_dekked_user:7qPswGiAoYHmC674AqH4bL2ANtbt3hfi@frankfurt-postgres.render.com/production_database_dekked",
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
