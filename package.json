@@ -4,8 +4,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/app.js",
-    "dev": "nodemon src/app.ts",
-    "build": "tsc -p ."
+    "start:dev": "env-cmd -f .env.development nodemon src/app.ts",
+    "build": "tsc -p .",
+    "build:development": "env-cmd -f .env.development tsc -p .",
+    "build:integration": "env-cmd -f .env.integration tsc -p .",
+    "build:production": "env-cmd -f .env.production tsc -p ."
   },
   "license": "MIT",
   "dependencies": {
@@ -21,6 +24,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "env-cmd": "^10.1.0",
     "express": "^4.17.1",
     "google-auth-library": "^7.3.0",
     "jsonwebtoken": "^8.5.1",

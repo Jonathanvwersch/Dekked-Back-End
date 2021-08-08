@@ -1,11 +1,9 @@
 require("dotenv").config();
 
-const { CLIENT, DB_PRODUCTION, DB_INTEGRATION } = process.env;
-
 module.exports = {
   development: {
-    client: CLIENT,
-    connection: DB_INTEGRATION,
+    client: process.env.CLIENT,
+    connection: process.env.DB_CONNECTION,
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
@@ -15,8 +13,8 @@ module.exports = {
   },
 
   integration: {
-    client: CLIENT,
-    connection: DB_INTEGRATION,
+    client: process.env.CLIENT,
+    connection: process.env.DB_CONNECTION,
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
@@ -30,8 +28,8 @@ module.exports = {
   },
 
   production: {
-    client: CLIENT,
-    connection: DB_PRODUCTION,
+    client: process.env.CLIENT,
+    connection: process.env.DB_CONNECTION,
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
