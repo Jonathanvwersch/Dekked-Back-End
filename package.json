@@ -4,11 +4,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/app.js",
-    "start:dev": "env-cmd -f .env.development nodemon src/app.ts",
+    "start:dev": "NODE_ENV=development nodemon src/app.ts",
     "build": "tsc -p .",
-    "build:development": "env-cmd -f .env.development tsc -p .",
-    "build:integration": "env-cmd -f .env.integration tsc -p .",
-    "build:production": "env-cmd -f .env.production tsc -p ."
+    "build:development": "NODE_ENV=development tsc -p .",
+    "build:integration": "NODE_ENV=test tsc -p .",
+    "build:production": "NODE_ENV=production tsc -p ."
   },
   "license": "MIT",
   "dependencies": {
