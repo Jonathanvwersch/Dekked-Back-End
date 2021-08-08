@@ -297,5 +297,5 @@ process.env.NODE_ENV === "development" &&
 process.env.NODE_ENV === "test" &&
   app.listen(5000, () => console.log("Integration server is up and running"));
 
-process.env.NODE_ENV === "produciton" &&
+process.env.NODE_ENV === "production" &&
   app.listen(5000, () => console.log("Production server is up and running"));
