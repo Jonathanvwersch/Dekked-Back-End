@@ -12,7 +12,7 @@ module.exports = {
     },
   },
 
-  integration: {
+  test: {
     client: process.env.CLIENT,
     connection: process.env.DB_INTEGRATION,
     migrations: {
