@@ -57,6 +57,10 @@ export class FlashcardController {
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    console.log(process.env.ENV);
+    console.log(process.env.DB_CONNECTION);
+    console.log(process.env);
+    console.log("hi");
 
     try {
       const decks = await FlashcardService.getAllDueDecks(userId);
@@ -144,7 +148,7 @@ export class FlashcardController {
 
       if (flashcard) {
         const currentFlashcard = flashcard?.[0];
-        spacedRepetition(currentFlashcard, quality, interval, learning_status);
+        spacedRepetition(currentFlashcard, quality, interval);
 
         const {
           ease_factor,
