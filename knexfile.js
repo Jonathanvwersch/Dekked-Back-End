@@ -3,7 +3,8 @@ require("dotenv").config({ path: `./.env.${process.env.ENV}` });
 module.exports = {
   development: {
     client: "pg",
-    connection: process.env.DB_CONNECTION,
+    connection:
+      "postgres://dekked_db_user:z6LdOwGN85MDDE5HoZznkViSjUAhwGhp@frankfurt-postgres.render.com/dekked_db?ssl=true",
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
@@ -14,7 +15,8 @@ module.exports = {
 
   integration: {
     client: "pg",
-    connection: process.env.DB_CONNECTION,
+    connection:
+      "postgres://dekked_db_user:z6LdOwGN85MDDE5HoZznkViSjUAhwGhp@frankfurt-postgres.render.com/dekked_db?ssl=true",
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
@@ -29,7 +31,8 @@ module.exports = {
 
   production: {
     client: "pg",
-    connection: process.env.DB_CONNECTION,
+    connection:
+      "postgres://production_database_dekked_user:7qPswGiAoYHmC674AqH4bL2ANtbt3hfi@frankfurt-postgres.render.com/production_database_dekked",
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
