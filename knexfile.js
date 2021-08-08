@@ -3,7 +3,7 @@ require("dotenv").config();
 module.exports = {
   development: {
     client: process.env.CLIENT,
-    connection: process.env.DB_INTEGRATION,
+    connection: process.env.DB_CONNECTION,
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
@@ -14,7 +14,7 @@ module.exports = {
 
   integration: {
     client: process.env.CLIENT,
-    connection: process.env.DB_INTEGRATION,
+    connection: process.env.DB_CONNECTION,
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
@@ -29,7 +29,7 @@ module.exports = {
 
   staging: {
     client: process.env.CLIENT,
-    connection: process.env.DB_PRODUCTION,
+    connection: process.env.DB_CONNECTION,
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
@@ -44,7 +44,7 @@ module.exports = {
 
   production: {
     client: process.env.CLIENT,
-    connection: process.env.DB_PRODUCTION,
+    connection: process.env.DB_CONNECTION,
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
