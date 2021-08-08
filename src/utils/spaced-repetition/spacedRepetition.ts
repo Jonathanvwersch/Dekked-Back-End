@@ -1,6 +1,5 @@
 import {
   FlashcardInterface,
-  FlashcardLearningStatus,
   FlashcardQuality,
   FlashcardStatus,
 } from "../../types";
@@ -8,8 +7,7 @@ import {
 export const spacedRepetition = (
   currentFlashcard: FlashcardInterface,
   quality: FlashcardQuality,
-  interval: number,
-  learning_status: FlashcardLearningStatus
+  interval: number
 ) => {
   currentFlashcard.interval = interval;
   const today = new Date();
