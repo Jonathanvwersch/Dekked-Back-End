@@ -289,6 +289,16 @@ app.delete(
 
 //-----------------------------//
 
-app.listen(5000, () =>
-  console.log("Server running is up and running on port 5000")
-);
+process.env.APP_ENV === "development" &&
+  app.listen(5000, () =>
+    console.log("Development server is up and running on port 5000")
+  );
+
+process.env.APP_ENV === "integration" &&
+  app.listen(5000, () => console.log("Integration server is up and running"));
+
+process.env.APP_ENV === "staging" &&
+  app.listen(5000, () => console.log("Staging server is up and running"));
+
+process.env.APP_ENV === "production" &&
+  app.listen(5000, () => console.log("Production server is up and running"));
