@@ -14,7 +14,8 @@ module.exports = {
 
   test: {
     client: process.env.CLIENT,
-    connection: process.env.DB_INTEGRATION,
+    connection:
+      "postgres://dekked_db_user:z6LdOwGN85MDDE5HoZznkViSjUAhwGhp@frankfurt-postgres.render.com/dekked_db?ssl=true",
     migrations: {
       directory: __dirname + "/src/db/migrations",
     },
