@@ -6,8 +6,8 @@
     "start": "node dist/app.js",
     "start:dev": "NODE_ENV=development nodemon src/app.ts",
     "build": "tsc -p .",
-    "build:development": "NODE_ENV=development tsc -p .",
-    "build:integration": "NODE_ENV=test tsc -p .",
+    "build:development": "tsc -p .",
+    "build:integration": "tsc -p .",
     "build:production": "NODE_ENV=production tsc -p ."
   },
   "license": "MIT",
