@@ -12,6 +12,13 @@ module.exports = {
     seeds: {
       directory: __dirname + "/src/db/seeds",
     },
+    pool: {
+      min: 0,
+      max: 10,
+      createTimeoutMillis: 60000,
+      acquireTimeoutMillis: 60000,
+      idleTimeoutMillis: 600000,
+    },
   },
 
   integration: {
@@ -24,8 +31,11 @@ module.exports = {
       directory: __dirname + "/src/db/seeds",
     },
     pool: {
-      min: 2,
+      min: 0,
       max: 10,
+      createTimeoutMillis: 60000,
+      acquireTimeoutMillis: 60000,
+      idleTimeoutMillis: 600000,
     },
   },
 
@@ -39,8 +49,11 @@ module.exports = {
       directory: __dirname + "/src/db/seeds",
     },
     pool: {
-      min: 2,
+      min: 0,
       max: 10,
+      createTimeoutMillis: 60000,
+      acquireTimeoutMillis: 60000,
+      idleTimeoutMillis: 600000,
     },
   },
 
@@ -54,8 +67,11 @@ module.exports = {
       directory: __dirname + "/src/db/seeds",
     },
     pool: {
-      min: 2,
+      min: 0,
       max: 10,
+      createTimeoutMillis: 60000,
+      acquireTimeoutMillis: 60000,
+      idleTimeoutMillis: 600000,
     },
   },
 };
