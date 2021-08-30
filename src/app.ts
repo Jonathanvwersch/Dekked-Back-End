@@ -1,12 +1,14 @@
 import express from "express";
-import { FolderController } from "./Controllers/FolderController";
+import compression from "compression";
 import cors from "cors";
-import { PageController } from "./Controllers/PageController";
-import { BlockController } from "./Controllers/BlockController";
-import { UserController } from "./Controllers/UserController";
 import cookieParser from "cookie-parser";
 import { applyPassportStrategy } from "./utils/passport/passport";
 import passport from "passport";
+
+import { FolderController } from "./Controllers/FolderController";
+import { PageController } from "./Controllers/PageController";
+import { BlockController } from "./Controllers/BlockController";
+import { UserController } from "./Controllers/UserController";
 import { FileTreeController } from "./Controllers/FileTreeController";
 import { BinderController } from "./Controllers/BinderController";
 import { StudySetController } from "./Controllers/StudySetController";
@@ -18,6 +20,7 @@ applyPassportStrategy(passport);
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
+app.use(compression);
 
 const folderController = new FolderController();
 const pageController = new PageController();
