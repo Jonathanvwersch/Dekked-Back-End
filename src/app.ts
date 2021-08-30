@@ -19,8 +19,8 @@ const app = express();
 applyPassportStrategy(passport);
 app.use(cookieParser());
 app.use(express.json());
+app.use(compression());
 app.use(cors());
-app.use(compression);
 
 const folderController = new FolderController();
 const pageController = new PageController();
