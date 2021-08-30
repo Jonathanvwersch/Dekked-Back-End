@@ -17,9 +17,7 @@ module.exports = {
       max: 10,
       createTimeoutMillis: 60000,
       acquireTimeoutMillis: 60000,
-      idleTimeoutMillis: 60000,
-      reapIntervalMillis: 1000,
-      createRetryIntervalMillis: 100,
+      idleTimeoutMillis: 600000,
     },
   },
 
@@ -37,9 +35,7 @@ module.exports = {
       max: 10,
       createTimeoutMillis: 60000,
       acquireTimeoutMillis: 60000,
-      idleTimeoutMillis: 60000,
-      reapIntervalMillis: 1000,
-      createRetryIntervalMillis: 100,
+      idleTimeoutMillis: 600000,
     },
   },
 
@@ -57,9 +53,7 @@ module.exports = {
       max: 10,
       createTimeoutMillis: 60000,
       acquireTimeoutMillis: 60000,
-      idleTimeoutMillis: 60000,
-      reapIntervalMillis: 1000,
-      createRetryIntervalMillis: 100,
+      idleTimeoutMillis: 600000,
     },
   },
 
@@ -77,9 +71,7 @@ module.exports = {
       max: 10,
       createTimeoutMillis: 60000,
       acquireTimeoutMillis: 60000,
-      idleTimeoutMillis: 60000,
-      reapIntervalMillis: 1000,
-      createRetryIntervalMillis: 100,
+      idleTimeoutMillis: 600000,
     },
   },
 };
