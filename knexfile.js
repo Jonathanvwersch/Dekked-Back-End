@@ -1,8 +1,6 @@
 require("dotenv").config();
 const pg = require("pg");
 pg.defaults.ssl = true;
-import { config } from "./src/config";
-const { CLIENT, DB_CONNECTION } = config;
 
 const poolConfig = {
   min: 0,
@@ -13,8 +11,8 @@ const poolConfig = {
 };
 
 const environmentProperties = {
-  client: CLIENT,
-  connection: DB_CONNECTION,
+  client: process.env.CLIENT,
+  connection: process.env.DB_CONNECTION,
   migrations: {
     directory: __dirname + "/src/db/migrations",
   },

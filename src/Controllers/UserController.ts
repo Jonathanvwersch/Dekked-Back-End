@@ -3,11 +3,9 @@ import { getUserByEmail } from "../Persistance/UserModel";
 import { createUser, genToken, login } from "../Services/AuthService";
 import UserService from "../Services/UserService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
-import { OAuth2Client } from "google-auth-library";
-import { config } from "../config";
-const { GOOGLE_CLIENT_ID } = config;
+const { OAuth2Client } = require("google-auth-library");
 
-const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
+const googleOAuth = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 export class UserController {
   public async register(
     req: express.Request,
@@ -67,7 +65,7 @@ export class UserController {
     try {
       const response: any = await googleOAuth.verifyIdToken({
         idToken: token,
-        audience: GOOGLE_CLIENT_ID,
+        audience: process.env.GOOGLE_CLIENT_ID,
       });
       const { email_verified } = response.payload;
       if (email_verified) {
