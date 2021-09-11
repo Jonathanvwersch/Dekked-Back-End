@@ -17,7 +17,7 @@ export class BinderController {
       return res.status(200).json({
         success: true,
         data: {
-          binders: binderObject,
+          binderObject,
         },
       });
     } catch (e) {

@@ -14,6 +14,7 @@ import { BinderController } from "./Controllers/BinderController";
 import { StudySetController } from "./Controllers/StudySetController";
 import { FlashcardController } from "./Controllers/FlashcardController";
 import { DeckController } from "./Controllers/DeckController";
+import { config } from "./config";
 
 const app = express();
 applyPassportStrategy(passport);
@@ -31,6 +32,7 @@ const fileTreeController = new FileTreeController();
 const binderController = new BinderController();
 const studyPackController = new StudySetController();
 const flashcardController = new FlashcardController();
+const { API_ENV } = config;
 
 //-----------------------------//
 
@@ -48,26 +50,6 @@ app.post("/auth/google", (req, res) => {
 });
 
 app.get(
-  "/auth",
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  (req, res) => {
-    const user: any = req.user;
-    if (user) {
-      if (user._id) {
-        res.json({
-          success: true,
-          data: {
-            userId: user._id,
-          },
-        });
-      }
-    }
-  }
-);
-
-app.get(
   "/user",
   passport.authenticate("jwt", {
     session: false,
@@ -80,7 +62,7 @@ app.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  userController.editUser
+  userController.updateUser
 );
 
 //-----------------------------//
@@ -209,7 +191,7 @@ app.patch(
   }),
   (req, res) => pageController.saveFullPage(req, res)
 );
-app.get("/pages", (req, res) => pageController.getPages(res));
+app.get("/pages", (_, res) => pageController.getPages(res));
 app.get("/page-meta/:page_id", (req, res) =>
   pageController.getPageMeta(req, res)
 );
@@ -292,16 +274,22 @@ app.delete(
 
 //-----------------------------//
 
-process.env.APP_ENV === "development" &&
+API_ENV === "development" &&
   app.listen(5000, () =>
     console.log("Development server is up and running on port 5000")
   );
 
-process.env.APP_ENV === "integration" &&
-  app.listen(5000, () => console.log("Integration server is up and running"));
+API_ENV === "integration" &&
+  app.listen(5000, () =>
+    console.log("Integration server is up and running on port 5000")
+  );
 
-process.env.APP_ENV === "staging" &&
-  app.listen(5000, () => console.log("Staging server is up and running"));
+API_ENV === "staging" &&
+  app.listen(5000, () =>
+    console.log("Staging server is up and running on port 5000")
+  );
 
-process.env.APP_ENV === "production" &&
-  app.listen(5000, () => console.log("Production server is up and running"));
+API_ENV === "production" &&
+  app.listen(5000, () =>
+    console.log("Production server is up and running on port 5000")
+  );

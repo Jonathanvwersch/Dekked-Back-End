@@ -11,7 +11,7 @@ export class FolderController {
 
     try {
       const folders = await FolderService.getFolderObject(userId);
-      return res.status(200).json({ success: true, data: { folders } });
+      return res.status(200).json({ success: true, data: folders });
     } catch (e) {
       console.log(e);
       return res.status(500).json({ success: false, error: e.message });

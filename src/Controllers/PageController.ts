@@ -103,7 +103,7 @@ export class PageController {
       return res.status(200).json({
         success: true,
         data: {
-          page: response,
+          response,
         },
       });
     } catch (e) {

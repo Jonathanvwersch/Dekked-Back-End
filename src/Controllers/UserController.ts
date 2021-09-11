@@ -1,13 +1,13 @@
 import express from "express";
-import { getUserByEmail, getUserById } from "../Persistance/UserModel";
+import { getUserByEmail } from "../Persistance/UserModel";
 import { createUser, genToken, login } from "../Services/AuthService";
 import UserService from "../Services/UserService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
-const { OAuth2Client } = require("google-auth-library");
+import { OAuth2Client } from "google-auth-library";
+import { config } from "../config";
+const { GOOGLE_CLIENT_ID } = config;
 
-const googleClientId = `281383698502-ho9b8tv17243fcjjcvdslondg6820oko.apps.googleusercontent.com`;
-
-const googleOAuth = new OAuth2Client(googleClientId);
+const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
 export class UserController {
   public async register(
     req: express.Request,
@@ -67,7 +67,7 @@ export class UserController {
     try {
       const response: any = await googleOAuth.verifyIdToken({
         idToken: token,
-        audience: googleClientId,
+        audience: GOOGLE_CLIENT_ID,
       });
       const { email_verified } = response.payload;
       if (email_verified) {
@@ -140,12 +140,12 @@ export class UserController {
     }
   }
 
-  public async editUser(
+  public async updateUser(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { last_name, first_name, email_address } = req.body;
+    const { last_name, first_name, email_address, password } = req.body;
 
     try {
       await UserService.updateUserAsync({
@@ -153,6 +153,7 @@ export class UserController {
         last_name,
         first_name,
         email_address,
+        password,
       });
       return res.status(200).json({
         success: true,
@@ -160,6 +161,7 @@ export class UserController {
         last_name,
         email_address,
         userId,
+        password,
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });

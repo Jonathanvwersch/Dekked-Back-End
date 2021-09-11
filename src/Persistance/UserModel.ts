@@ -53,18 +53,26 @@ export async function updateUser({
   first_name,
   last_name,
   email_address,
+  password,
 }: {
   id: string;
   first_name?: string;
   last_name?: string;
   email_address?: string;
+  password?: string;
 }) {
   const now = new Date();
 
   try {
     await db
       .table("users")
-      .update({ email_address, first_name, last_name, date_modified: now })
+      .update({
+        email_address,
+        first_name,
+        last_name,
+        date_modified: now,
+        password,
+      })
       .where({ id });
   } catch (error) {
     console.log(error);

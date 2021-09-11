@@ -17,7 +17,7 @@ export class BlockController {
 
       return res.status(200).json({
         success: true,
-        data: { blocks: organizedBlocks },
+        data: organizedBlocks,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });

@@ -23,7 +23,7 @@ export class StudySetController {
       return res.status(200).json({
         success: true,
         data: {
-          studySets: studyPackObject,
+          ...studyPackObject,
         },
       });
     } catch (e) {
@@ -45,7 +45,7 @@ export class StudySetController {
       return res.status(200).json({
         success: true,
         data: {
-          study_set: response,
+          ...response,
         },
       });
     } catch (e) {

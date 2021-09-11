@@ -20,14 +20,16 @@ async function updateUserAsync({
   last_name,
   email_address,
   id,
+  password,
 }: {
+  id: string;
+  password: string;
   first_name?: string;
   last_name?: string;
   email_address?: string;
-  id: string;
 }) {
   try {
-    await updateUser({ first_name, last_name, email_address, id });
+    await updateUser({ first_name, last_name, email_address, id, password });
   } catch (error) {
     console.log(error);
     throw Error("There was an error updating user");

@@ -9,7 +9,7 @@ export class FlashcardController {
   public async getFullFlashcardsByDeckId(
     req: express.Request,
     res: express.Response
-  ): Promise<express.Response<any>> {
+  ): Promise<express.Response<FlashcardInterface>> {
     const userId = getUserIdFromRequest(req);
     const { deck_id } = req.params;
 
@@ -21,7 +21,7 @@ export class FlashcardController {
       return res.status(200).json({
         success: true,
         data: {
-          flashcards,
+          ...flashcards,
         },
       });
     } catch (error) {
@@ -44,7 +44,7 @@ export class FlashcardController {
       return res.status(200).json({
         success: true,
         data: {
-          flashcards,
+          ...flashcards,
         },
       });
     } catch (error) {
@@ -63,7 +63,7 @@ export class FlashcardController {
       return res.status(200).json({
         success: true,
         data: {
-          decks,
+          ...decks,
         },
       });
     } catch (error) {
