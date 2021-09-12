@@ -11,7 +11,7 @@ export class FolderController {
 
     try {
       const folders = await FolderService.getFolderObject(userId);
-      return res.status(200).json({ success: true, data: folders });
+      return res.status(200).json({ ...folders });
     } catch (e) {
       console.log(e);
       return res.status(500).json({ success: false, error: e.message });
@@ -25,8 +25,7 @@ export class FolderController {
     try {
       const folder = await FolderModel.createFolder(name, userId, color, id);
       res.status(200).json({
-        success: true,
-        folder,
+        ...folder,
       });
     } catch (e) {
       console.log(e);
@@ -49,7 +48,7 @@ export class FolderController {
         owner_id: userId,
       });
 
-      return res.status(200).json({ success: true, folder });
+      return res.status(200).json({ folder });
     } catch (e) {
       console.log(e);
       return res.status(500).json({ success: false, error: e.message });

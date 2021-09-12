@@ -15,10 +15,7 @@ export class BinderController {
       const binderObject = createBinderObject(binders);
 
       return res.status(200).json({
-        success: true,
-        data: {
-          binderObject,
-        },
+        ...binderObject,
       });
     } catch (e) {
       return res.status(400).json({ success: false, error: e.message });
@@ -36,10 +33,7 @@ export class BinderController {
       const binder = await createBinder(folder_id, name, userId, color, id);
 
       return res.status(200).json({
-        success: true,
-        data: {
-          binder,
-        },
+        ...binder,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });

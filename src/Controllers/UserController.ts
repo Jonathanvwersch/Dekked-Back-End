@@ -3,9 +3,11 @@ import { getUserByEmail } from "../Persistance/UserModel";
 import { createUser, genToken, login } from "../Services/AuthService";
 import UserService from "../Services/UserService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
-const { OAuth2Client } = require("google-auth-library");
+import { OAuth2Client } from "google-auth-library";
+import { config } from "../config";
+const { GOOGLE_CLIENT_ID } = config;
 
-const googleOAuth = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
 export class UserController {
   public async register(
     req: express.Request,
@@ -21,7 +23,7 @@ export class UserController {
         password
       );
       if (response.success) {
-        return res.status(200).json(response);
+        return res.status(200).json(response?.data);
       } else {
         return res.status(response.code).json({
           success: false,
@@ -43,7 +45,7 @@ export class UserController {
     try {
       const response: any = await login(email_address, password);
       if (response.success) {
-        return res.status(200).json(response);
+        return res.status(200).json(response?.data);
       } else {
         return res.status(response.code).json({
           success: false,
@@ -65,7 +67,7 @@ export class UserController {
     try {
       const response: any = await googleOAuth.verifyIdToken({
         idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID,
+        audience: GOOGLE_CLIENT_ID,
       });
       const { email_verified } = response.payload;
       if (email_verified) {
@@ -74,14 +76,11 @@ export class UserController {
         if (user?.id) {
           const token = genToken(user);
           return res.status(200).json({
-            success: true,
-            data: {
-              token,
-              first_name,
-              last_name,
-              email_address,
-              id: user.id,
-            },
+            token,
+            first_name,
+            last_name,
+            email_address,
+            id: user.id,
           });
         }
         // if user does not exist, we need to create an entry in database for new user
@@ -93,7 +92,7 @@ export class UserController {
               email_address
             );
             if (response.success) {
-              return res.status(200).json(response);
+              return res.status(200).json(response?.data);
             } else {
               return res.status(response.code).json({
                 success: false,
@@ -127,10 +126,7 @@ export class UserController {
     try {
       const user = await UserService.getUserByIdAsync(userId);
       return res.status(200).json({
-        success: true,
-        data: {
-          user,
-        },
+        ...user,
       });
     } catch (error) {
       console.log(error);

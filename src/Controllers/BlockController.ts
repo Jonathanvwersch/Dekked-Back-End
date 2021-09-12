@@ -15,10 +15,7 @@ export class BlockController {
       const blocks = await BlockModel.getBlocksByParentId(page_id);
       const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);
 
-      return res.status(200).json({
-        success: true,
-        data: organizedBlocks,
-      });
+      return res.status(200).json(organizedBlocks);
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }
