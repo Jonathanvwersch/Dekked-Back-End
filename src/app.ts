@@ -78,7 +78,6 @@ app.get(
 //-----------------------------//
 
 // Folders
-
 app.patch(
   `/folder`,
   passport.authenticate("jwt", {
