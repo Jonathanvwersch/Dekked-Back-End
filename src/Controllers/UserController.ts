@@ -162,4 +162,21 @@ export class UserController {
       return res.status(500).json({ success: false, error: error.message });
     }
   }
+
+  public async verifyUserEmail(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const { email_address } = req.body;
+
+    try {
+      const user = await getUserByEmail(email_address);
+
+      return res.status(200).json({
+        success: Boolean(user),
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  }
 }

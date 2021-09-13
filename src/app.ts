@@ -65,6 +65,10 @@ app.patch(
   userController.updateUser
 );
 
+app.post("/verify-user-email", (req, res) => {
+  userController.verifyUserEmail(req, res);
+});
+
 //-----------------------------//
 
 // Filetree
