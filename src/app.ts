@@ -69,6 +69,14 @@ app.post("/verify-user-email", (req, res) => {
   userController.verifyUserEmail(req, res);
 });
 
+app.patch("/forget-password", (req, res) => {
+  userController.forgetPassword(req, res);
+});
+
+app.patch("/reset-password/:token", (req, res) => {
+  userController.resetPassword(req, res);
+});
+
 //-----------------------------//
 
 // Filetree

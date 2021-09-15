@@ -3,6 +3,7 @@ type ConfigType = {
   DB_CONNECTION: string;
   CLIENT: string;
   GOOGLE_CLIENT_ID: string;
+  SENDGRID_API_KEY: string;
 };
 
 export const config: ConfigType = {
@@ -10,4 +11,5 @@ export const config: ConfigType = {
   DB_CONNECTION: process.env.DB_CONNECTION!,
   CLIENT: process.env.CLIENT!,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!,
 };

@@ -1,10 +1,16 @@
 import express from "express";
-import { getUserByEmail } from "../Persistance/UserModel";
+import {
+  getUserByEmail,
+  getUserByResetPasswordToken,
+} from "../Persistance/UserModel";
 import { createUser, genToken, login } from "../Services/AuthService";
-import UserService from "../Services/UserService";
+import UserService, { sendEmail } from "../Services/UserService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 import { OAuth2Client } from "google-auth-library";
+import { genSaltSync, hashSync } from "bcryptjs";
+
 import { config } from "../config";
+import jwt from "jsonwebtoken";
 
 const { GOOGLE_CLIENT_ID } = config;
 
@@ -177,6 +183,91 @@ export class UserController {
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
+    }
+  }
+
+  public async forgetPassword(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    const { email_address } = req.body;
+
+    try {
+      const user = await getUserByEmail(email_address);
+
+      if (!user) {
+        return res
+          .status(404)
+          .json({ success: false, error: "User does not exist" });
+      } else {
+        // otherwise we need to create a temporary token that expires in 10 mins
+        const resetPasswordToken = jwt.sign(
+          { user: user.email_address },
+          "reset secret",
+          {
+            expiresIn: "10m",
+          }
+        );
+        // update resetLink property to be the temporary token and then send email
+        await UserService.updateUserAsync({
+          id: user.id,
+          reset_password_token: resetPasswordToken,
+        });
+        sendEmail(user, resetPasswordToken);
+        return res.status(200).json({ success: true });
+      }
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  }
+
+  public async resetPassword(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    // Get the token from params
+    const resetPasswordToken = req.params.token;
+    const newPassword = req.body;
+
+    // if there is a token we need to decode it and check that there are no errors
+    if (resetPasswordToken) {
+      jwt.verify(resetPasswordToken, "check for errors", (error) => {
+        if (error) {
+          return res.status(500).json({
+            message: "Incorrect token or expired",
+          });
+        }
+      });
+    }
+
+    try {
+      // find user by the temporary token we stored earlier
+      const user = await getUserByResetPasswordToken(resetPasswordToken);
+
+      // if there is no user, send back an error
+      if (!user) {
+        return res
+          .status(400)
+          .json({ message: "No user exists with that resetPasswordToken" });
+      }
+
+      // otherwise we need to hash the new password  before saving it in the database
+      const salt = genSaltSync();
+      const hashedPassword = hashSync(newPassword, salt);
+
+      // update user credentials and remove the temporary link from database before saving
+      const updatedCredentials = {
+        password: hashedPassword,
+        resetPasswordToken: undefined,
+        id: user.id,
+      };
+
+      await UserService.updateUserAsync({
+        ...updatedCredentials,
+      });
+      return res.status(200).json({ message: "Password updated" });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
     }
   }
 }
