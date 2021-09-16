@@ -227,13 +227,11 @@ export class UserController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    // Get the token from params
-    const resetPasswordToken = req.params.token;
-    const newPassword = req.body;
+    const { password, token }: { password: string; token: string } = req.body;
 
     // if there is a token we need to decode it and check that there are no errors
-    if (resetPasswordToken) {
-      jwt.verify(resetPasswordToken, "check for errors", (error) => {
+    if (token) {
+      jwt.verify(token, "check for errors", (error) => {
         if (error) {
           return res.status(500).json({
             message: "Incorrect token or expired",
@@ -244,7 +242,7 @@ export class UserController {
 
     try {
       // find user by the temporary token we stored earlier
-      const user = await getUserByResetPasswordToken(resetPasswordToken);
+      const user = await getUserByResetPasswordToken(token);
 
       // if there is no user, send back an error
       if (!user) {
@@ -255,7 +253,7 @@ export class UserController {
 
       // otherwise we need to hash the new password  before saving it in the database
       const salt = genSaltSync();
-      const hashedPassword = hashSync(newPassword, salt);
+      const hashedPassword = hashSync(password, salt);
 
       // update user credentials and remove the temporary link from database before saving
       const updatedCredentials = {
