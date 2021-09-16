@@ -229,16 +229,16 @@ export class UserController {
   ): Promise<express.Response<any>> {
     const { password, token }: { password: string; token: string } = req.body;
 
-    // if there is a token we need to decode it and check that there are no errors
-    if (token) {
-      jwt.verify(token, "check for errors", (error) => {
-        if (error) {
-          return res.status(500).json({
-            message: "Incorrect token or expired",
-          });
-        }
-      });
-    }
+    // // if there is a token we need to decode it and check that there are no errors
+    // if (token) {
+    //   jwt.verify(token, "check for errors", (error) => {
+    //     if (error) {
+    //       return res.status(400).json({
+    //         message: "Incorrect token or expired",
+    //       });
+    //     }
+    //   });
+    // }
 
     try {
       // find user by the temporary token we stored earlier
@@ -247,7 +247,7 @@ export class UserController {
       // if there is no user, send back an error
       if (!user) {
         return res
-          .status(400)
+          .status(404)
           .json({ message: "No user exists with that resetPasswordToken" });
       }
 
