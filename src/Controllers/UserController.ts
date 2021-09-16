@@ -202,8 +202,8 @@ export class UserController {
       } else {
         // otherwise we need to create a temporary token that expires in 10 mins
         const resetPasswordToken = jwt.sign(
-          { user: user.email_address },
-          "reset secret",
+          { email_address: user.email_address },
+          "reset-secret",
           {
             expiresIn: "10m",
           }
@@ -231,10 +231,8 @@ export class UserController {
 
     // if there is a token we need to decode it and check that there are no errors
     if (token) {
-      jwt.verify(token, "check for errors", (error, decoded) => {
+      jwt.verify(token, "reset-secret", (error) => {
         if (error) {
-          console.log("decoded token", decoded);
-          console.log("token error", error);
           return res.status(400).json({
             message: "Incorrect token or expired",
           });
