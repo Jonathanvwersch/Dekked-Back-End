@@ -229,16 +229,18 @@ export class UserController {
   ): Promise<express.Response<any>> {
     const { password, token }: { password: string; token: string } = req.body;
 
-    // // if there is a token we need to decode it and check that there are no errors
-    // if (token) {
-    //   jwt.verify(token, "check for errors", (error) => {
-    //     if (error) {
-    //       return res.status(400).json({
-    //         message: "Incorrect token or expired",
-    //       });
-    //     }
-    //   });
-    // }
+    // if there is a token we need to decode it and check that there are no errors
+    if (token) {
+      jwt.verify(token, "check for errors", (error, decoded) => {
+        if (error) {
+          console.log("decoded token", decoded);
+          console.log("token error", error);
+          return res.status(400).json({
+            message: "Incorrect token or expired",
+          });
+        }
+      });
+    }
 
     try {
       // find user by the temporary token we stored earlier
