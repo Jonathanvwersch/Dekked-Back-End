@@ -4,6 +4,7 @@ type ConfigType = {
   CLIENT: string;
   GOOGLE_CLIENT_ID: string;
   SENDGRID_API_KEY: string;
+  RESET_PASSWORD_SECRET_KEY: string;
 };
 
 export const config: ConfigType = {
@@ -12,4 +13,5 @@ export const config: ConfigType = {
   CLIENT: process.env.CLIENT!,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!,
+  RESET_PASSWORD_SECRET_KEY: process.env.RESET_PASSWORD_SECRET_KEY!,
 };

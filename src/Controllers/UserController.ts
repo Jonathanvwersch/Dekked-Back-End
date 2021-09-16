@@ -12,7 +12,7 @@ import { genSaltSync, hashSync } from "bcryptjs";
 import { config } from "../config";
 import jwt from "jsonwebtoken";
 
-const { GOOGLE_CLIENT_ID } = config;
+const { GOOGLE_CLIENT_ID, RESET_PASSWORD_SECRET_KEY } = config;
 
 const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
 export class UserController {
@@ -203,7 +203,7 @@ export class UserController {
         // otherwise we need to create a temporary token that expires in 10 mins
         const resetPasswordToken = jwt.sign(
           { email_address: user.email_address },
-          "reset-secret",
+          RESET_PASSWORD_SECRET_KEY,
           {
             expiresIn: "10m",
           }
@@ -231,7 +231,7 @@ export class UserController {
 
     // if there is a token we need to decode it and check that there are no errors
     if (token) {
-      jwt.verify(token, "reset-secret", (error) => {
+      jwt.verify(token, RESET_PASSWORD_SECRET_KEY, (error) => {
         if (error) {
           return res.status(400).json({
             message: "Incorrect token or expired",
