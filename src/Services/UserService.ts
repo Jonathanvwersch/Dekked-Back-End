@@ -55,9 +55,9 @@ export const sendEmail = (user: UserInterface, token: string) => {
   const msg = {
     to: user.email_address,
     from: "team@dekked.com",
-    subject: "Reset password requested",
+    subject: "Reset your password",
     html: `
-     <a href="https:/dekked.com/reset-password/${token}">${token}</a>
+     <a href="https://www.dekked.com/reset-password/${token}">Reset password</a>
    `,
   };
 

@@ -198,7 +198,7 @@ export class UserController {
       if (!user) {
         return res
           .status(404)
-          .json({ success: false, error: "User does not exist" });
+          .json({ success: false, message: "User does not exist" });
       } else {
         // otherwise we need to create a temporary token that expires in 10 mins
         const resetPasswordToken = jwt.sign(
@@ -214,7 +214,9 @@ export class UserController {
           reset_password_token: resetPasswordToken,
         });
         sendEmail(user, resetPasswordToken);
-        return res.status(200).json({ success: true });
+        return res
+          .status(200)
+          .json({ success: true, message: "Reset email sent" });
       }
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
