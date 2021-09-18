@@ -16,8 +16,7 @@ export class CardController {
         if (type === "classic") {
           const response = await ClassicCardModel.createCard(cardData);
           return res.status(200).json({
-            success: true,
-            data: response,
+            response,
           });
         } else {
           return res.status(400).json({
@@ -26,12 +25,10 @@ export class CardController {
           });
         }
       } else {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            error: "Properties not found, type and cardData not found",
-          });
+        return res.status(400).json({
+          success: false,
+          error: "Properties not found, type and cardData not found",
+        });
       }
     } catch (e) {
       return res.status(400).json({ success: false, error: e.message });
@@ -46,8 +43,7 @@ export class CardController {
       if (req.params.card_id) {
         const response = await ClassicCardModel.getCard(req.params.card_id);
         return res.status(200).json({
-          success: true,
-          data: response,
+          response,
         });
       } else {
         return res
@@ -116,7 +112,7 @@ export class CardController {
         req.params.deck_id
       );
       console.log(response);
-      return res.status(200).json({ success: true, data: response });
+      return res.status(200).json({ ...response });
     } catch (e) {
       console.log(e.message);
       return res.status(500).json({ success: false, error: e.message });

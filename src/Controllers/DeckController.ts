@@ -9,10 +9,7 @@ export class DeckController {
     try {
       const response = await DeckService.getDeckByStudySetIdAsync(study_set_id);
       return res.status(200).json({
-        success: true,
-        data: {
-          deck: response,
-        },
+        ...response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
