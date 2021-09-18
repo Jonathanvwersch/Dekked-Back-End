@@ -3,7 +3,11 @@ import { config } from "../config";
 import sgMail from "@sendgrid/mail";
 import { UserInterface } from "../types";
 
-const { SENDGRID_API_KEY } = config;
+const {
+  SENDGRID_API_KEY,
+  SENDGRID_RESET_PASSWORD_TEMPLATE_ID,
+  API_ENV,
+} = config;
 
 async function getUserByIdAsync(userId: string) {
   try {
@@ -52,13 +56,25 @@ async function updateUserAsync({
 
 export const sendEmail = (user: UserInterface, token: string) => {
   sgMail.setApiKey(SENDGRID_API_KEY);
+
+  const getResetPasswordLink = () => {
+    if (API_ENV === "production")
+      return `https://www.app.dekked.com/reset-password/${token}`;
+    else if (API_ENV === "integration")
+      return `https://www.integration.dekked.com/reset-password/${token}`;
+    else if (API_ENV === "staging")
+      return `https://www.staging.dekked.com/reset-password/${token}`;
+    return `http://localhost:3000/reset-password/${token}`;
+  };
+
   const msg = {
     to: user.email_address,
     from: "team@dekked.com",
     subject: "Reset your password",
-    html: `
-     <a href="https://www.dekked.com/reset-password/${token}">Reset password</a>
-   `,
+    templateId: SENDGRID_RESET_PASSWORD_TEMPLATE_ID,
+    dynamic_template_data: {
+      resetPasswordLink: getResetPasswordLink(),
+    },
   };
 
   sgMail
