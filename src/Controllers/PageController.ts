@@ -17,8 +17,8 @@ export class PageController {
       const blocks = await BlockModel.getBlocksByParentId(page_id);
       const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);
       return res.status(200).json({
-        success: true,
-        data: { page, organizedBlocks },
+        page,
+        organizedBlocks,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -34,8 +34,7 @@ export class PageController {
     try {
       const response = await PageModel.getPage(page_id);
       return res.status(200).json({
-        success: true,
-        data: response,
+        response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -70,8 +69,7 @@ export class PageController {
     try {
       const response = await PageModel.updatePage(req.body);
       return res.status(200).json({
-        success: true,
-        data: response,
+        response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -82,10 +80,7 @@ export class PageController {
     try {
       const response = await PageModel.getPages();
       return res.status(200).json({
-        success: true,
-        data: {
-          pages: response,
-        },
+        pages: response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
@@ -101,10 +96,7 @@ export class PageController {
     try {
       const response = await PageService.getPageByStudySetIdAsync(study_set_id);
       return res.status(200).json({
-        success: true,
-        data: {
-          page: response,
-        },
+        ...response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });

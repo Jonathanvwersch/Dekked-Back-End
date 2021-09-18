@@ -234,7 +234,7 @@ async function saveFlashcard({
     block_link,
     quality,
   });
-  return flashcard[0];
+  return flashcard;
 }
 
 async function deleteFlashcard(owner_id: string, id: string) {

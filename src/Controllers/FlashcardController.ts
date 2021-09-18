@@ -9,7 +9,7 @@ export class FlashcardController {
   public async getFullFlashcardsByDeckId(
     req: express.Request,
     res: express.Response
-  ): Promise<express.Response<any>> {
+  ): Promise<express.Response<FlashcardInterface>> {
     const userId = getUserIdFromRequest(req);
     const { deck_id } = req.params;
 
@@ -18,12 +18,7 @@ export class FlashcardController {
         deck_id,
         userId
       );
-      return res.status(200).json({
-        success: true,
-        data: {
-          flashcards,
-        },
-      });
+      return res.status(200).json(flashcards);
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
     }
@@ -41,12 +36,7 @@ export class FlashcardController {
         deck_id,
         userId
       );
-      return res.status(200).json({
-        success: true,
-        data: {
-          flashcards,
-        },
-      });
+      return res.status(200).json(flashcards);
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
     }
@@ -60,12 +50,7 @@ export class FlashcardController {
 
     try {
       const decks = await FlashcardService.getAllDueDecks(userId);
-      return res.status(200).json({
-        success: true,
-        data: {
-          decks,
-        },
-      });
+      return res.status(200).json(decks);
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
     }
@@ -105,8 +90,7 @@ export class FlashcardController {
       };
 
       return res.status(200).json({
-        success: true,
-        fullFlashcard,
+        ...fullFlashcard,
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
@@ -173,8 +157,7 @@ export class FlashcardController {
           };
 
           return res.status(200).json({
-            success: true,
-            fullFlashcard,
+            ...fullFlashcard,
           });
         } catch (error) {
           return res.status(500).json({ success: false, error: error.message });
@@ -199,8 +182,7 @@ export class FlashcardController {
       };
 
       return res.status(200).json({
-        success: true,
-        fullFlashcard,
+        ...fullFlashcard,
       });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });

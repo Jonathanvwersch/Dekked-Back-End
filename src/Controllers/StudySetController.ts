@@ -21,10 +21,7 @@ export class StudySetController {
       const studySets = await getStudySetsByUserId(userId);
       const studyPackObject = createStudySetObject(studySets);
       return res.status(200).json({
-        success: true,
-        data: {
-          studySets: studyPackObject,
-        },
+        ...studyPackObject,
       });
     } catch (e) {
       return res.status(400).json({ success: false, error: e.message });
@@ -43,10 +40,7 @@ export class StudySetController {
       await PageService.createPage(id, userId);
       await DeckService.createDeck(id, name, userId);
       return res.status(200).json({
-        success: true,
-        data: {
-          study_set: response,
-        },
+        ...response,
       });
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });

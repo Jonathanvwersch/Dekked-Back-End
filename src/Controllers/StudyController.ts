@@ -10,7 +10,7 @@ export class StudyController {
     try {
       const response = await ClassicCardModel.getAllCards();
       const cards = StudyService.getSpacedRepetitionQueuedCards(response);
-      return res.status(200).json({ success: true, data: cards });
+      return res.status(200).json({ ...cards });
     } catch (e) {
       console.log(e.message);
       return res.status(500).json({ success: false, error: e.message });

@@ -23,6 +23,21 @@ export async function getUserByEmail(email_address: string) {
   }
 }
 
+export async function getUserByResetPasswordToken(
+  reset_password_token: string
+) {
+  try {
+    const user: UserInterface = await db
+      .table("users")
+      .where({ reset_password_token })
+      .first();
+    return user;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
 export async function createNewUser(
   email_address: string,
   first_name: string,
@@ -53,18 +68,29 @@ export async function updateUser({
   first_name,
   last_name,
   email_address,
+  password,
+  reset_password_token,
 }: {
   id: string;
   first_name?: string;
   last_name?: string;
   email_address?: string;
+  password?: string;
+  reset_password_token?: string;
 }) {
   const now = new Date();
 
   try {
     await db
       .table("users")
-      .update({ email_address, first_name, last_name, date_modified: now })
+      .update({
+        email_address,
+        first_name,
+        last_name,
+        date_modified: now,
+        password,
+        reset_password_token,
+      })
       .where({ id });
   } catch (error) {
     console.log(error);
