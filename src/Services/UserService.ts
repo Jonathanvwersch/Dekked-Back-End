@@ -70,7 +70,6 @@ export const sendEmail = (user: UserInterface, token: string) => {
   const msg = {
     to: user.email_address,
     from: "team@dekked.com",
-    subject: "Reset your password",
     templateId: SENDGRID_RESET_PASSWORD_TEMPLATE_ID,
     dynamic_template_data: {
       subject: "Reset your password",
