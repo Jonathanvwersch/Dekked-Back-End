@@ -6,7 +6,7 @@ import { UserInterface } from "../types";
 const {
   SENDGRID_API_KEY,
   SENDGRID_RESET_PASSWORD_TEMPLATE_ID,
-  API_ENV,
+  APP_ENV,
 } = config;
 
 async function getUserByIdAsync(userId: string) {
@@ -58,11 +58,11 @@ export const sendEmail = (user: UserInterface, token: string) => {
   sgMail.setApiKey(SENDGRID_API_KEY);
 
   const getResetPasswordLink = () => {
-    if (API_ENV === "production")
+    if (APP_ENV === "production")
       return `https://www.app.dekked.com/reset-password/${token}`;
-    else if (API_ENV === "integration")
+    else if (APP_ENV === "integration")
       return `https://www.integration.dekked.com/reset-password/${token}`;
-    else if (API_ENV === "staging")
+    else if (APP_ENV === "staging")
       return `https://www.staging.dekked.com/reset-password/${token}`;
     return `http://localhost:3000/reset-password/${token}`;
   };
@@ -73,6 +73,7 @@ export const sendEmail = (user: UserInterface, token: string) => {
     subject: "Reset your password",
     templateId: SENDGRID_RESET_PASSWORD_TEMPLATE_ID,
     dynamic_template_data: {
+      subject: "Reset your password",
       resetPasswordLink: getResetPasswordLink(),
     },
   };

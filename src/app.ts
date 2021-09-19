@@ -32,7 +32,7 @@ const fileTreeController = new FileTreeController();
 const binderController = new BinderController();
 const studyPackController = new StudySetController();
 const flashcardController = new FlashcardController();
-const { API_ENV } = config;
+const { APP_ENV } = config;
 
 //-----------------------------//
 
@@ -285,22 +285,22 @@ app.delete(
 
 //-----------------------------//
 
-API_ENV === "development" &&
+APP_ENV === "development" &&
   app.listen(5000, () =>
     console.log("Development server is up and running on port 5000")
   );
 
-API_ENV === "integration" &&
+APP_ENV === "integration" &&
   app.listen(5000, () =>
     console.log("Integration server is up and running on port 5000")
   );
 
-API_ENV === "staging" &&
+APP_ENV === "staging" &&
   app.listen(5000, () =>
     console.log("Staging server is up and running on port 5000")
   );
 
-API_ENV === "production" &&
+APP_ENV === "production" &&
   app.listen(5000, () =>
     console.log("Production server is up and running on port 5000")
   );
