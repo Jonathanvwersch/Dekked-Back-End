@@ -37,20 +37,20 @@ const { APP_ENV } = config;
 //-----------------------------//
 
 // User
-app.post("/register", (req, res) => {
+app.post("/api/v1/register", (req, res) => {
   userController.register(req, res);
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/v1/login", (req, res) => {
   userController.login(req, res);
 });
 
-app.post("/auth/google", (req, res) => {
+app.post("/api/v1/auth/google", (req, res) => {
   userController.googleAuthentication(req, res);
 });
 
 app.get(
-  "/user",
+  "/api/v1/user",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -58,22 +58,22 @@ app.get(
 );
 
 app.patch(
-  "/user",
+  "/api/v1/user",
   passport.authenticate("jwt", {
     session: false,
   }),
   userController.updateUser
 );
 
-app.post("/verify-user-email", (req, res) => {
+app.post("/api/v1/verify-user-email", (req, res) => {
   userController.verifyUserEmail(req, res);
 });
 
-app.patch("/forget-password", (req, res) => {
+app.patch("/api/v1/forget-password", (req, res) => {
   userController.forgetPassword(req, res);
 });
 
-app.patch("/reset-password", (req, res) => {
+app.patch("/api/v1/reset-password", (req, res) => {
   userController.resetPassword(req, res);
 });
 
@@ -81,7 +81,7 @@ app.patch("/reset-password", (req, res) => {
 
 // Filetree
 app.get(
-  "/file-tree",
+  "/api/v1/file-tree",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -91,7 +91,7 @@ app.get(
 
 // Folders
 app.patch(
-  `/folder`,
+  `/api/v1/folder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -99,7 +99,7 @@ app.patch(
 );
 
 app.post(
-  `/folder`,
+  `/api/v1/folder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -107,7 +107,7 @@ app.post(
 );
 
 app.delete(
-  `/folder`,
+  `/api/v1/folder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -115,7 +115,7 @@ app.delete(
 );
 
 app.get(
-  `/folders`,
+  `/api/v1/folders`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -126,7 +126,7 @@ app.get(
 
 // Binders
 app.get(
-  `/binders`,
+  `/api/v1/binders`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -134,7 +134,7 @@ app.get(
 );
 
 app.post(
-  `/binder`,
+  `/api/v1/binder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -142,7 +142,7 @@ app.post(
 );
 
 app.patch(
-  `/binder`,
+  `/api/v1/binder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -150,7 +150,7 @@ app.patch(
 );
 
 app.delete(
-  `/binder`,
+  `/api/v1/binder`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -161,7 +161,7 @@ app.delete(
 
 // Study Packs
 app.get(
-  `/study-sets`,
+  `/api/v1/study-sets`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -169,7 +169,7 @@ app.get(
 );
 
 app.post(
-  `/study-set`,
+  `/api/v1/study-set`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -177,7 +177,7 @@ app.post(
 );
 
 app.patch(
-  `/study-set`,
+  `/api/v1/study-set`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -185,7 +185,7 @@ app.patch(
 );
 
 app.delete(
-  `/study-set`,
+  `/api/v1/study-set`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -196,19 +196,21 @@ app.delete(
 
 // Pages
 app.patch(
-  "/page/:page_id",
+  "/api/v1/page/:page_id",
   passport.authenticate("jwt", {
     session: false,
   }),
   (req, res) => pageController.saveFullPage(req, res)
 );
-app.get("/pages", (_, res) => pageController.getPages(res));
-app.get("/page-meta/:page_id", (req, res) =>
+app.get("/api/v1/pages", (_, res) => pageController.getPages(res));
+app.get("/api/v1/page-meta/:page_id", (req, res) =>
   pageController.getPageMeta(req, res)
 );
-app.get("/page/:page_id", (req, res) => pageController.getFullPage(req, res));
+app.get("/api/v1/page/:page_id", (req, res) =>
+  pageController.getFullPage(req, res)
+);
 app.get(
-  "/get-page-by-study-set-id/:study_set_id",
+  "/api/v1/get-page-by-study-set-id/:study_set_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -217,7 +219,7 @@ app.get(
 
 // Block
 app.get(
-  "/get-blocks-by-page/:page_id",
+  "/api/v1/get-blocks-by-page/:page_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -228,7 +230,7 @@ app.get(
 
 // Flashcards and Decks
 app.get(
-  "/get-deck-by-study-set-id/:study_set_id",
+  "/api/v1/get-deck-by-study-set-id/:study_set_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -236,7 +238,7 @@ app.get(
 );
 
 app.get(
-  "/get-flashcards-by-deck-id/:deck_id",
+  "/api/v1/get-flashcards-by-deck-id/:deck_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -244,7 +246,7 @@ app.get(
 );
 
 app.get(
-  "/get-sr-flashcards-by-deck-id/:deck_id",
+  "/api/v1/get-sr-flashcards-by-deck-id/:deck_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -252,7 +254,7 @@ app.get(
 );
 
 app.get(
-  "/get-all-due-sr-decks",
+  "/api/v1/get-all-due-sr-decks",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -260,7 +262,7 @@ app.get(
 );
 
 app.post(
-  "/flashcard",
+  "/api/v1/flashcard",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -268,7 +270,7 @@ app.post(
 );
 
 app.patch(
-  "/flashcard/:flashcard_id",
+  "/api/v1/flashcard/:flashcard_id",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -276,7 +278,7 @@ app.patch(
 );
 
 app.delete(
-  "/flashcard/:flashcard_id",
+  "/api/v1/flashcard/:flashcard_id",
   passport.authenticate("jwt", {
     session: false,
   }),
