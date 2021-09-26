@@ -53,7 +53,7 @@ export function getOrganizedBlocks(
   let orderingMap: any = {};
 
   blocks.forEach((val) => (orderingMap[val.draft_key] = val.content));
-  const orderedBlocks = ordering.map((val) => {
+  const orderedBlocks: BlockInterface[] = ordering.map((val) => {
     return orderingMap[val];
   });
 

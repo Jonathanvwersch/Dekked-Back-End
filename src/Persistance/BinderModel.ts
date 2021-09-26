@@ -25,7 +25,6 @@ export async function createBinder(
       .returning("*");
     return binders[0];
   } catch (err) {
-    console.error(err);
     throw new Error("There was an error creating the binder");
   }
 }
@@ -39,22 +38,7 @@ export async function getBindersByUserId(user_id: string) {
       .orderBy("date_created");
     return binder;
   } catch (err) {
-    console.log(err);
     throw new Error("There was an error getting the binders by user id");
-  }
-}
-
-export async function getBinderById(id: string) {
-  try {
-    const binder: BinderInterface | undefined = await db
-      .table("binders")
-      .select("*")
-      .where({ id })
-      .first();
-    return binder;
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error getting the binders by binder id");
   }
 }
 
@@ -75,7 +59,6 @@ export async function updateBinder({
       .update({ name, color, date_modified: now })
       .where({ id: binder_id, owner_id });
   } catch (err) {
-    console.log(err);
     throw Error("There was an error updating binder");
   }
 }
@@ -90,7 +73,6 @@ export async function deleteBinder({
   try {
     await db("binders").delete("*").where({ id: binder_id, owner_id });
   } catch (err) {
-    console.log(err);
     throw Error("There was an error deleting binder");
   }
 }
@@ -106,7 +88,6 @@ export async function getBindersByFolderId(
       .where({ owner_id, folder_id });
     return binders;
   } catch (err) {
-    console.log(err);
     throw Error("There was an error fetching the binders");
   }
 }
@@ -114,7 +95,6 @@ export async function getBindersByFolderId(
 export default {
   updateBinder,
   createBinder,
-  getBinderById,
   getBindersByUserId,
   deleteBinder,
   getBindersByFolderId,

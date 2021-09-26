@@ -25,7 +25,6 @@ export async function createStudySet(
     );
     return study_set[0];
   } catch (err) {
-    console.log(err);
     throw new Error("There was an error creating the study set");
   }
 }
@@ -39,7 +38,6 @@ export async function getStudySetById(id: string) {
       .first();
     return studySet;
   } catch (err) {
-    console.log(err);
     throw Error("Error getting study pack by id");
   }
 }
@@ -52,7 +50,6 @@ export async function getStudySetsByBinderId(binder_id: string) {
       .where({ binder_id });
     return study_sets;
   } catch (err) {
-    console.log(err);
     throw Error("Error getting study pack by binder id");
   }
 }
@@ -66,7 +63,6 @@ export async function getStudySetsByUserId(user_id: string) {
       .orderBy("date_created");
     return studySets;
   } catch (err) {
-    console.log(err);
     throw Error("Error getting study pack by user id");
   }
 }
@@ -89,7 +85,6 @@ export async function updateStudySet({
       .update({ name, color, date_modified: now })
       .where({ id: study_set_id, owner_id });
   } catch (err) {
-    console.log(err);
     throw Error("There was an error updating study pack");
   }
 }
@@ -104,7 +99,6 @@ async function deleteStudySet({
   try {
     await db("study_sets").delete("*").where({ id: study_set_id, owner_id });
   } catch (err) {
-    console.log(err);
     throw Error("There was an error deleting study pack");
   }
 }

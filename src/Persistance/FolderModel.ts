@@ -22,7 +22,6 @@ export async function createFolder(
       .returning("id");
     return folders[0];
   } catch (error) {
-    console.log(error);
     throw new Error("There was an error creating folder");
   }
 }
@@ -37,7 +36,6 @@ export async function getFoldersByUser(
       .orderBy("date_created");
     return response;
   } catch (error) {
-    console.log(error);
     throw new Error("There was fetching folders for given user");
   }
 }

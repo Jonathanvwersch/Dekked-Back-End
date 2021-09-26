@@ -4,7 +4,7 @@ import BinderService, { createBinderObject } from "../Services/BinderService";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class BinderController {
-  public async getBindersByUserId(
+  public async getBinders(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
@@ -32,7 +32,7 @@ export class BinderController {
     try {
       const binder = await createBinder(folder_id, name, userId, color, id);
 
-      return res.status(200).json({
+      return res.status(201).json({
         ...binder,
       });
     } catch (e) {
@@ -54,9 +54,9 @@ export class BinderController {
         binder_id,
         owner_id: userId,
       });
+
       return res.status(200).json({ success: true });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }
@@ -73,9 +73,9 @@ export class BinderController {
         binder_id,
         owner_id: userId,
       });
+
       return res.status(200).json({ success: true });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }

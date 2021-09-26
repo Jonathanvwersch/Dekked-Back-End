@@ -1,0 +1,10 @@
+export * from "./routes.helpers";
+export { authRouter } from "./authentication";
+export { usersRouter } from "./users";
+export { bindersRouter } from "./binders";
+export { foldersRouter } from "./folders";
+export { studySetsRouter } from "./studySets";
+export { decksRouter } from "./decks";
+export { flashcardsRouter } from "./flashcards";
+export { pagesRouter } from "./pages";
+export { blocksRouter } from "./blocks";

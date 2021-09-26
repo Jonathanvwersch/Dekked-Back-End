@@ -11,16 +11,11 @@ export async function getUserById(id: string) {
 }
 
 export async function getUserByEmail(email_address: string) {
-  try {
-    const user: UserInterface = await db
-      .table("users")
-      .where({ email_address })
-      .first();
-    return user;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
+  const user: UserInterface = await db
+    .table("users")
+    .where({ email_address })
+    .first();
+  return user;
 }
 
 export async function getUserByResetPasswordToken(
@@ -33,7 +28,6 @@ export async function getUserByResetPasswordToken(
       .first();
     return user;
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }
@@ -43,24 +37,20 @@ export async function createNewUser(
   first_name: string,
   last_name: string,
   password?: string
-) {
+): Promise<UserInterface> {
   const now = new Date();
-
-  try {
-    await db.table("users").insert({
+  const users = await db
+    .table("users")
+    .insert({
       email_address,
       first_name,
       last_name,
       password,
       date_created: now,
       date_modified: now,
-    });
-    const user: UserInterface = await getUserByEmail(email_address);
-    return user;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+    })
+    .returning("*");
+  return users[0];
 }
 
 export async function updateUser({
@@ -93,7 +83,6 @@ export async function updateUser({
       })
       .where({ id });
   } catch (error) {
-    console.log(error);
     throw new Error("Error updating user");
   }
 }

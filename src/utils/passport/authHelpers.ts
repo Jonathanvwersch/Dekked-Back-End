@@ -5,6 +5,6 @@ export function comparePass(userPassword: string, databasePassword: string) {
 }
 
 export function getUserIdFromRequest(req: any) {
-  const userId: string = req.user._id;
+  const userId: string = req.user.id;
   return userId;
 }

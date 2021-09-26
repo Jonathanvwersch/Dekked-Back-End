@@ -11,7 +11,7 @@ import StudySetService, {
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class StudySetController {
-  public async getStudySetsByUserId(
+  public async getStudySets(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
@@ -65,7 +65,6 @@ export class StudySetController {
       await DeckService.updateDeck(name, study_set_id, userId);
       return res.status(200).json({ success: true });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }
@@ -84,7 +83,6 @@ export class StudySetController {
       });
       return res.status(200).json({ success: true });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }

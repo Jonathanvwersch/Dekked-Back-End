@@ -37,7 +37,6 @@ async function createFlashcard({
       .returning("*");
     return flashcard;
   } catch (error) {
-    console.log(error);
     throw new Error("There was an error creating the flashcard");
   }
 }
@@ -53,7 +52,6 @@ async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
       .orderBy("date_created", "asc");
     return flashcards;
   } catch (error) {
-    console.log(error);
     throw new Error("There was an error fetching flashcards by deck id");
   }
 }
@@ -71,7 +69,6 @@ async function getFlashcardsByStudySetId(
       });
     return flashcards;
   } catch (error) {
-    console.log(error);
     throw new Error("There was an error fetching flashcards by deck id");
   }
 }
@@ -95,7 +92,6 @@ async function getSpacedRepetitionDeckByDeckId(
       .orderBy("due_date", "asc");
     return flashcards;
   } catch (error) {
-    console.log(error);
     throw new Error("There was an error fetching flashcards by deck id");
   }
 }
@@ -115,7 +111,6 @@ async function getAllDueFlashcards(owner_id: string) {
 
     return flashcards;
   } catch (error) {
-    console.log(error);
     throw new Error(
       "There was an error fetching the spaced repetition flashcards by deck id"
     );
@@ -169,7 +164,6 @@ async function updateFlashcard({
       .returning("*");
     return flashcard[0];
   } catch (error) {
-    console.log(error);
     throw new Error("Error updating flashcard");
   }
 }
@@ -187,7 +181,6 @@ async function deleteFlashcard({
       id,
     });
   } catch (error) {
-    console.log(error);
     throw new Error("There was an error deleting flashcard");
   }
 }
@@ -205,7 +198,6 @@ async function deleteFlashcardByStudySetId({
       study_set_id,
     });
   } catch (error) {
-    console.log(error);
     throw new Error(
       "There was an error deleting the flashcards by study set id"
     );

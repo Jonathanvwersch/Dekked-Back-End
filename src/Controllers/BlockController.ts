@@ -4,7 +4,7 @@ import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks } from "../Services/BlockService";
 
 export class BlockController {
-  public async getBlocksByPage(
+  public async getBlocksByPageId(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {

@@ -1,5 +1,6 @@
 import express from "express";
 import FileTreeService from "../Services/FileTreeService";
+import { ErrorHandler } from "../utils";
 import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 
 export class FileTreeController {
@@ -15,7 +16,7 @@ export class FileTreeController {
         ...fileTree,
       });
     } catch (e) {
-      return res.status(400).json({ success: false, error: e.message });
+      throw new ErrorHandler(e.status, e.message);
     }
   }
 }

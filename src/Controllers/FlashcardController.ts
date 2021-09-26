@@ -6,7 +6,7 @@ import { getUserIdFromRequest } from "../utils/passport/authHelpers";
 import { spacedRepetition } from "../utils/spaced-repetition/spacedRepetition";
 
 export class FlashcardController {
-  public async getFullFlashcardsByDeckId(
+  public async getFlashcards(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<FlashcardInterface>> {
@@ -24,7 +24,7 @@ export class FlashcardController {
     }
   }
 
-  public async getSpacedRepetitionDeckByDeckId(
+  public async getSpacedRepetitionFlashcards(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
@@ -42,7 +42,7 @@ export class FlashcardController {
     }
   }
 
-  public async getAllDueDecks(
+  public async getDueDecks(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
@@ -97,7 +97,7 @@ export class FlashcardController {
     }
   }
 
-  public async saveFullFlashcard(
+  public async updateFlashcard(
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {

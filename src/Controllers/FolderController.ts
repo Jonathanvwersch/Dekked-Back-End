@@ -13,7 +13,6 @@ export class FolderController {
       const folders = await FolderService.getFolderObject(userId);
       return res.status(200).json({ ...folders });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }
@@ -28,7 +27,6 @@ export class FolderController {
         ...folder,
       });
     } catch (e) {
-      console.log(e);
       res.status(400).json({ success: false, error: e.message });
     }
   }
@@ -50,7 +48,6 @@ export class FolderController {
 
       return res.status(200).json({ folder });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }
@@ -66,7 +63,6 @@ export class FolderController {
       await FolderService.deleteFolder(folder_id, userId);
       return res.status(200).json({ success: true });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({ success: false, error: e.message });
     }
   }

@@ -40,7 +40,7 @@ async function deleteStudySet({
 }) {
   try {
     await StudySetModel.deleteStudySet({ owner_id, study_set_id });
-    const page = await PageService.getPageByStudySetIdAsync(study_set_id);
+    const page = await PageService.getDeckByStudySetId(study_set_id);
     await PageService.deletePage(page.id, owner_id);
     await DeckService.deleteDeck(study_set_id, owner_id);
   } catch (error) {

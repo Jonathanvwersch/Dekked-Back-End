@@ -3,7 +3,6 @@ import FlashcardModel from "../Persistance/FlashcardModel";
 import { getStudySetById } from "../Persistance/StudySetModel";
 import {
   BlockInterface,
-  DeckInterface,
   DueSpacedRepetitionDecks,
   FlashcardInterface,
   FlashcardLearningStatus,
@@ -11,7 +10,6 @@ import {
   StudySetInterface,
 } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
-import { getDeckByStudySetIdAsync } from "./DeckService";
 
 async function createFlashcard(
   study_set_id: string,
@@ -74,7 +72,6 @@ async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
     );
     return fullFlashcards;
   } catch (error) {
-    console.log(error);
     throw Error("There was an error getting flashcards by deck id");
   }
 }
@@ -90,7 +87,6 @@ async function getFlashcardsByStudySetId(
     );
     return flashcards;
   } catch (error) {
-    console.log(error);
     throw Error("There was an error getting flashcards by deck id");
   }
 }
@@ -121,7 +117,6 @@ async function getSpacedRepetitionDeckByDeckId(
     );
     return fullFlashcards;
   } catch (error) {
-    console.log(error);
     throw Error(
       "There was an error getting spaced repetition flashcards by deck id"
     );
@@ -176,7 +171,6 @@ async function getAllDueDecks(owner_id: string) {
 
     return allDueDecks;
   } catch (error) {
-    console.log(error);
     throw Error(
       "There was an error getting spaced repetition flashcards by deck id"
     );
@@ -250,7 +244,6 @@ async function deleteFlashcard(owner_id: string, id: string) {
       id,
     });
   } catch (error) {
-    console.log(error);
     throw Error("There was an error deleting flashcard");
   }
 }
@@ -278,7 +271,6 @@ async function deleteFlashcardByStudySetId(
       study_set_id,
     });
   } catch (error) {
-    console.log(error);
     throw Error("There was an error deleting flashcard");
   }
 }
