@@ -1,7 +1,7 @@
 import express from "express";
 import { createBinder, getBindersByUserId } from "../Persistance/BinderModel";
 import BinderService, { createBinderObject } from "../Services/BinderService";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest } from "../utils";
 
 export class BinderController {
   public async getBinders(

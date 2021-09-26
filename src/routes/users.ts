@@ -1,9 +1,7 @@
 import express from "express";
 import { commonBaseUrl } from ".";
 import { UserController } from "../Controllers";
-import passport from "passport";
-import { applyPassportStrategy } from "../utils";
-applyPassportStrategy(passport);
+import passport from "./routes.helpers";
 
 const router = express();
 

@@ -3,7 +3,7 @@ import BlockModel from "../Persistance/BlockModel";
 import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks, saveBlocks } from "../Services/BlockService";
 import PageService from "../Services/PageService";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest } from "../utils";
 
 export class PageController {
   public async getPage(

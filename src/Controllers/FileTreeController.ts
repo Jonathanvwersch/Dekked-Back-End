@@ -1,7 +1,6 @@
 import express from "express";
 import FileTreeService from "../Services/FileTreeService";
-import { ErrorHandler } from "../utils";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest, ErrorHandler } from "../utils";
 
 export class FileTreeController {
   public async getFileTree(

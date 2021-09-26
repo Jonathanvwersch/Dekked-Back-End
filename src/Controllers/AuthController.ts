@@ -7,7 +7,7 @@ import { createUser, genToken, login } from "../Services/AuthService";
 import UserService, { sendEmail } from "../Services/UserService";
 import { OAuth2Client } from "google-auth-library";
 import { genSaltSync, hashSync } from "bcryptjs";
-import { catchAsync, ErrorHandler, missingParams } from "../../src/utils";
+import { ErrorHandler, missingParams } from "../utils";
 
 import { config } from "../config";
 import jwt from "jsonwebtoken";

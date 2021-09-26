@@ -2,8 +2,7 @@ import express from "express";
 import db from "../db/database";
 import FlashcardService from "../Services/FlashcardService";
 import { FlashcardInterface } from "../types";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
-import { spacedRepetition } from "../utils/spaced-repetition/spacedRepetition";
+import { spacedRepetition, getUserIdFromRequest } from "../utils";
 
 export class FlashcardController {
   public async getFlashcards(

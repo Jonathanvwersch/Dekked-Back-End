@@ -8,7 +8,7 @@ import PageService from "../Services/PageService";
 import StudySetService, {
   createStudySetObject,
 } from "../Services/StudySetService";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest } from "../utils";
 
 export class StudySetController {
   public async getStudySets(

@@ -1,6 +1,6 @@
 import express from "express";
 import FolderModel from "../Persistance/FolderModel";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest } from "../utils";
 import FolderService from "../Services/FolderService";
 export class FolderController {
   public async getFolders(

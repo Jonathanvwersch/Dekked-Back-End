@@ -1,6 +1,6 @@
 import express from "express";
 import UserService from "../Services/UserService";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest } from "../utils";
 
 export class UserController {
   public async getUser(
