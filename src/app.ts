@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(compression());
 app.use(cors());
 
-const { APP_ENV, PORT } = config;
+const { APP_ENV } = config;
 
 // Routes which handle requests
 app.use(`${commonBaseUrl}/auth`, authRouter);
@@ -59,9 +59,11 @@ const errorHandlingMiddleWare: ErrorRequestHandler = (
 
 app.use(errorHandlingMiddleWare);
 
-app.listen(PORT, () =>
+app.listen(5000, () =>
   console.log(
-    `${APP_ENV.toUpperCase()} server is up and running on port ${PORT}  🚀`
+    `${
+      APP_ENV.charAt(0).toUpperCase() + APP_ENV.slice(1)
+    } server is up and running on port 5000  🚀`
   )
 );
 

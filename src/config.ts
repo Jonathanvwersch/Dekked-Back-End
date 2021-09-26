@@ -7,7 +7,6 @@ type ConfigType = {
   RESET_PASSWORD_SECRET_KEY: string;
   SENDGRID_RESET_PASSWORD_TEMPLATE_ID: string;
   AUTHENTICATION_SECRET_KEY: string;
-  PORT: number;
 };
 
 export const config: ConfigType = {
@@ -20,5 +19,4 @@ export const config: ConfigType = {
   SENDGRID_RESET_PASSWORD_TEMPLATE_ID: process.env
     .SENDGRID_RESET_PASSWORD_TEMPLATE_ID!,
   AUTHENTICATION_SECRET_KEY: process.env.AUTHENTICATION_SECRET_KEY!,
-  PORT: Number(process.env.PORT),
 };
