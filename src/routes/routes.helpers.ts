@@ -4,4 +4,4 @@ applyPassportStrategy(passport);
 
 export { passport as default };
 
-export const commonBaseUrl = "api/v1";
+export const commonBaseUrl = "/api/v1";
