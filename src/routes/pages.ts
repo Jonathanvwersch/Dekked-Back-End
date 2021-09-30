@@ -6,15 +6,13 @@ import passport from "./routes.helpers";
 const router = express();
 
 const pageController = new PageController();
-
 router.get(`${commonBaseUrl}/pages`, (_, res) => pageController.getPages(res));
+export const pagesRoute = `${commonBaseUrl}/pages`;
 
-router.get(`${commonBaseUrl}/pages/:page_id`, (req, res) =>
-  pageController.getPage(req, res)
-);
+router.get(`/:page_id`, (req, res) => pageController.getPage(req, res));
 
 router.get(
-  `${commonBaseUrl}/pages/study-sets/:study_set_id`,
+  `/study-sets/:study_set_id`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -22,7 +20,7 @@ router.get(
 );
 
 router.patch(
-  `${commonBaseUrl}/pages`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),

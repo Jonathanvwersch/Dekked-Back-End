@@ -6,9 +6,10 @@ import passport from "./routes.helpers";
 const router = express();
 
 const folderController = new FolderController();
+export const foldersRoute = `${commonBaseUrl}/folders`;
 
 router.post(
-  `${commonBaseUrl}/folders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -16,7 +17,7 @@ router.post(
 );
 
 router.get(
-  `${commonBaseUrl}/folders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -24,7 +25,7 @@ router.get(
 );
 
 router.patch(
-  `${commonBaseUrl}/folders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -32,7 +33,7 @@ router.patch(
 );
 
 router.delete(
-  `${commonBaseUrl}/folders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),

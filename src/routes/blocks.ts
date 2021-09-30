@@ -3,12 +3,13 @@ import { commonBaseUrl } from ".";
 import { BlockController } from "../Controllers";
 import passport from "./routes.helpers";
 
-const router = express();
+const router = express.Router();
 
 const blockController = new BlockController();
+export const blockRoute = `${commonBaseUrl}/blocks`;
 
 router.get(
-  `${commonBaseUrl}/blocks/:page_id`,
+  `/:page_id`,
   passport.authenticate("jwt", {
     session: false,
   }),

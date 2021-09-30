@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import { compareSync } from "bcryptjs";
 import { UserInterface } from "../types";
 import { config } from "../config";
-import { ErrorHandler } from "../utils";
 const { AUTHENTICATION_SECRET_KEY } = config;
 
 export function comparePass(userPassword: string, databasePassword: string) {

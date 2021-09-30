@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 type ConfigType = {
   APP_ENV: string;
   DB_CONNECTION: string;

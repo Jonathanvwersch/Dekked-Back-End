@@ -3,12 +3,13 @@ import { commonBaseUrl } from ".";
 import { BinderController } from "../Controllers";
 import passport from "./routes.helpers";
 
-const router = express();
+const router = express.Router();
 
 const binderController = new BinderController();
+export const bindersRoute = `${commonBaseUrl}/binders`;
 
 router.post(
-  `${commonBaseUrl}/binders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -16,7 +17,7 @@ router.post(
 );
 
 router.get(
-  `${commonBaseUrl}/binders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -24,7 +25,7 @@ router.get(
 );
 
 router.patch(
-  `${commonBaseUrl}/binders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -32,7 +33,7 @@ router.patch(
 );
 
 router.delete(
-  `${commonBaseUrl}/binders`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),

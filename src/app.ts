@@ -4,19 +4,29 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { config } from "./config";
 import { ErrorHandler, sendError } from "./utils";
+
 import {
+  authRoute,
   authRouter,
+  bindersRoute,
   bindersRouter,
+  blockRoute,
   blocksRouter,
-  commonBaseUrl,
+  decksRoute,
   decksRouter,
+  flashcardsRoute,
   flashcardsRouter,
+  foldersRoute,
   foldersRouter,
+  pagesRoute,
   pagesRouter,
+  studySetsRoute,
   studySetsRouter,
+  usersRoute,
   usersRouter,
+  fileTreeRoute,
+  fileTreeRouter,
 } from "./routes";
-import { fileTreeRouter } from "./routes/fileTree";
 
 const app = express();
 app.use(cookieParser());
@@ -27,16 +37,16 @@ app.use(cors());
 const { APP_ENV } = config;
 
 // Routes which handle requests
-app.use(`${commonBaseUrl}/auth`, authRouter);
-app.use(`${commonBaseUrl}/users`, usersRouter);
-app.use(`${commonBaseUrl}/file-tree`, fileTreeRouter);
-app.use(`${commonBaseUrl}/folders`, foldersRouter);
-app.use(`${commonBaseUrl}/binders`, bindersRouter);
-app.use(`${commonBaseUrl}/study-sets`, studySetsRouter);
-app.use(`${commonBaseUrl}/pages`, pagesRouter);
-app.use(`${commonBaseUrl}/blocks`, blocksRouter);
-app.use(`${commonBaseUrl}/flashcards`, flashcardsRouter);
-app.use(`${commonBaseUrl}/decks`, decksRouter);
+app.use(authRoute, authRouter);
+app.use(usersRoute, usersRouter);
+app.use(fileTreeRoute, fileTreeRouter);
+app.use(foldersRoute, foldersRouter);
+app.use(bindersRoute, bindersRouter);
+app.use(studySetsRoute, studySetsRouter);
+app.use(pagesRoute, pagesRouter);
+app.use(blockRoute, blocksRouter);
+app.use(flashcardsRoute, flashcardsRouter);
+app.use(decksRoute, decksRouter);
 
 app.all("*", (req, _, next) => {
   next(

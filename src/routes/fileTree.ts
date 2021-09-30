@@ -6,9 +6,10 @@ import passport from "./routes.helpers";
 const router = express();
 
 const fileTreeController = new FileTreeController();
+export const fileTreeRoute = `${commonBaseUrl}/file-tree`;
 
 router.get(
-  `${commonBaseUrl}/file-tree`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),

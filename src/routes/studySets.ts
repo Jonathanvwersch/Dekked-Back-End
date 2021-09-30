@@ -4,11 +4,11 @@ import { StudySetController } from "../Controllers";
 import passport from "./routes.helpers";
 
 const router = express();
-
 const studySetController = new StudySetController();
+export const studySetsRoute = `${commonBaseUrl}/study-sets`;
 
 router.post(
-  `${commonBaseUrl}/study-sets`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -16,7 +16,7 @@ router.post(
 );
 
 router.get(
-  `${commonBaseUrl}/study-sets`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -24,7 +24,7 @@ router.get(
 );
 
 router.patch(
-  `${commonBaseUrl}/study-sets`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -32,7 +32,7 @@ router.patch(
 );
 
 router.delete(
-  `${commonBaseUrl}/study-sets`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),

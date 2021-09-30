@@ -6,9 +6,10 @@ import passport from "./routes.helpers";
 const router = express();
 
 const flashcardController = new FlashcardController();
+export const flashcardsRoute = `${commonBaseUrl}/flashcards`;
 
 router.post(
-  `${commonBaseUrl}/flashcards`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -16,7 +17,7 @@ router.post(
 );
 
 router.get(
-  `${commonBaseUrl}/flashcards/:deck_id`,
+  `/:deck_id`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -24,7 +25,7 @@ router.get(
 );
 
 router.get(
-  `${commonBaseUrl}/flashcards/spaced-repetition/:deck_id`,
+  `/spaced-repetition/:deck_id`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -32,7 +33,7 @@ router.get(
 );
 
 router.patch(
-  `${commonBaseUrl}/flashcards/:flashcard_id`,
+  `/:flashcard_id`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -40,7 +41,7 @@ router.patch(
 );
 
 router.delete(
-  `${commonBaseUrl}/flashcards/:flashcard_id`,
+  `/:flashcard_id`,
   passport.authenticate("jwt", {
     session: false,
   }),

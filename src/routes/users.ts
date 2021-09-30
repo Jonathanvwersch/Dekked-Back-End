@@ -4,11 +4,11 @@ import { UserController } from "../Controllers";
 import passport from "./routes.helpers";
 
 const router = express();
-
 const userController = new UserController();
+export const usersRoute = `${commonBaseUrl}/users`;
 
 router.get(
-  `${commonBaseUrl}/users`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -16,7 +16,7 @@ router.get(
 );
 
 router.patch(
-  `${commonBaseUrl}/users`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),

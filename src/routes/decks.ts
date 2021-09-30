@@ -7,9 +7,10 @@ const router = express();
 
 const deckController = new DeckController();
 const flashcardController = new FlashcardController();
+export const decksRoute = `${commonBaseUrl}/decks`;
 
 router.get(
-  `${commonBaseUrl}/decks/spaced-repetition`,
+  `/spaced-repetition`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -17,7 +18,7 @@ router.get(
 );
 
 router.get(
-  `${commonBaseUrl}/decks/study-sets/:study_set_id`,
+  `/study-sets/:study_set_id`,
   passport.authenticate("jwt", {
     session: false,
   }),
