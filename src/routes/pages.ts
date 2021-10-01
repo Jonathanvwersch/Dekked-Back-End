@@ -6,8 +6,9 @@ import passport from "./routes.helpers";
 const router = express();
 
 const pageController = new PageController();
-router.get(`${commonBaseUrl}/pages`, (_, res) => pageController.getPages(res));
 export const pagesRoute = `${commonBaseUrl}/pages`;
+
+router.get("/", (_, res) => pageController.getPages(res));
 
 router.get(`/:page_id`, (req, res) => pageController.getPage(req, res));
 
@@ -20,7 +21,7 @@ router.get(
 );
 
 router.patch(
-  `/`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
