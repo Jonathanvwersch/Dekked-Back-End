@@ -69,7 +69,7 @@ const sendErrorProd = (err: ErrorHandler, res: express.Response) => {
     res.status(500).json({
       status: 500,
       message:
-        "Something went wrong. If problem persists, contact support at team@dekked.app.",
+        "Something went wrong. If problem persists, contact support at team@dekked.com.",
     });
   }
   res.status(err.status).json({
