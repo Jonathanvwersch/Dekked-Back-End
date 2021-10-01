@@ -100,7 +100,6 @@ export class FlashcardController {
     req: express.Request,
     res: express.Response
   ): Promise<express.Response<any>> {
-    const { flashcard_id: id } = req.params;
     const {
       front_blocks,
       front_draft_keys,
@@ -110,6 +109,7 @@ export class FlashcardController {
       interval,
       learning_status,
       owner_id,
+      flashcard_id: id,
     } = req.body;
 
     if (quality) {
@@ -193,7 +193,7 @@ export class FlashcardController {
     res: express.Response
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { flashcard_id } = req.params;
+    const { flashcard_id } = req.body;
 
     try {
       await FlashcardService.deleteFlashcard(userId, flashcard_id);

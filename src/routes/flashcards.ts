@@ -33,7 +33,7 @@ router.get(
 );
 
 router.patch(
-  `/:flashcard_id`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -41,7 +41,7 @@ router.patch(
 );
 
 router.delete(
-  `/:flashcard_id`,
+  "/",
   passport.authenticate("jwt", {
     session: false,
   }),
