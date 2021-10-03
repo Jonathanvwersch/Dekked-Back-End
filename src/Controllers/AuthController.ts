@@ -12,9 +12,19 @@ import { ErrorHandler, missingParams } from "../utils";
 import { config } from "../config";
 import jwt from "jsonwebtoken";
 
-const { GOOGLE_CLIENT_ID, RESET_PASSWORD_SECRET_KEY } = config;
+const { GOOGLE_CLIENT_ID, RESET_PASSWORD_SECRET_KEY, APP_ENV } = config;
 
 const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+const sessionCookieName = "dekked-session";
+
+const oneYearInSeconds = 60 * 60 * 24 * 365;
+
+const cookieOptions = {
+  maxAge: oneYearInSeconds,
+  httpOnly: false,
+  secure: APP_ENV === "production" ? true : false,
+};
 
 export class AuthController {
   public register = async (
@@ -53,6 +63,8 @@ export class AuthController {
     try {
       const response: any = await login(email_address, password);
       if (response.success) {
+        res.cookie(sessionCookieName, response?.data?.token, cookieOptions);
+        res.redirect("/");
         return res.status(200).json(response?.data);
       } else {
         return res.status(response.code).json({
@@ -63,6 +75,16 @@ export class AuthController {
     } catch (e) {
       return res.status(500).json({ success: false, error: e.message });
     }
+  }
+
+  public async logout(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response<any>> {
+    res.clearCookie(sessionCookieName);
+    req.logout();
+    res.redirect("/login");
+    return res.sendStatus(200);
   }
 
   public async googleAuthentication(
@@ -82,6 +104,8 @@ export class AuthController {
         // if user already exists, generate a token and send that back to client
         if (user?.id) {
           const token = genToken(user);
+          res.cookie(sessionCookieName, token, cookieOptions);
+          res.redirect("/");
           return res.status(200).json({
             token,
             first_name,

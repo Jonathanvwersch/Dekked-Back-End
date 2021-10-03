@@ -32,7 +32,11 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(compression());
-app.use(cors());
+const corsOptions = {
+  origin: true,
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 const { APP_ENV } = config;
 
