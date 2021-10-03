@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(compression());
 const corsOptions = {
-  origin: true,
+  origin: "http://localhost:3000",
   credentials: true,
 };
 app.use(cors(corsOptions));

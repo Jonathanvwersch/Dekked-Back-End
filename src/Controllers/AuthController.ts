@@ -22,8 +22,9 @@ const oneYearInSeconds = 60 * 60 * 24 * 365;
 
 const cookieOptions = {
   maxAge: oneYearInSeconds,
-  httpOnly: false,
+  httpOnly: true,
   secure: APP_ENV === "production" ? true : false,
+  expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
 };
 
 export class AuthController {
