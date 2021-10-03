@@ -64,8 +64,7 @@ export class AuthController {
       const response: any = await login(email_address, password);
       if (response.success) {
         res.cookie(sessionCookieName, response?.data?.token, cookieOptions);
-        res.redirect("/");
-        return res.status(200).json(response?.data);
+        return res.status(200).json({ success: true, ...response?.data });
       } else {
         return res.status(response.code).json({
           success: false,
@@ -83,8 +82,7 @@ export class AuthController {
   ): Promise<express.Response<any>> {
     res.clearCookie(sessionCookieName);
     req.logout();
-    res.redirect("/login");
-    return res.sendStatus(200);
+    return res.status(200).json({ success: true });
   }
 
   public async googleAuthentication(
@@ -105,9 +103,9 @@ export class AuthController {
         if (user?.id) {
           const token = genToken(user);
           res.cookie(sessionCookieName, token, cookieOptions);
-          res.redirect("/");
           return res.status(200).json({
             token,
+            success: true,
             first_name,
             last_name,
             email_address,
@@ -123,7 +121,8 @@ export class AuthController {
               email_address
             );
             if (response.success) {
-              return res.status(200).json(response?.data);
+              res.cookie(sessionCookieName, token, cookieOptions);
+              return res.status(200).json({ success: true, ...response?.data });
             } else {
               return res.status(response.code).json({
                 success: false,
