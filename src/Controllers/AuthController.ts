@@ -18,10 +18,7 @@ const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const sessionCookieName = "dekked-session";
 
-const oneYearInSeconds = 60 * 60 * 24 * 365;
-
 const cookieOptions = {
-  maxAge: oneYearInSeconds,
   httpOnly: true,
   secure: APP_ENV === "production" ? true : false,
   expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),

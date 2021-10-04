@@ -32,8 +32,10 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(compression());
+
 const corsOptions = {
   credentials: true,
+  "Access-Control-Allow-Credentials": "true",
 };
 app.use(cors(corsOptions));
 
