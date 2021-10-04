@@ -33,12 +33,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(compression());
 
-const corsOptions = {
-  credentials: true,
-  "Access-Control-Allow-Credentials": "true",
-  domain: "localhost",
-};
-app.use(cors(corsOptions));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 const { APP_ENV } = config;
 
