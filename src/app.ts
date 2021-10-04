@@ -36,6 +36,7 @@ app.use(compression());
 const corsOptions = {
   credentials: true,
   "Access-Control-Allow-Credentials": "true",
+  domain: "localhost",
 };
 app.use(cors(corsOptions));
 
