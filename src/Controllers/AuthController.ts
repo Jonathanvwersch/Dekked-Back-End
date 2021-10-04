@@ -22,7 +22,7 @@ const cookieOptions = {
   httpOnly: true,
   secure: APP_ENV === "production" ? true : false,
   expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-  sameSite: APP_ENV === "production" ? "none" : true,
+  SameSite: APP_ENV === "production" ? "none" : true,
 };
 
 export class AuthController {
