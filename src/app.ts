@@ -39,17 +39,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(function (_, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "PUT, POST, GET, DELETE, PATCH, OPTIONS"
-  );
-
-  next();
-});
-
 const { APP_ENV } = config;
 
 // Routes which handle requests
