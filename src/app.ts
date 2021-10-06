@@ -45,7 +45,6 @@ const corsOptions = {
     "https://integration.dekked.com/",
     "https://app.dekked.com/",
   ],
-  methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
 };
 app.use(cors(corsOptions));
 
