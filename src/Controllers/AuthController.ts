@@ -64,7 +64,7 @@ export class AuthController {
       const response: any = await login(email_address, password);
       if (response.success) {
         res.cookie(sessionCookieName, response?.data?.token, cookieOptions);
-        return res.status(200).json({ success: true, ...response?.data });
+        return res.status(200);
       } else {
         return res.status(response.code).json({
           success: false,
