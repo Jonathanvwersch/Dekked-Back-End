@@ -40,6 +40,8 @@ const corsOptions = {
     "http://127.0.0.1",
     "https://www.integration.dekked.com",
     "https://www.app.dekked.com",
+    "https://integration.dekked.com/",
+    "https://app.dekked.com/",
   ],
   exposedHeaders: ["set-cookie"],
 };
