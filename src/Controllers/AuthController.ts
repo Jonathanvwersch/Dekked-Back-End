@@ -12,7 +12,7 @@ import { ErrorHandler, missingParams } from "../utils";
 import { config } from "../config";
 import jwt from "jsonwebtoken";
 
-const { GOOGLE_CLIENT_ID, RESET_PASSWORD_SECRET_KEY, APP_ENV } = config;
+const { GOOGLE_CLIENT_ID, RESET_PASSWORD_SECRET_KEY } = config;
 
 const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
 
@@ -20,10 +20,9 @@ const sessionCookieName = "dekked-session";
 
 const cookieOptions = {
   httpOnly: true,
-  secure: APP_ENV === "production" ? true : false,
+  secure: true,
   expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-  SameSite: APP_ENV === "production" ? "none" : true,
-  domain: ".app.localhost",
+  SameSite: "none",
 };
 
 export class AuthController {
