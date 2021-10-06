@@ -35,7 +35,12 @@ app.use(compression());
 
 const corsOptions = {
   credentials: true,
-  origin: ["http://localhost:3000", "http://127.0.0.1"],
+  origin: [
+    "http://localhost:3000",
+    "http://127.0.0.1",
+    "https://www.integration.dekked.com",
+    "https://www.app.dekked.com",
+  ],
   exposedHeaders: ["set-cookie"],
 };
 app.use(cors(corsOptions));
