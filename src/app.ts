@@ -39,6 +39,8 @@ const corsOptions = {
     "http://localhost:3000",
     "http://127.0.0.1",
     "https://www.integration.dekked.com",
+    "integration.dekked.com",
+    "app.dekked.com",
     "https://www.app.dekked.com",
     "https://integration.dekked.com/",
     "https://app.dekked.com/",
