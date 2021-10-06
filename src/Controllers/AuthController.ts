@@ -54,17 +54,14 @@ export class AuthController {
     return res.status(200).json(response);
   };
 
-  public async login(
-    req: express.Request,
-    res: express.Response
-  ): Promise<express.Response<any>> {
+  public async login(req: express.Request, res: express.Response) {
     const { password, email_address } = req.body;
 
     try {
       const response: any = await login(email_address, password);
       if (response.success) {
         res.cookie(sessionCookieName, response?.data?.token, cookieOptions);
-        return res.status(200);
+        res.send("Logged in successfully");
       } else {
         return res.status(response.code).json({
           success: false,
