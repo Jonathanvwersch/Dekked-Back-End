@@ -23,7 +23,6 @@ const cookieOptions: CookieOptions = {
   secure: true,
   expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
   sameSite: "strict",
-  signed: true,
 };
 
 export class AuthController {
