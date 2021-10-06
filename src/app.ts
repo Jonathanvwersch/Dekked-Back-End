@@ -53,6 +53,8 @@ app.use(function (_, res, next) {
   next();
 });
 
+app.set("trust proxy", 1);
+
 const { APP_ENV } = config;
 
 // Routes which handle requests
