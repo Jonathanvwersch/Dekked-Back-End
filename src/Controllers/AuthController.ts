@@ -19,7 +19,7 @@ const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
 const sessionCookieName = "dekked-session";
 
 const cookieOptions = {
-  httpOnly: true,
+  httpOnly: false,
   secure: true,
   expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
   SameSite: "none",
