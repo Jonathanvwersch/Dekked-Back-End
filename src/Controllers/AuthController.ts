@@ -1,4 +1,4 @@
-import express, { NextFunction } from "express";
+import express, { CookieOptions, NextFunction } from "express";
 import {
   getUserByEmail,
   getUserByResetPasswordToken,
@@ -18,11 +18,11 @@ const googleOAuth = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const sessionCookieName = "dekked-session";
 
-const cookieOptions = {
+const cookieOptions: CookieOptions = {
   httpOnly: false,
   secure: true,
   expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-  SameSite: "None",
+  sameSite: "none",
 };
 
 export class AuthController {
