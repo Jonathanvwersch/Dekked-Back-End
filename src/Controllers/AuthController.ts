@@ -21,6 +21,7 @@ const sessionCookieName = "dekked-session";
 const cookieOptions = {
   httpOnly: false,
   secure: true,
+  expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
   SameSite: "none",
 };
 
