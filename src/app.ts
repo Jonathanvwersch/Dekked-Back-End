@@ -49,6 +49,13 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://www.integration.dekked.com"
+  );
+});
+
 const { APP_ENV } = config;
 
 // Routes which handle requests
