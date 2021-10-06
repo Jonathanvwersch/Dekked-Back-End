@@ -20,9 +20,9 @@ const sessionCookieName = "dekked-session";
 
 const cookieOptions: CookieOptions = {
   httpOnly: false,
-  secure: true,
   expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-  sameSite: "strict",
+  secure: true,
+  sameSite: "none",
 };
 
 export class AuthController {
