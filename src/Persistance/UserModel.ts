@@ -2,7 +2,7 @@ import { UserInterface } from "../types";
 import db from "../db/database";
 
 export async function getUserById(id: string): Promise<UserInterface> {
-  return await db.table("users").where({ id }).first());
+  return await db.table("users").where({ id }).first();
 }
 
 export async function getUserByEmail(email_address: string) {

@@ -2,9 +2,10 @@ import express, { CookieOptions, NextFunction } from "express";
 import {
   getUserByEmail,
   getUserByResetPasswordToken,
+  updateUser,
 } from "../Persistance/UserModel";
 import { createUser, genToken, login } from "../Services/AuthService";
-import UserService, { sendEmail } from "../Services/UserService";
+import { sendEmail } from "../Services/UserService";
 import { LoginTicket, OAuth2Client } from "google-auth-library";
 import { genSaltSync, hashSync } from "bcryptjs";
 import { ErrorHandler, missingParams, returnSuccessData } from "../utils";
@@ -182,7 +183,7 @@ export class AuthController {
       );
 
       // update resetLink property to be the temporary token and then send email
-      await UserService.updateUserAsync({
+      await updateUser({
         id: user.id,
         reset_password_token: resetPasswordToken,
       });
@@ -237,7 +238,7 @@ export class AuthController {
       id: user.id,
     };
 
-    await UserService.updateUserAsync({
+    await updateUser({
       ...updatedCredentials,
     });
 
