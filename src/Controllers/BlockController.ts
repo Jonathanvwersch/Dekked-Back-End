@@ -2,6 +2,7 @@ import express, { NextFunction } from "express";
 import BlockModel from "../Persistance/BlockModel";
 import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks } from "../Services/BlockService";
+import { getUserIdFromRequest } from "../utils";
 
 export class BlockController {
   public async getBlocksByPageId(
@@ -10,8 +11,9 @@ export class BlockController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { page_id } = req.params;
+    const ownerId = getUserIdFromRequest(req);
 
-    const page = await PageModel.getPage(page_id);
+    const page = await PageModel.getPage(page_id, ownerId);
     const blocks = await BlockModel.getBlocksByParentId(page_id);
     const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);
 

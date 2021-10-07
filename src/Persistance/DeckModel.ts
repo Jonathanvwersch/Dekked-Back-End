@@ -28,33 +28,28 @@ async function updateDeck(
   name: string,
   study_set_id: string,
   owner_id: string
-): Promise<number> {
+): Promise<DeckInterface> {
   const now = new Date();
-  const response = await db
+  const response: DeckInterface[] = await db
     .table("decks")
     .update({ name, date_modified: now })
-    .where({ study_set_id, owner_id });
+    .where({ study_set_id, owner_id })
+    .returning("*");
 
-  if (response) {
-    return response;
-  }
-
-  throw new Error("There was an error updating the deck");
+  return response?.[0];
 }
 
 async function deleteDeck(study_set_id: string, owner_id: string) {
   await db.table("decks").delete("*").where({ study_set_id, owner_id });
 }
 
-async function getDeckByStudySetId(study_set_id: string) {
+async function getDeckByStudySetId(study_set_id: string, ownerId: string) {
   const response: DeckInterface[] = await db
     .table("decks")
     .select("*")
-    .where({ study_set_id });
-  if (response.length) {
-    return response[0];
-  }
-  throw new Error("Deck not found!");
+    .where({ study_set_id, owner_id: ownerId });
+
+  return response?.[0];
 }
 
 export default {
