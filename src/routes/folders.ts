@@ -1,6 +1,7 @@
 import express from "express";
 import { commonBaseUrl } from ".";
 import { FolderController } from "../Controllers";
+import { catchAsync } from "../utils";
 import passport from "./routes.helpers";
 
 const router = express();
@@ -13,7 +14,9 @@ router.post(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res) => folderController.createFolder(req, res)
+  (req, res, next) => {
+    catchAsync(() => folderController.createFolder(req, res, next));
+  }
 );
 
 router.get(
@@ -21,7 +24,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  folderController.getFolders
+  (req, res, next) => {
+    catchAsync(() => folderController.getFolders(req, res, next));
+  }
 );
 
 router.patch(
@@ -29,7 +34,7 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res) => folderController.updateFolder(req, res)
+  (req, res, next) => folderController.updateFolder(req, res, next)
 );
 
 router.delete(

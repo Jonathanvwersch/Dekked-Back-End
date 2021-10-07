@@ -1,18 +1,16 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import DeckService from "../Services/DeckService";
 export class DeckController {
   public async getDeckByStudySetId(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const { study_set_id } = req.params;
-    try {
-      const response = await DeckService.getDeckByStudySetId(study_set_id);
-      return res.status(200).json({
-        ...response,
-      });
-    } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
-    }
+    const response = await DeckService.getDeckByStudySetId(study_set_id);
+
+    return res.status(200).json({
+      ...response,
+    });
   }
 }

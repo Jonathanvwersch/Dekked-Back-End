@@ -1,6 +1,7 @@
 import express from "express";
 import { commonBaseUrl } from ".";
 import { FileTreeController } from "../Controllers";
+import { catchAsync } from "../utils";
 import passport from "./routes.helpers";
 
 const router = express();
@@ -13,7 +14,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  fileTreeController.getFileTree
+  (req, res, next) => {
+    catchAsync(() => fileTreeController.getFileTree(req, res, next));
+  }
 );
 
 export { router as fileTreeRouter };

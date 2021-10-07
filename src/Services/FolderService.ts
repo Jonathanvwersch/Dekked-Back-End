@@ -12,20 +12,6 @@ async function getFolderObject(user_id: string) {
   return folderObject;
 }
 
-async function updateFolder({
-  color,
-  name,
-  folder_id,
-  owner_id,
-}: {
-  color?: string;
-  name?: string;
-  folder_id: string;
-  owner_id: string;
-}) {
-  await FolderModel.updateFolder({ color, name, folder_id, owner_id });
-}
-
 async function deleteFolder(folder_id: string, owner_id: string) {
   const binders = await BinderService.getBindersByFolderId(folder_id, owner_id);
   await Promise.all(
@@ -34,11 +20,10 @@ async function deleteFolder(folder_id: string, owner_id: string) {
     )
   );
 
-  await FolderModel.deleteFolder({ folder_id, owner_id });
+  return await FolderModel.deleteFolder({ folder_id, owner_id });
 }
 
 export default {
   getFolderObject,
-  updateFolder,
   deleteFolder,
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import { commonBaseUrl } from ".";
 import { DeckController, FlashcardController } from "../Controllers";
+import { catchAsync } from "../utils";
 import passport from "./routes.helpers";
 
 const router = express();
@@ -14,7 +15,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.getDueDecks
+  (req, res, next) => {
+    catchAsync(() => flashcardController.getDueDecks(req, res, next));
+  }
 );
 
 router.get(
@@ -22,7 +25,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  deckController.getDeckByStudySetId
+  (req, res, next) => {
+    catchAsync(() => deckController.getDeckByStudySetId(req, res, next));
+  }
 );
 
 export { router as decksRouter };

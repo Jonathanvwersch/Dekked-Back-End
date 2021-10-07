@@ -11,28 +11,28 @@ router.post(`/register`, (req, res, next) => {
   catchAsync(() => authController.register(req, res, next));
 });
 
-router.post(`/login`, (req, res) => {
-  authController.login(req, res);
+router.post(`/login`, (req, res, next) => {
+  catchAsync(() => authController.login(req, res, next));
 });
 
-router.post(`/logout`, (req, res) => {
-  authController.logout(req, res);
+router.post(`/logout`, (req, res, next) => {
+  catchAsync(() => authController.logout(req, res, next));
 });
 
-router.post(`/google`, (req, res) => {
-  authController.googleAuthentication(req, res);
+router.post(`/google`, (req, res, next) => {
+  catchAsync(() => authController.googleAuthentication(req, res, next));
 });
 
-router.post(`/verify-user-email`, (req, res) => {
-  authController.verifyUserEmail(req, res);
+router.post(`/verify-user-email`, (req, res, next) => {
+  catchAsync(() => authController.verifyUserEmail(req, res, next));
 });
 
-router.patch(`/forget-password`, (req, res) => {
-  authController.forgetPassword(req, res);
+router.patch(`/forget-password`, (req, res, next) => {
+  catchAsync(() => authController.forgetPassword(req, res, next));
 });
 
-router.patch(`/reset-password`, (req, res) => {
-  authController.resetPassword(req, res);
+router.patch(`/reset-password`, (req, res, next) => {
+  catchAsync(() => authController.resetPassword(req, res, next));
 });
 
 export { router as authRouter };

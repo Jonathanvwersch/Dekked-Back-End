@@ -1,13 +1,8 @@
 import { UserInterface } from "../types";
 import db from "../db/database";
 
-export async function getUserById(id: string) {
-  try {
-    const user: UserInterface = await db.table("users").where({ id }).first();
-    return user;
-  } catch (err) {
-    throw err;
-  }
+export async function getUserById(id: string): Promise<UserInterface> {
+  return await db.table("users").where({ id }).first());
 }
 
 export async function getUserByEmail(email_address: string) {
@@ -21,15 +16,11 @@ export async function getUserByEmail(email_address: string) {
 export async function getUserByResetPasswordToken(
   reset_password_token: string
 ) {
-  try {
-    const user: UserInterface = await db
-      .table("users")
-      .where({ reset_password_token })
-      .first();
-    return user;
-  } catch (err) {
-    throw err;
-  }
+  const user: UserInterface = await db
+    .table("users")
+    .where({ reset_password_token })
+    .first();
+  return user;
 }
 
 export async function createNewUser(
@@ -70,19 +61,15 @@ export async function updateUser({
 }) {
   const now = new Date();
 
-  try {
-    await db
-      .table("users")
-      .update({
-        email_address,
-        first_name,
-        last_name,
-        date_modified: now,
-        password,
-        reset_password_token,
-      })
-      .where({ id });
-  } catch (error) {
-    throw new Error("Error updating user");
-  }
+  await db
+    .table("users")
+    .update({
+      email_address,
+      first_name,
+      last_name,
+      date_modified: now,
+      password,
+      reset_password_token,
+    })
+    .where({ id });
 }

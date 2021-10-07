@@ -1,6 +1,7 @@
 import express from "express";
 import { commonBaseUrl } from ".";
 import { FlashcardController } from "../Controllers";
+import { catchAsync } from "../utils";
 import passport from "./routes.helpers";
 
 const router = express();
@@ -13,7 +14,9 @@ router.post(
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.createFlashCard
+  (req, res, next) => {
+    catchAsync(() => flashcardController.createFlashCard(req, res, next));
+  }
 );
 
 router.get(
@@ -21,7 +24,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.getFlashcards
+  (req, res, next) => {
+    catchAsync(() => flashcardController.getFlashcards(req, res, next));
+  }
 );
 
 router.get(
@@ -29,7 +34,11 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  flashcardController.getSpacedRepetitionFlashcards
+  (req, res, next) => {
+    catchAsync(() =>
+      flashcardController.getSpacedRepetitionFlashcards(req, res, next)
+    );
+  }
 );
 
 router.patch(
@@ -37,7 +46,9 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res) => flashcardController.updateFlashcard(req, res)
+  (req, res, next) => {
+    catchAsync(() => flashcardController.updateFlashcard(req, res, next));
+  }
 );
 
 router.delete(
@@ -45,7 +56,9 @@ router.delete(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res) => flashcardController.deleteFlashcard(req, res)
+  (req, res, next) => {
+    catchAsync(() => flashcardController.deleteFlashcard(req, res, next));
+  }
 );
 
 export { router as flashcardsRouter };

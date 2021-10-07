@@ -38,29 +38,14 @@ async function deleteStudySet({
   study_set_id: string;
   owner_id: string;
 }) {
-  try {
-    await StudySetModel.deleteStudySet({ owner_id, study_set_id });
-    const page = await PageService.getDeckByStudySetId(study_set_id);
-    await PageService.deletePage(page.id, owner_id);
-    await DeckService.deleteDeck(study_set_id, owner_id);
-  } catch (error) {
-    console.log(error);
-    throw new Error("There was an error deleting the study pack");
-  }
-}
-
-async function getStudySetsByBinderId(binder_id: string) {
-  try {
-    const studySets = await StudySetModel.getStudySetsByBinderId(binder_id);
-    return studySets;
-  } catch (err) {
-    throw new Error("There was an error getting study packs by binder id");
-  }
+  await StudySetModel.deleteStudySet({ owner_id, study_set_id });
+  const page = await PageService.getDeckByStudySetId(study_set_id, owner_id);
+  await PageService.deletePage(page.id, owner_id);
+  await DeckService.deleteDeck(study_set_id, owner_id);
 }
 
 export default {
   createStudySetObject,
   updateStudySet,
   deleteStudySet,
-  getStudySetsByBinderId,
 };

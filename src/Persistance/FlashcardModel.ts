@@ -22,55 +22,43 @@ async function createFlashcard({
 }) {
   const now = new Date();
 
-  try {
-    const flashcard: FlashcardInterface[] = await db("flashcards")
-      .insert({
-        owner_id,
-        study_set_id,
-        deck_id,
-        block_link,
-        date_created: now,
-        date_modified: now,
-        front_ordering: front_draft_keys ?? [],
-        back_ordering: back_draft_keys ?? [],
-      })
-      .returning("*");
-    return flashcard;
-  } catch (error) {
-    throw new Error("There was an error creating the flashcard");
-  }
+  const flashcard: FlashcardInterface[] = await db("flashcards")
+    .insert({
+      owner_id,
+      study_set_id,
+      deck_id,
+      block_link,
+      date_created: now,
+      date_modified: now,
+      front_ordering: front_draft_keys ?? [],
+      back_ordering: back_draft_keys ?? [],
+    })
+    .returning("*");
+  return flashcard;
 }
 
 async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
-  try {
-    const flashcards: FlashcardInterface[] = await db("flashcards")
-      .select("*")
-      .where({
-        owner_id,
-        deck_id,
-      })
-      .orderBy("date_created", "asc");
-    return flashcards;
-  } catch (error) {
-    throw new Error("There was an error fetching flashcards by deck id");
-  }
+  const flashcards: FlashcardInterface[] = await db("flashcards")
+    .select("*")
+    .where({
+      owner_id,
+      deck_id,
+    })
+    .orderBy("date_created", "asc");
+  return flashcards;
 }
 
 async function getFlashcardsByStudySetId(
   owner_id: string,
   study_set_id: string
 ) {
-  try {
-    const flashcards: FlashcardInterface[] = await db("flashcards")
-      .select("*")
-      .where({
-        owner_id,
-        study_set_id,
-      });
-    return flashcards;
-  } catch (error) {
-    throw new Error("There was an error fetching flashcards by deck id");
-  }
+  const flashcards: FlashcardInterface[] = await db("flashcards")
+    .select("*")
+    .where({
+      owner_id,
+      study_set_id,
+    });
+  return flashcards;
 }
 
 async function getSpacedRepetitionDeckByDeckId(
@@ -79,42 +67,32 @@ async function getSpacedRepetitionDeckByDeckId(
 ) {
   const now = new Date();
 
-  try {
-    const flashcards: FlashcardInterface[] = await db("flashcards")
-      .select("*")
-      .where({
-        owner_id,
-        deck_id,
-      })
-      .andWhere(function () {
-        this.whereNull("due_date").orWhere("due_date", "<=", now);
-      })
-      .orderBy("due_date", "asc");
-    return flashcards;
-  } catch (error) {
-    throw new Error("There was an error fetching flashcards by deck id");
-  }
+  const flashcards: FlashcardInterface[] = await db("flashcards")
+    .select("*")
+    .where({
+      owner_id,
+      deck_id,
+    })
+    .andWhere(function () {
+      this.whereNull("due_date").orWhere("due_date", "<=", now);
+    })
+    .orderBy("due_date", "asc");
+  return flashcards;
 }
 
 async function getAllDueFlashcards(owner_id: string) {
   const now = new Date();
 
-  try {
-    const flashcards: FlashcardInterface[] = await db("flashcards")
-      .select("*")
-      .where({
-        owner_id,
-      })
-      .andWhere(function () {
-        this.whereNull("due_date").orWhere("due_date", "<=", now);
-      });
+  const flashcards: FlashcardInterface[] = await db("flashcards")
+    .select("*")
+    .where({
+      owner_id,
+    })
+    .andWhere(function () {
+      this.whereNull("due_date").orWhere("due_date", "<=", now);
+    });
 
-    return flashcards;
-  } catch (error) {
-    throw new Error(
-      "There was an error fetching the spaced repetition flashcards by deck id"
-    );
-  }
+  return flashcards;
 }
 
 async function updateFlashcard({
@@ -145,27 +123,24 @@ async function updateFlashcard({
   quality?: number;
 }) {
   const now = new Date();
-  try {
-    const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
-      .update({
-        back_ordering,
-        front_ordering,
-        block_link,
-        date_modified: now,
-        interval,
-        learning_status,
-        ease_factor,
-        status,
-        failed_consecutive_attempts,
-        due_date,
-        quality,
-      })
-      .where({ id, owner_id })
-      .returning("*");
-    return flashcard[0];
-  } catch (error) {
-    throw new Error("Error updating flashcard");
-  }
+
+  const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
+    .update({
+      back_ordering,
+      front_ordering,
+      block_link,
+      date_modified: now,
+      interval,
+      learning_status,
+      ease_factor,
+      status,
+      failed_consecutive_attempts,
+      due_date,
+      quality,
+    })
+    .where({ id, owner_id })
+    .returning("*");
+  return flashcard[0];
 }
 
 async function deleteFlashcard({
@@ -175,14 +150,10 @@ async function deleteFlashcard({
   owner_id: string;
   id: string;
 }) {
-  try {
-    await db("flashcards").delete("*").where({
-      owner_id,
-      id,
-    });
-  } catch (error) {
-    throw new Error("There was an error deleting flashcard");
-  }
+  await db("flashcards").delete("*").where({
+    owner_id,
+    id,
+  });
 }
 
 async function deleteFlashcardByStudySetId({
@@ -192,16 +163,10 @@ async function deleteFlashcardByStudySetId({
   owner_id: string;
   study_set_id: string;
 }) {
-  try {
-    await db("flashcards").delete("*").where({
-      owner_id,
-      study_set_id,
-    });
-  } catch (error) {
-    throw new Error(
-      "There was an error deleting the flashcards by study set id"
-    );
-  }
+  await db("flashcards").delete("*").where({
+    owner_id,
+    study_set_id,
+  });
 }
 
 export default {

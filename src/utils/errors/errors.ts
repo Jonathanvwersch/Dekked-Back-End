@@ -29,23 +29,23 @@ export const catchAsync = (
   };
 };
 
-export const missingParams = (params: { [key: string]: string }) => {
-  const paramKeys = Object.keys(params);
-  const isParamMissing = Object.keys(params).some((param) => {
-    return !params?.[param];
+export const missingParams = (
+  responseBody: { [key: string]: string },
+  requiredFields: string[]
+) => {
+  const missingFields: string[] = [];
+  requiredFields.forEach((field) => {
+    if (!responseBody[field]) {
+      missingFields.push(field);
+    }
   });
 
-  let paramKeysAsStrings = "";
-  paramKeys.forEach((key, index) => {
-    const addCommaAndSpace = index + 1 === paramKeys.length ? false : true;
-    paramKeysAsStrings += `${key}${addCommaAndSpace ? ", " : ""}`;
-  });
-
-  if (isParamMissing) {
-    throw new ErrorHandler(
-      400,
-      `One or more of the following fields is missing: ${paramKeys}`
-    );
+  if (missingFields.length) {
+    const errorMessage =
+      missingFields.length > 1
+        ? "The following field is missing:"
+        : "The following fields are missing:";
+    throw new ErrorHandler(400, `${errorMessage} ${missingFields.join()}`);
   }
 };
 

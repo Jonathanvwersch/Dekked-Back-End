@@ -1,6 +1,7 @@
 import express from "express";
 import { commonBaseUrl } from ".";
 import { UserController } from "../Controllers";
+import { catchAsync } from "../utils";
 import passport from "./routes.helpers";
 
 const router = express();
@@ -12,7 +13,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  userController.getUser
+  (req, res, next) => {
+    catchAsync(() => userController.getUser(req, res, next));
+  }
 );
 
 router.patch(
@@ -20,7 +23,9 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  userController.updateUser
+  (req, res, next) => {
+    catchAsync(() => userController.updateUser(req, res, next));
+  }
 );
 
 export { router as usersRouter };

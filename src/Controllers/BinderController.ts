@@ -1,43 +1,52 @@
 import express from "express";
-import { createBinder, getBindersByUserId } from "../Persistance/BinderModel";
+import {
+  createBinder,
+  getBindersByUserId,
+  updateBinder,
+} from "../Persistance/BinderModel";
 import BinderService, { createBinderObject } from "../Services/BinderService";
-import { getUserIdFromRequest } from "../utils";
+import { ErrorHandler, getUserIdFromRequest } from "../utils";
 
 export class BinderController {
   public async getBinders(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
 
-    try {
-      const binders = await getBindersByUserId(userId);
-      const binderObject = createBinderObject(binders);
+    const binders = await getBindersByUserId(userId);
+    const binderObject = createBinderObject(binders);
 
-      return res.status(200).json({
-        ...binderObject,
-      });
-    } catch (e) {
-      return res.status(400).json({ success: false, error: e.message });
+    if (!binders) {
+      throw new ErrorHandler(
+        500,
+        "There was an error getting the binders by user id"
+      );
     }
+
+    return res.status(200).json({
+      ...binderObject,
+    });
   }
 
   public async createBinder(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { folder_id, name, color, id } = req.body;
 
-    try {
-      const binder = await createBinder(folder_id, name, userId, color, id);
+    const binder = await createBinder(folder_id, name, userId, color, id);
 
-      return res.status(201).json({
-        ...binder,
-      });
-    } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+    if (!binder) {
+      throw new ErrorHandler(500, "There was an error creating the binder");
     }
+
+    return res.status(200).json({
+      ...binder,
+    });
   }
 
   public async updateBinder(
@@ -47,18 +56,18 @@ export class BinderController {
     const userId = getUserIdFromRequest(req);
     const { name, color, binder_id } = req.body;
 
-    try {
-      await BinderService.updateBinder({
-        name,
-        color,
-        binder_id,
-        owner_id: userId,
-      });
+    const binder = await updateBinder({
+      name,
+      color,
+      binder_id,
+      owner_id: userId,
+    });
 
-      return res.status(200).json({ success: true });
-    } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+    if (!binder) {
+      throw new ErrorHandler(500, "There was an error updating the binder");
     }
+
+    return res.status(200).json({ ...binder });
   }
 
   public async deleteBinder(
@@ -68,15 +77,15 @@ export class BinderController {
     const userId = getUserIdFromRequest(req);
     const { binder_id } = req.body;
 
-    try {
-      await BinderService.deleteBinder({
-        binder_id,
-        owner_id: userId,
-      });
+    const binder = await BinderService.deleteBinder({
+      binder_id,
+      owner_id: userId,
+    });
 
-      return res.status(200).json({ success: true });
-    } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
+    if (!binder) {
+      throw new ErrorHandler(500, "There was an error deleting the binder");
     }
+
+    return res.status(200).json({ ...binder });
   }
 }

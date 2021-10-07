@@ -1,6 +1,7 @@
 import express from "express";
 import { commonBaseUrl } from ".";
 import { BinderController } from "../Controllers";
+import { catchAsync } from "../utils";
 import passport from "./routes.helpers";
 
 const router = express.Router();
@@ -13,7 +14,9 @@ router.post(
   passport.authenticate("jwt", {
     session: false,
   }),
-  binderController.createBinder
+  (req, res, next) => {
+    catchAsync(() => binderController.createBinder(req, res, next));
+  }
 );
 
 router.get(
