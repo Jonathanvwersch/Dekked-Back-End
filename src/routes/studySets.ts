@@ -13,9 +13,7 @@ router.post(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(studySetController.createStudySet(req, res, next));
-  }
+  catchAsync(studySetController.createStudySet)
 );
 
 router.get(
@@ -23,9 +21,7 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(studySetController.getStudySets(req, res, next));
-  }
+  catchAsync(studySetController.getStudySets)
 );
 
 router.patch(
@@ -33,9 +29,7 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(studySetController.updateStudySet(req, res, next));
-  }
+  catchAsync(studySetController.updateStudySet)
 );
 
 router.delete(
@@ -43,9 +37,7 @@ router.delete(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(studySetController.deleteStudySet(req, res, next));
-  }
+  catchAsync(studySetController.deleteStudySet)
 );
 
 export { router as studySetsRouter };

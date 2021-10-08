@@ -14,9 +14,7 @@ router.post(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(flashcardController.createFlashCard(req, res, next));
-  }
+  catchAsync(flashcardController.createFlashCard)
 );
 
 router.get(
@@ -24,9 +22,7 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(flashcardController.getFlashcards(req, res, next));
-  }
+  catchAsync(flashcardController.getFlashcards)
 );
 
 router.get(
@@ -34,11 +30,7 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(
-      flashcardController.getSpacedRepetitionFlashcards(req, res, next)
-    );
-  }
+  catchAsync(flashcardController.getSpacedRepetitionFlashcards)
 );
 
 router.patch(
@@ -46,9 +38,7 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(flashcardController.updateFlashcard(req, res, next));
-  }
+  catchAsync(flashcardController.updateFlashcard)
 );
 
 router.delete(
@@ -56,9 +46,7 @@ router.delete(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(flashcardController.deleteFlashcard(req, res, next));
-  }
+  catchAsync(flashcardController.deleteFlashcard)
 );
 
 export { router as flashcardsRouter };

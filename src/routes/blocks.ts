@@ -14,9 +14,7 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(blockController.getBlocksByPageId(req, res, next));
-  }
+  catchAsync(blockController.getBlocksByPageId)
 );
 
 export { router as blocksRouter };

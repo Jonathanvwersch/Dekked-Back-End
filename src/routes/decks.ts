@@ -15,9 +15,7 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(flashcardController.getDueDecks(req, res, next));
-  }
+  catchAsync(flashcardController.getDueDecks)
 );
 
 router.get(
@@ -25,9 +23,7 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => {
-    catchAsync(deckController.getDeckByStudySetId(req, res, next));
-  }
+  catchAsync(deckController.getDeckByStudySetId)
 );
 
 export { router as decksRouter };
