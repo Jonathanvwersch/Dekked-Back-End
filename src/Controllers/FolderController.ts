@@ -45,7 +45,8 @@ export class FolderController {
 
   public async deleteFolder(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { folder_id } = req.body;

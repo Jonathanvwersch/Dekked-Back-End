@@ -15,7 +15,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => fileTreeController.getFileTree(req, res, next));
+    catchAsync(fileTreeController.getFileTree(req, res, next));
   }
 );
 

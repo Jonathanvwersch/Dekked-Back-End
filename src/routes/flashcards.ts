@@ -15,7 +15,7 @@ router.post(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => flashcardController.createFlashCard(req, res, next));
+    catchAsync(flashcardController.createFlashCard(req, res, next));
   }
 );
 
@@ -25,7 +25,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => flashcardController.getFlashcards(req, res, next));
+    catchAsync(flashcardController.getFlashcards(req, res, next));
   }
 );
 
@@ -35,7 +35,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() =>
+    catchAsync(
       flashcardController.getSpacedRepetitionFlashcards(req, res, next)
     );
   }
@@ -47,7 +47,7 @@ router.patch(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => flashcardController.updateFlashcard(req, res, next));
+    catchAsync(flashcardController.updateFlashcard(req, res, next));
   }
 );
 
@@ -57,7 +57,7 @@ router.delete(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => flashcardController.deleteFlashcard(req, res, next));
+    catchAsync(flashcardController.deleteFlashcard(req, res, next));
   }
 );
 

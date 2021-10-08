@@ -51,7 +51,8 @@ export class BinderController {
 
   public async updateBinder(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { name, color, binder_id } = req.body;
@@ -72,7 +73,8 @@ export class BinderController {
 
   public async deleteBinder(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { binder_id } = req.body;

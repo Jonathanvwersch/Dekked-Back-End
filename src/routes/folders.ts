@@ -15,7 +15,7 @@ router.post(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => folderController.createFolder(req, res, next));
+    catchAsync(folderController.createFolder(req, res, next));
   }
 );
 
@@ -25,7 +25,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => folderController.getFolders(req, res, next));
+    catchAsync(folderController.getFolders(req, res, next));
   }
 );
 
@@ -34,7 +34,9 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => folderController.updateFolder(req, res, next)
+  (req, res, next) => {
+    catchAsync(folderController.updateFolder(req, res, next));
+  }
 );
 
 router.delete(
@@ -42,7 +44,9 @@ router.delete(
   passport.authenticate("jwt", {
     session: false,
   }),
-  folderController.deleteFolder
+  (req, res, next) => {
+    catchAsync(folderController.deleteFolder(req, res, next));
+  }
 );
 
 export { router as foldersRouter };

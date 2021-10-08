@@ -63,7 +63,8 @@ export class PageController {
 
   public async getPageByStudySetId(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const { study_set_id } = req.params;
     const userId = getUserIdFromRequest(req);

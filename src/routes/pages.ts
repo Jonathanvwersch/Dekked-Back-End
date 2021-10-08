@@ -15,7 +15,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => pageController.getPages(req, res, next));
+    catchAsync(pageController.getPages(req, res, next));
   }
 );
 
@@ -25,7 +25,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => pageController.getPage(req, res, next));
+    catchAsync(pageController.getPage(req, res, next));
   }
 );
 
@@ -34,7 +34,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  pageController.getPageByStudySetId
+  (req, res, next) => {
+    catchAsync(pageController.getPageByStudySetId(req, res, next));
+  }
 );
 
 router.patch(
@@ -42,7 +44,9 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  (req, res, next) => pageController.updatePage(req, res, next)
+  (req, res, next) => {
+    catchAsync(pageController.updatePage(req, res, next));
+  }
 );
 
 export { router as pagesRouter };

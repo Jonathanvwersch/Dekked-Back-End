@@ -14,7 +14,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => userController.getUser(req, res, next));
+    catchAsync(userController.getUser(req, res, next));
   }
 );
 
@@ -24,7 +24,7 @@ router.patch(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => userController.updateUser(req, res, next));
+    catchAsync(userController.updateUser(req, res, next));
   }
 );
 

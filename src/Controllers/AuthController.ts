@@ -12,7 +12,6 @@ import { ErrorHandler, missingParams, returnSuccessData } from "../utils";
 
 import { config } from "../config";
 import jwt from "jsonwebtoken";
-import { UserInterface } from "../types";
 
 const { GOOGLE_CLIENT_ID, RESET_PASSWORD_SECRET_KEY } = config;
 
@@ -67,10 +66,7 @@ export class AuthController {
     const { password, email_address } = req.body;
     missingParams(req.body, ["password", "email_address"]);
 
-    const response: UserInterface & { token: string } = await login(
-      email_address,
-      password
-    );
+    const response = await login(email_address, password);
 
     if (!response?.first_name) {
       throw new ErrorHandler(

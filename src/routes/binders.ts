@@ -15,7 +15,7 @@ router.post(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => binderController.createBinder(req, res, next));
+    catchAsync(binderController.createBinder(req, res, next));
   }
 );
 
@@ -24,7 +24,9 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  binderController.getBinders
+  (req, res, next) => {
+    catchAsync(binderController.getBinders(req, res, next));
+  }
 );
 
 router.patch(
@@ -32,7 +34,9 @@ router.patch(
   passport.authenticate("jwt", {
     session: false,
   }),
-  binderController.updateBinder
+  (req, res, next) => {
+    catchAsync(binderController.updateBinder(req, res, next));
+  }
 );
 
 router.delete(
@@ -40,7 +44,9 @@ router.delete(
   passport.authenticate("jwt", {
     session: false,
   }),
-  binderController.deleteBinder
+  (req, res, next) => {
+    catchAsync(binderController.deleteBinder(req, res, next));
+  }
 );
 
 export { router as bindersRouter };

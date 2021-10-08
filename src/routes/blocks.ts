@@ -15,7 +15,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => blockController.getBlocksByPageId(req, res, next));
+    catchAsync(blockController.getBlocksByPageId(req, res, next));
   }
 );
 

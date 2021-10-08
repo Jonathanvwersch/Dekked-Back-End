@@ -17,23 +17,18 @@ export class ErrorHandler extends Error {
   }
 }
 
-export const catchAsync = (
-  fn: (
-    req: express.Request,
-    res: express.Response,
-    next: NextFunction
-  ) => Promise<express.Response<any>>
-) => {
-  return (req: express.Request, res: express.Response, next: NextFunction) => {
-    fn(req, res, next).catch(next);
-  };
-};
+export const catchAsync = (fn: any) => (
+  req: express.Request,
+  res: express.Response,
+  next: NextFunction
+) => Promise.resolve(fn(req, res, next).catch(next));
 
 export const missingParams = (
   responseBody: { [key: string]: string },
   requiredFields: string[]
 ) => {
   const missingFields: string[] = [];
+
   requiredFields.forEach((field) => {
     if (!responseBody[field]) {
       missingFields.push(field);
@@ -43,9 +38,10 @@ export const missingParams = (
   if (missingFields.length) {
     const errorMessage =
       missingFields.length > 1
-        ? "The following field is missing:"
-        : "The following fields are missing:";
-    throw new ErrorHandler(400, `${errorMessage} ${missingFields.join()}`);
+        ? "The following fields are missing:"
+        : "The following field is missing:";
+
+    throw new ErrorHandler(400, `${errorMessage} ${missingFields.join(", ")}`);
   }
 };
 
@@ -72,10 +68,6 @@ const sendErrorProd = (err: ErrorHandler, res: express.Response) => {
         "Something went wrong. If problem persists, contact support at team@dekked.com.",
     });
   }
-  res.status(err.status).json({
-    status: err.status,
-    message: err.message,
-  });
 };
 
 export const sendError = (err: ErrorHandler, res: express.Response) => {

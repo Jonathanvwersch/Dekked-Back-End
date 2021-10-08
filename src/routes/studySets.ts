@@ -14,7 +14,7 @@ router.post(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => studySetController.createStudySet(req, res, next));
+    catchAsync(studySetController.createStudySet(req, res, next));
   }
 );
 
@@ -24,7 +24,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => studySetController.getStudySets(req, res, next));
+    catchAsync(studySetController.getStudySets(req, res, next));
   }
 );
 
@@ -34,7 +34,7 @@ router.patch(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => studySetController.updateStudySet(req, res, next));
+    catchAsync(studySetController.updateStudySet(req, res, next));
   }
 );
 
@@ -44,7 +44,7 @@ router.delete(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => studySetController.deleteStudySet(req, res, next));
+    catchAsync(studySetController.deleteStudySet(req, res, next));
   }
 );
 

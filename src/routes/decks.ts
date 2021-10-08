@@ -16,7 +16,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => flashcardController.getDueDecks(req, res, next));
+    catchAsync(flashcardController.getDueDecks(req, res, next));
   }
 );
 
@@ -26,7 +26,7 @@ router.get(
     session: false,
   }),
   (req, res, next) => {
-    catchAsync(() => deckController.getDeckByStudySetId(req, res, next));
+    catchAsync(deckController.getDeckByStudySetId(req, res, next));
   }
 );
 
