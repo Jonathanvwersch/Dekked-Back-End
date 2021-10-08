@@ -12,6 +12,7 @@ import { ErrorHandler, missingParams, returnSuccessData } from "../utils";
 
 import { config } from "../config";
 import jwt from "jsonwebtoken";
+import { UserInterface } from "../types";
 
 const { GOOGLE_CLIENT_ID, RESET_PASSWORD_SECRET_KEY } = config;
 
@@ -64,20 +65,22 @@ export class AuthController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { password, email_address } = req.body;
-
     missingParams(req.body, ["password", "email_address"]);
 
-    const response: any = await login(email_address, password);
+    const response: UserInterface & { token: string } = await login(
+      email_address,
+      password
+    );
 
-    if (!response.success) {
+    if (!response?.first_name) {
       throw new ErrorHandler(
-        response.code,
+        409,
         "A user already exists with that email address"
       );
     }
 
-    res.cookie(sessionCookieName, response?.data?.token, cookieOptions);
-    return res.status(200).json(response?.data);
+    res.cookie(sessionCookieName, response?.token, cookieOptions);
+    return res.status(200).json(response);
   }
 
   public async logout(
