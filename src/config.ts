@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 type ConfigType = {
   APP_ENV: string;
   DB_CONNECTION: string;
@@ -6,6 +8,7 @@ type ConfigType = {
   SENDGRID_API_KEY: string;
   RESET_PASSWORD_SECRET_KEY: string;
   SENDGRID_RESET_PASSWORD_TEMPLATE_ID: string;
+  AUTHENTICATION_SECRET_KEY: string;
 };
 
 export const config: ConfigType = {
@@ -17,4 +20,5 @@ export const config: ConfigType = {
   RESET_PASSWORD_SECRET_KEY: process.env.RESET_PASSWORD_SECRET_KEY!,
   SENDGRID_RESET_PASSWORD_TEMPLATE_ID: process.env
     .SENDGRID_RESET_PASSWORD_TEMPLATE_ID!,
+  AUTHENTICATION_SECRET_KEY: process.env.AUTHENTICATION_SECRET_KEY!,
 };

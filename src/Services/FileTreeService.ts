@@ -1,5 +1,5 @@
 import { getStudySetsByUserId } from "../Persistance/StudySetModel";
-import { getBindersByUserId } from "../Persistance/BinderModel";
+import { getBinders } from "../Persistance/BinderModel";
 import FolderModel from "../Persistance/FolderModel";
 import {
   BinderInterface,
@@ -87,7 +87,7 @@ function createFullHierarchyObject(
 async function createFullFileTree(user_id: string) {
   const folders = await FolderModel.getFoldersByUser(user_id);
   const study_sets = await getStudySetsByUserId(user_id);
-  const binders = await getBindersByUserId(user_id);
+  const binders = await getBinders(user_id);
   const folder_hierarchy = createFolderHierarchyObject(folders);
   const binder_hierachy = createBindersObject(binders, study_sets);
   const full_hierarchy = createFullHierarchyObject(

@@ -1,64 +1,61 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import db from "../db/database";
 import FlashcardService from "../Services/FlashcardService";
 import { FlashcardInterface } from "../types";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
-import { spacedRepetition } from "../utils/spaced-repetition/spacedRepetition";
+import { spacedRepetition, getUserIdFromRequest, ErrorHandler } from "../utils";
 
 export class FlashcardController {
-  public async getFullFlashcardsByDeckId(
+  public async getFlashcards(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<FlashcardInterface>> {
     const userId = getUserIdFromRequest(req);
     const { deck_id } = req.params;
 
-    try {
-      const flashcards = await FlashcardService.getFullFlashcardsByDeckId(
-        deck_id,
-        userId
-      );
-      return res.status(200).json(flashcards);
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
-    }
+    const flashcards = await FlashcardService.getFullFlashcardsByDeckId(
+      deck_id,
+      userId
+    );
+
+    return res.status(200).json(flashcards);
   }
 
-  public async getSpacedRepetitionDeckByDeckId(
+  public async getSpacedRepetitionFlashcards(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { deck_id } = req.params;
 
-    try {
-      const flashcards = await FlashcardService.getSpacedRepetitionDeckByDeckId(
-        deck_id,
-        userId
-      );
-      return res.status(200).json(flashcards);
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
-    }
+    const flashcards = await FlashcardService.getSpacedRepetitionDeckByDeckId(
+      deck_id,
+      userId
+    );
+
+    return res.status(200).json(flashcards);
   }
 
-  public async getAllDueDecks(
+  public async getDueDecks(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    const decks = await FlashcardService.getAllDueDecks(userId);
 
-    try {
-      const decks = await FlashcardService.getAllDueDecks(userId);
-      return res.status(200).json(decks);
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
+    if (!decks) {
+      throw new ErrorHandler(500, "There was an error getting the due decks");
     }
+
+    return res.status(200).json(decks);
   }
 
   public async createFlashCard(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const {
@@ -71,37 +68,35 @@ export class FlashcardController {
       deck_id,
     } = req.body;
 
-    try {
-      const flashcard = await FlashcardService.createFlashcard(
-        study_set_id,
-        userId,
-        deck_id,
-        block_link,
-        front_blocks,
-        front_draft_keys,
-        back_blocks,
-        back_draft_keys
-      );
+    const flashcard = await FlashcardService.createFlashcard(
+      study_set_id,
+      userId,
+      deck_id,
+      block_link,
+      front_blocks,
+      front_draft_keys,
+      back_blocks,
+      back_draft_keys
+    );
 
-      const fullFlashcard = {
-        ...flashcard,
-        front_blocks,
-        back_blocks,
-      };
+    const fullFlashcard = {
+      ...flashcard,
+      front_blocks,
+      back_blocks,
+    };
 
-      return res.status(200).json({
-        ...fullFlashcard,
-      });
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
-    }
+    return res.status(200).json({
+      ...fullFlashcard,
+    });
   }
 
-  public async saveFullFlashcard(
+  public async updateFlashcard(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
-    const { flashcard_id: id } = req.params;
+    const owner_id = getUserIdFromRequest(req);
+
     const {
       front_blocks,
       front_draft_keys,
@@ -110,24 +105,20 @@ export class FlashcardController {
       quality,
       interval,
       learning_status,
-      owner_id,
+      flashcard_id: id,
     } = req.body;
 
     if (quality) {
-      let flashcard: FlashcardInterface[] | undefined;
+      const currentFlashcards:
+        | FlashcardInterface[]
+        | undefined = await db
+        .table("flashcards")
+        .select("*")
+        .where({ id, owner_id })
+        .returning("*");
 
-      try {
-        flashcard = await db
-          .table("flashcards")
-          .select("*")
-          .where({ id, owner_id })
-          .returning("*");
-      } catch (error) {
-        return res.status(500).json({ success: false, error: error.message });
-      }
-
-      if (flashcard) {
-        const currentFlashcard = flashcard?.[0];
+      if (currentFlashcards?.[0]) {
+        const currentFlashcard: FlashcardInterface = currentFlashcards?.[0];
         spacedRepetition(currentFlashcard, quality, interval);
 
         const {
@@ -138,71 +129,59 @@ export class FlashcardController {
           status,
         } = currentFlashcard;
 
-        try {
-          const flashcard = await FlashcardService.saveFlashcard({
-            ease_factor,
-            failed_consecutive_attempts,
-            due_date,
-            interval: new_interval,
-            status,
-            id,
-            owner_id,
-            learning_status,
-          });
+        const flashcard = await FlashcardService.saveFlashcard({
+          ease_factor,
+          failed_consecutive_attempts,
+          due_date,
+          interval: new_interval,
+          status,
+          id,
+          owner_id,
+          learning_status,
+        });
 
-          const fullFlashcard: FlashcardInterface = {
-            ...flashcard,
-            front_blocks,
-            back_blocks,
-          };
+        const fullFlashcard: FlashcardInterface = {
+          ...flashcard,
+          front_blocks,
+          back_blocks,
+        };
 
-          return res.status(200).json({
-            ...fullFlashcard,
-          });
-        } catch (error) {
-          return res.status(500).json({ success: false, error: error.message });
-        }
+        return res.status(200).json({
+          ...fullFlashcard,
+        });
       }
     }
 
-    try {
-      const flashcard = await FlashcardService.saveFlashcard({
-        id,
-        owner_id,
-        front_blocks,
-        front_draft_keys,
-        back_blocks,
-        back_draft_keys,
-      });
+    const flashcard = await FlashcardService.saveFlashcard({
+      id,
+      owner_id,
+      front_blocks,
+      front_draft_keys,
+      back_blocks,
+      back_draft_keys,
+    });
 
-      const fullFlashcard: FlashcardInterface = {
-        ...flashcard,
-        front_blocks,
-        back_blocks,
-      };
+    const fullFlashcard: FlashcardInterface = {
+      ...flashcard,
+      front_blocks,
+      back_blocks,
+    };
 
-      return res.status(200).json({
-        ...fullFlashcard,
-      });
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
-    }
+    return res.status(200).json({
+      ...fullFlashcard,
+    });
   }
 
   public async deleteFlashcard(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { flashcard_id } = req.params;
+    const { flashcard_id } = req.body;
 
-    try {
-      await FlashcardService.deleteFlashcard(userId, flashcard_id);
-      return res.status(200).json({
-        success: true,
-      });
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
-    }
+    await FlashcardService.deleteFlashcard(userId, flashcard_id);
+
+    return res.sendStatus(200);
   }
 }

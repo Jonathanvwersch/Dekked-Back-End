@@ -1,21 +1,18 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import FileTreeService from "../Services/FileTreeService";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest } from "../utils";
 
 export class FileTreeController {
   public async getFileTree(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    const fileTree = await FileTreeService.createFullFileTree(userId);
 
-    try {
-      const fileTree = await FileTreeService.createFullFileTree(userId);
-      return res.status(200).json({
-        ...fileTree,
-      });
-    } catch (e) {
-      return res.status(400).json({ success: false, error: e.message });
-    }
+    return res.status(200).json({
+      ...fileTree,
+    });
   }
 }

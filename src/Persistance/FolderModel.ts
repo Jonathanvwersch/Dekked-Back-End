@@ -6,40 +6,31 @@ export async function createFolder(
   owner_id: string,
   color: string,
   id?: string
-): Promise<FolderInterface> {
+): Promise<string> {
   const now = new Date();
+  const folders: FolderInterface[] = await db("folders")
+    .insert({
+      name,
+      owner_id,
+      color,
+      date_created: now,
+      date_modified: now,
+      id,
+    })
+    .returning("*");
 
-  try {
-    const folders: FolderInterface[] = await db("folders")
-      .insert({
-        name,
-        owner_id,
-        color,
-        date_created: now,
-        date_modified: now,
-        id,
-      })
-      .returning("id");
-    return folders[0];
-  } catch (error) {
-    console.log(error);
-    throw new Error("There was an error creating folder");
-  }
+  return folders[0]?.id;
 }
 
 export async function getFoldersByUser(
   owner_id: string
 ): Promise<FolderInterface[]> {
-  try {
-    const response: FolderInterface[] = await db("folders")
-      .select("*")
-      .where({ owner_id })
-      .orderBy("date_created");
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw new Error("There was fetching folders for given user");
-  }
+  const folders: FolderInterface[] = await db("folders")
+    .select("*")
+    .where({ owner_id })
+    .orderBy("date_created");
+
+  return folders;
 }
 
 async function updateFolder({
@@ -52,17 +43,14 @@ async function updateFolder({
   color?: string;
   folder_id: string;
   owner_id: string;
-}) {
+}): Promise<string> {
   const now = new Date();
+  const folders = await db("folders")
+    .update({ name, color, date_modified: now })
+    .where({ id: folder_id, owner_id })
+    .returning("*");
 
-  try {
-    await db("folders")
-      .update({ name, color, date_modified: now })
-      .where({ id: folder_id, owner_id });
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error updating folder");
-  }
+  return folders[0]?.id;
 }
 
 async function deleteFolder({
@@ -72,12 +60,10 @@ async function deleteFolder({
   folder_id: string;
   owner_id: string;
 }) {
-  try {
-    await db("folders").delete("*").where({ id: folder_id, owner_id });
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error deleting folder");
-  }
+  await db("folders")
+    .delete("*")
+    .where({ id: folder_id, owner_id })
+    .returning("*");
 }
 
 export default {

@@ -7,68 +7,55 @@ export async function createStudySet(
   owner_id: string,
   color: string,
   id?: string
-): Promise<StudySetInterface> {
+): Promise<string> {
   const now = new Date();
+  const study_set: StudySetInterface[] = await db
+    .table("study_sets")
+    .insert({
+      binder_id,
+      name,
+      owner_id,
+      color,
+      id,
+      date_created: now,
+      date_modified: now,
+    })
+    .returning("*");
 
-  try {
-    const study_set: StudySetInterface[] = await db.table("study_sets").insert(
-      {
-        binder_id,
-        name,
-        owner_id,
-        color,
-        id,
-        date_created: now,
-        date_modified: now,
-      },
-      ["*"]
-    );
-    return study_set[0];
-  } catch (err) {
-    console.log(err);
-    throw new Error("There was an error creating the study set");
-  }
+  return study_set[0]?.id;
 }
 
-export async function getStudySetById(id: string) {
-  try {
-    const studySet: StudySetInterface | undefined = await db
-      .table("study_sets")
-      .select("*")
-      .where({ id })
-      .first();
-    return studySet;
-  } catch (err) {
-    console.log(err);
-    throw Error("Error getting study pack by id");
-  }
+export async function getStudySetById(id: string): Promise<StudySetInterface> {
+  const studySet: StudySetInterface = await db
+    .table("study_sets")
+    .select("*")
+    .where({ id })
+    .first();
+
+  return studySet;
 }
 
-export async function getStudySetsByBinderId(binder_id: string) {
-  try {
-    const study_sets: StudySetInterface[] = await db
-      .table("study_sets")
-      .select("*")
-      .where({ binder_id });
-    return study_sets;
-  } catch (err) {
-    console.log(err);
-    throw Error("Error getting study pack by binder id");
-  }
+export async function getStudySetsByBinderId(
+  binder_id: string
+): Promise<StudySetInterface[]> {
+  const study_sets: StudySetInterface[] = await db
+    .table("study_sets")
+    .select("*")
+    .where({ binder_id });
+
+  return study_sets;
 }
 
-export async function getStudySetsByUserId(user_id: string) {
-  try {
-    const studySets: StudySetInterface[] = await db
-      .table("study_sets")
-      .select("*")
-      .where({ owner_id: user_id })
-      .orderBy("date_created");
-    return studySets;
-  } catch (err) {
-    console.log(err);
-    throw Error("Error getting study pack by user id");
-  }
+export async function getStudySetsByUserId(
+  user_id: string
+): Promise<StudySetInterface[]> {
+  const studySets: StudySetInterface[] = await db
+    .table("study_sets")
+    .select("*")
+    .where({ owner_id: user_id })
+    .orderBy("date_created");
+
+  return studySets;
 }
 
 export async function updateStudySet({
@@ -81,17 +68,14 @@ export async function updateStudySet({
   owner_id: string;
   color?: string;
   name?: string;
-}) {
+}): Promise<string> {
   const now = new Date();
+  const studySet: StudySetInterface[] = await db("study_sets")
+    .update({ name, color, date_modified: now })
+    .where({ id: study_set_id, owner_id })
+    .returning("*");
 
-  try {
-    await db("study_sets")
-      .update({ name, color, date_modified: now })
-      .where({ id: study_set_id, owner_id });
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error updating study pack");
-  }
+  return studySet[0]?.id;
 }
 
 async function deleteStudySet({
@@ -101,13 +85,9 @@ async function deleteStudySet({
   study_set_id: string;
   owner_id: string;
 }) {
-  try {
-    await db("study_sets").delete("*").where({ id: study_set_id, owner_id });
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error deleting study pack");
-  }
+  await db("study_sets").delete("*").where({ id: study_set_id, owner_id });
 }
+
 export default {
   createStudySet,
   getStudySetById,
