@@ -2,8 +2,8 @@ import BlockModel from "../Persistance/BlockModel";
 import { BlockInterface } from "../types";
 
 export async function checkBlockExists(parent_id: string, draft_key: string) {
-  await BlockModel.getBlock(parent_id, draft_key);
-  return true;
+  const block = await BlockModel.getBlock(parent_id, draft_key);
+  return Boolean(block);
 }
 
 async function saveOrCreateBlock(

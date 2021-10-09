@@ -5,21 +5,20 @@ async function createPage(
   study_set_id: string,
   owner_id: string | undefined,
   ordering = []
-): Promise<PageInterface> {
+): Promise<string> {
   const now = new Date();
-
-  const response: PageInterface[] = await db.table("pages").insert(
-    {
+  const response: PageInterface[] = await db
+    .table("pages")
+    .insert({
       ordering,
       owner_id,
       study_set_id,
       date_created: now,
       date_modified: now,
-    },
-    ["id"]
-  );
+    })
+    .returning("*");
 
-  return response[0];
+  return response[0]?.id;
 }
 
 async function getPage(id: string, owner_id: string): Promise<PageInterface> {
@@ -40,21 +39,21 @@ async function updatePage({
   page_id: string;
   ordering?: string[];
   owner_id?: string;
-}): Promise<PageInterface> {
+}): Promise<string> {
   const now = new Date();
-
   const response: PageInterface[] = await db("pages")
     .update({ ordering, date_modified: now })
     .where({ id: page_id, owner_id })
     .returning("*");
 
-  return response[0];
+  return response[0]?.id;
 }
 
-async function getPages(ownerId: string) {
+async function getPages(ownerId: string): Promise<PageInterface[]> {
   const response: PageInterface[] = await db("pages")
-    .select()
+    .select("*")
     .where({ owner_id: ownerId });
+
   return response;
 }
 
@@ -73,11 +72,8 @@ async function deletePage({
 }: {
   page_id: string;
   owner_id: string;
-}): Promise<number> {
-  const response: number = await db("pages")
-    .delete()
-    .where({ owner_id, id: page_id });
-  return response;
+}) {
+  await db.table("pages").delete().where({ owner_id, id: page_id });
 }
 
 export default {

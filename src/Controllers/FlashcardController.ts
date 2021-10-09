@@ -182,8 +182,6 @@ export class FlashcardController {
 
     await FlashcardService.deleteFlashcard(userId, flashcard_id);
 
-    return res.status(200).json({
-      success: true,
-    });
+    return res.sendStatus(200);
   }
 }

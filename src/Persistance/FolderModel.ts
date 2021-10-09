@@ -6,7 +6,7 @@ export async function createFolder(
   owner_id: string,
   color: string,
   id?: string
-): Promise<FolderInterface> {
+): Promise<string> {
   const now = new Date();
   const folders: FolderInterface[] = await db("folders")
     .insert({
@@ -17,20 +17,20 @@ export async function createFolder(
       date_modified: now,
       id,
     })
-    .returning("id");
+    .returning("*");
 
-  return folders[0];
+  return folders[0]?.id;
 }
 
 export async function getFoldersByUser(
   owner_id: string
 ): Promise<FolderInterface[]> {
-  const response: FolderInterface[] = await db("folders")
+  const folders: FolderInterface[] = await db("folders")
     .select("*")
     .where({ owner_id })
     .orderBy("date_created");
 
-  return response;
+  return folders;
 }
 
 async function updateFolder({
@@ -43,15 +43,14 @@ async function updateFolder({
   color?: string;
   folder_id: string;
   owner_id: string;
-}): Promise<FolderInterface> {
+}): Promise<string> {
   const now = new Date();
-
   const folders = await db("folders")
     .update({ name, color, date_modified: now })
     .where({ id: folder_id, owner_id })
     .returning("*");
 
-  return folders[0];
+  return folders[0]?.id;
 }
 
 async function deleteFolder({
@@ -60,13 +59,11 @@ async function deleteFolder({
 }: {
   folder_id: string;
   owner_id: string;
-}): Promise<FolderInterface> {
-  const folders = await db("folders")
+}) {
+  await db("folders")
     .delete("*")
     .where({ id: folder_id, owner_id })
     .returning("*");
-
-  return folders[0];
 }
 
 export default {

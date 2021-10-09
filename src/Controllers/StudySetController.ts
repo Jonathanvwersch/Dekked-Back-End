@@ -38,9 +38,7 @@ export class StudySetController {
     await PageModel.createPage(id, userId);
     await DeckModel.createDeck(id, name, userId);
 
-    return res.status(200).json({
-      ...response,
-    });
+    return res.status(200).json(response);
   }
 
   public async updateStudySet(
@@ -51,17 +49,15 @@ export class StudySetController {
     const userId = getUserIdFromRequest(req);
     const { name, color, study_set_id } = req.body;
 
-    await StudySetService.updateStudySet({
+    const studySet = await StudySetService.updateStudySet({
       name,
       color,
       study_set_id,
       owner_id: userId,
     });
-
     await DeckModel.updateDeck(name, study_set_id, userId);
-    return res
-      .status(200)
-      .json(returnSuccessData("Successfully updated the study set"));
+
+    return res.status(200).json(studySet);
   }
 
   public async deleteStudySet(
@@ -77,8 +73,6 @@ export class StudySetController {
       owner_id: userId,
     });
 
-    return res
-      .status(200)
-      .json(returnSuccessData("Successfully deleted the study set"));
+    return res.sendStatus(200);
   }
 }

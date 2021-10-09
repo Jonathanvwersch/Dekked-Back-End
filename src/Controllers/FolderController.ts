@@ -22,7 +22,7 @@ export class FolderController {
     const userId = getUserIdFromRequest(req);
     const folder = await FolderModel.createFolder(name, userId, color, id);
 
-    return res.status(200).json({ ...folder });
+    return res.status(200).json(folder);
   }
 
   public async updateFolder(
@@ -40,7 +40,7 @@ export class FolderController {
       owner_id: userId,
     });
 
-    return res.status(200).json({ ...folder });
+    return res.status(200).json(folder);
   }
 
   public async deleteFolder(
@@ -50,8 +50,8 @@ export class FolderController {
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { folder_id } = req.body;
+    await FolderService.deleteFolder(folder_id, userId);
 
-    const folder = await FolderService.deleteFolder(folder_id, userId);
-    return res.status(200).json({ ...folder });
+    return res.sendStatus(200);
   }
 }

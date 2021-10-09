@@ -1,25 +1,29 @@
-import { UserInterface } from "../types";
+import { StudySetInterface, UserInterface } from "../types";
 import db from "../db/database";
 
 export async function getUserById(id: string): Promise<UserInterface> {
   return await db.table("users").where({ id }).first();
 }
 
-export async function getUserByEmail(email_address: string) {
+export async function getUserByEmail(
+  email_address: string
+): Promise<UserInterface> {
   const user: UserInterface = await db
     .table("users")
     .where({ email_address })
     .first();
+
   return user;
 }
 
 export async function getUserByResetPasswordToken(
   reset_password_token: string
-) {
+): Promise<UserInterface> {
   const user: UserInterface = await db
     .table("users")
     .where({ reset_password_token })
     .first();
+
   return user;
 }
 
@@ -41,6 +45,7 @@ export async function createNewUser(
       date_modified: now,
     })
     .returning("*");
+
   return users[0];
 }
 
@@ -58,10 +63,9 @@ export async function updateUser({
   email_address?: string;
   password?: string;
   reset_password_token?: string;
-}) {
+}): Promise<string> {
   const now = new Date();
-
-  await db
+  const studySet: StudySetInterface[] = await db
     .table("users")
     .update({
       email_address,
@@ -71,5 +75,8 @@ export async function updateUser({
       password,
       reset_password_token,
     })
-    .where({ id });
+    .where({ id })
+    .returning("*");
+
+  return studySet[0]?.id;
 }

@@ -30,20 +30,20 @@ async function createFlashcard(
     back_draft_keys,
   });
 
-  if (result.length) {
+  if (result) {
     await saveBlocks(
       front_blocks ?? [],
-      result[0]?.id,
+      result?.id,
       front_draft_keys ?? [],
       owner_id
     );
     await saveBlocks(
       back_blocks ?? [],
-      result[0]?.id,
+      result?.id,
       back_draft_keys ?? [],
       owner_id
     );
-    return result[0];
+    return result;
   }
 }
 

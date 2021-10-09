@@ -17,18 +17,15 @@ async function createDeck(
       date_modified: now,
     })
     .returning("*");
-  if (response[0].id) {
-    return response[0].id;
-  }
 
-  throw new Error("There was an error creating the deck");
+  return response[0]?.id;
 }
 
 async function updateDeck(
   name: string,
   study_set_id: string,
   owner_id: string
-): Promise<DeckInterface> {
+): Promise<string> {
   const now = new Date();
   const response: DeckInterface[] = await db
     .table("decks")
@@ -36,7 +33,7 @@ async function updateDeck(
     .where({ study_set_id, owner_id })
     .returning("*");
 
-  return response?.[0];
+  return response?.[0]?.id;
 }
 
 async function deleteDeck(study_set_id: string, owner_id: string) {

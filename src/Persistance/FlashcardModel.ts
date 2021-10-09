@@ -19,9 +19,8 @@ async function createFlashcard({
   deck_id: string;
   front_draft_keys?: string[];
   back_draft_keys?: string[];
-}) {
+}): Promise<FlashcardInterface> {
   const now = new Date();
-
   const flashcard: FlashcardInterface[] = await db("flashcards")
     .insert({
       owner_id,
@@ -34,10 +33,14 @@ async function createFlashcard({
       back_ordering: back_draft_keys ?? [],
     })
     .returning("*");
-  return flashcard;
+
+  return flashcard[0];
 }
 
-async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
+async function getFlashcardsByDeckId(
+  owner_id: string,
+  deck_id: string
+): Promise<FlashcardInterface[]> {
   const flashcards: FlashcardInterface[] = await db("flashcards")
     .select("*")
     .where({
@@ -45,28 +48,29 @@ async function getFlashcardsByDeckId(owner_id: string, deck_id: string) {
       deck_id,
     })
     .orderBy("date_created", "asc");
+
   return flashcards;
 }
 
 async function getFlashcardsByStudySetId(
   owner_id: string,
   study_set_id: string
-) {
+): Promise<FlashcardInterface[]> {
   const flashcards: FlashcardInterface[] = await db("flashcards")
     .select("*")
     .where({
       owner_id,
       study_set_id,
     });
+
   return flashcards;
 }
 
 async function getSpacedRepetitionDeckByDeckId(
   owner_id: string,
   deck_id: string
-) {
+): Promise<FlashcardInterface[]> {
   const now = new Date();
-
   const flashcards: FlashcardInterface[] = await db("flashcards")
     .select("*")
     .where({
@@ -77,12 +81,14 @@ async function getSpacedRepetitionDeckByDeckId(
       this.whereNull("due_date").orWhere("due_date", "<=", now);
     })
     .orderBy("due_date", "asc");
+
   return flashcards;
 }
 
-async function getAllDueFlashcards(owner_id: string) {
+async function getAllDueFlashcards(
+  owner_id: string
+): Promise<FlashcardInterface[]> {
   const now = new Date();
-
   const flashcards: FlashcardInterface[] = await db("flashcards")
     .select("*")
     .where({
@@ -121,10 +127,9 @@ async function updateFlashcard({
   failed_consecutive_attempts?: number;
   due_date?: Date;
   quality?: number;
-}) {
+}): Promise<FlashcardInterface> {
   const now = new Date();
-
-  const flashcard: FlashcardInterface[] | undefined = await db("flashcards")
+  const flashcards: FlashcardInterface[] = await db("flashcards")
     .update({
       back_ordering,
       front_ordering,
@@ -140,7 +145,8 @@ async function updateFlashcard({
     })
     .where({ id, owner_id })
     .returning("*");
-  return flashcard[0];
+
+  return flashcards[0];
 }
 
 async function deleteFlashcard({

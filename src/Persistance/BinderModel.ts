@@ -7,9 +7,8 @@ export async function createBinder(
   owner_id: string,
   color: string,
   id?: string
-): Promise<BinderInterface> {
+): Promise<string> {
   const now = new Date();
-
   const binders: BinderInterface[] = await db
     .table("binders")
     .insert({
@@ -22,17 +21,30 @@ export async function createBinder(
       date_modified: now,
     })
     .returning("*");
-  return binders[0];
+
+  return binders[0]?.id;
 }
 
-export async function getBindersByUserId(user_id: string) {
-  const binder: BinderInterface[] = await db
+export async function getBinders(user_id: string): Promise<BinderInterface[]> {
+  const binders: BinderInterface[] = await db
     .table("binders")
     .select("*")
     .where({ owner_id: user_id })
     .orderBy("date_created");
 
-  return binder;
+  return binders;
+}
+
+export async function getBindersByFolderId(
+  owner_id: string,
+  folder_id: string
+): Promise<BinderInterface[]> {
+  const binders: BinderInterface[] = await db
+    .table("binders")
+    .select("*")
+    .where({ owner_id, folder_id });
+
+  return binders;
 }
 
 export async function updateBinder({
@@ -45,7 +57,7 @@ export async function updateBinder({
   owner_id: string;
   color?: string;
   name?: string;
-}) {
+}): Promise<string> {
   const now = new Date();
   const binders: BinderInterface[] = await db
     .table("binders")
@@ -53,7 +65,7 @@ export async function updateBinder({
     .where({ id: binder_id, owner_id })
     .returning("*");
 
-  return binders[0];
+  return binders[0]?.id;
 }
 
 export async function deleteBinder({
@@ -63,28 +75,13 @@ export async function deleteBinder({
   binder_id: string;
   owner_id: string;
 }) {
-  const binders = await db("binders")
-    .delete("*")
-    .where({ id: binder_id, owner_id })
-    .returning("*");
-  return binders[0];
-}
-
-export async function getBindersByFolderId(
-  owner_id: string,
-  folder_id: string
-) {
-  const binders: BinderInterface[] = await db
-    .table("binders")
-    .select("*")
-    .where({ owner_id, folder_id });
-  return binders;
+  await db("binders").delete("*").where({ id: binder_id, owner_id });
 }
 
 export default {
   updateBinder,
   createBinder,
-  getBindersByUserId,
+  getBinders,
   deleteBinder,
   getBindersByFolderId,
 };
