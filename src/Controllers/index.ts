@@ -8,3 +8,4 @@ export { FolderController } from "./FolderController";
 export { PageController } from "./PageController";
 export { StudySetController } from "./StudySetController";
 export { UserController } from "./UserController";
+export { FileController } from "./FileController";

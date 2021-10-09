@@ -8,7 +8,7 @@ import {
 import StudySetService, {
   createStudySetObject,
 } from "../Services/StudySetService";
-import { getUserIdFromRequest, returnSuccessData } from "../utils";
+import { getUserIdFromRequest } from "../utils";
 
 export class StudySetController {
   public async getStudySets(
@@ -19,10 +19,10 @@ export class StudySetController {
     const userId = getUserIdFromRequest(req);
 
     const studySets = await getStudySetsByUserId(userId);
-    const studyPackObject = createStudySetObject(studySets);
+    const studySetObject = createStudySetObject(studySets);
 
     return res.status(200).json({
-      ...studyPackObject,
+      ...studySetObject,
     });
   }
 
