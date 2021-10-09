@@ -26,6 +26,8 @@ import {
   usersRouter,
   fileTreeRoute,
   fileTreeRouter,
+  filesRouter,
+  filesRoute,
 } from "./routes";
 
 const app = express();
@@ -74,6 +76,7 @@ app.use(pagesRoute, pagesRouter);
 app.use(blockRoute, blocksRouter);
 app.use(flashcardsRoute, flashcardsRouter);
 app.use(decksRoute, decksRouter);
+app.use(filesRoute, filesRouter);
 
 app.all("*", (req, _, next) => {
   next(

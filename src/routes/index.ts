@@ -9,3 +9,4 @@ export { flashcardsRouter, flashcardsRoute } from "./flashcards";
 export { pagesRouter, pagesRoute } from "./pages";
 export { blocksRouter, blockRoute } from "./blocks";
 export { fileTreeRouter, fileTreeRoute } from "./fileTree";
+export { filesRouter, filesRoute } from "./files";
