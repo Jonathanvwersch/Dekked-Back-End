@@ -1,82 +1,72 @@
 import express from "express";
-import { createBinder, getBindersByUserId } from "../Persistance/BinderModel";
+import {
+  createBinder,
+  getBinders,
+  updateBinder,
+} from "../Persistance/BinderModel";
 import BinderService, { createBinderObject } from "../Services/BinderService";
-import { getUserIdFromRequest } from "../utils/passport/authHelpers";
+import { getUserIdFromRequest } from "../utils";
 
 export class BinderController {
-  public async getBindersByUserId(
+  public async getBinders(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
 
-    try {
-      const binders = await getBindersByUserId(userId);
-      const binderObject = createBinderObject(binders);
+    const binders = await getBinders(userId);
+    const binderObject = createBinderObject(binders);
 
-      return res.status(200).json({
-        ...binderObject,
-      });
-    } catch (e) {
-      return res.status(400).json({ success: false, error: e.message });
-    }
+    return res.status(200).json({
+      ...binderObject,
+    });
   }
 
   public async createBinder(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { folder_id, name, color, id } = req.body;
 
-    try {
-      const binder = await createBinder(folder_id, name, userId, color, id);
+    const binder = await createBinder(folder_id, name, userId, color, id);
 
-      return res.status(200).json({
-        ...binder,
-      });
-    } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
-    }
+    return res.status(200).json(binder);
   }
 
   public async updateBinder(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { name, color, binder_id } = req.body;
 
-    try {
-      await BinderService.updateBinder({
-        name,
-        color,
-        binder_id,
-        owner_id: userId,
-      });
-      return res.status(200).json({ success: true });
-    } catch (e) {
-      console.log(e);
-      return res.status(500).json({ success: false, error: e.message });
-    }
+    const binder = await updateBinder({
+      name,
+      color,
+      binder_id,
+      owner_id: userId,
+    });
+
+    return res.status(200).json(binder);
   }
 
   public async deleteBinder(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: express.NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
     const { binder_id } = req.body;
 
-    try {
-      await BinderService.deleteBinder({
-        binder_id,
-        owner_id: userId,
-      });
-      return res.status(200).json({ success: true });
-    } catch (e) {
-      console.log(e);
-      return res.status(500).json({ success: false, error: e.message });
-    }
+    await BinderService.deleteBinder({
+      binder_id,
+      owner_id: userId,
+    });
+
+    return res.sendStatus(200);
   }
 }

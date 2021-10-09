@@ -7,66 +7,63 @@ async function createPage(
   ordering = []
 ): Promise<string> {
   const now = new Date();
-
-  const response: PageInterface[] = await db.table("pages").insert(
-    {
+  const response: PageInterface[] = await db
+    .table("pages")
+    .insert({
       ordering,
       owner_id,
       study_set_id,
       date_created: now,
       date_modified: now,
-    },
-    ["id"]
-  );
-  if (response[0].id) {
-    return response[0].id;
-  }
+    })
+    .returning("*");
 
-  throw new Error("There was an error creating the page");
+  return response[0]?.id;
 }
 
-async function getPage(id: string): Promise<PageInterface> {
+async function getPage(id: string, owner_id: string): Promise<PageInterface> {
   const response: PageInterface[] = await db
     .table("pages")
     .select("*")
-    .where("id", id);
+    .where({ id, owner_id })
+    .returning("*");
 
-  if (response.length) {
-    return response[0];
-  }
-  throw new Error("The page you are looking for does not exist!");
+  return response[0];
 }
 
 async function updatePage({
   page_id,
   ordering,
+  owner_id,
 }: {
   page_id: string;
   ordering?: string[];
-}): Promise<number> {
+  owner_id?: string;
+}): Promise<string> {
   const now = new Date();
-
-  if (!page_id) throw new Error("You must specify a page Id");
-  const response: number = await db("pages")
+  const response: PageInterface[] = await db("pages")
     .update({ ordering, date_modified: now })
-    .where("id", page_id);
+    .where({ id: page_id, owner_id })
+    .returning("*");
+
+  return response[0]?.id;
+}
+
+async function getPages(ownerId: string): Promise<PageInterface[]> {
+  const response: PageInterface[] = await db("pages")
+    .select("*")
+    .where({ owner_id: ownerId });
+
   return response;
 }
 
-async function getPages() {
-  const response: PageInterface[] = await db("pages").select();
-  return response;
-}
-
-async function getPageByStudySetId(study_set_id: string) {
+async function getPageByStudySetId(study_set_id: string, owner_id: string) {
   const response: PageInterface[] = await db
     .table("pages")
     .select("*")
-    .where({ study_set_id });
-  if (response.length) {
-    return response[0];
-  }
-  throw new Error("Page not found!");
+    .where({ study_set_id, owner_id });
+
+  return response[0];
 }
 
 async function deletePage({
@@ -75,11 +72,8 @@ async function deletePage({
 }: {
   page_id: string;
   owner_id: string;
-}): Promise<number> {
-  const response: number = await db("pages")
-    .delete()
-    .where({ owner_id, id: page_id });
-  return response;
+}) {
+  await db.table("pages").delete().where({ owner_id, id: page_id });
 }
 
 export default {

@@ -2,12 +2,8 @@ import BlockModel from "../Persistance/BlockModel";
 import { BlockInterface } from "../types";
 
 export async function checkBlockExists(parent_id: string, draft_key: string) {
-  try {
-    await BlockModel.getBlock(parent_id, draft_key);
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const block = await BlockModel.getBlock(parent_id, draft_key);
+  return Boolean(block);
 }
 
 async function saveOrCreateBlock(
@@ -53,15 +49,11 @@ export function getOrganizedBlocks(
   let orderingMap: any = {};
 
   blocks.forEach((val) => (orderingMap[val.draft_key] = val.content));
-  const orderedBlocks = ordering.map((val) => {
+  const orderedBlocks: BlockInterface[] = ordering.map((val) => {
     return orderingMap[val];
   });
 
   return orderedBlocks;
-}
-
-export async function deleteBlock(block_id: string, owner_id: string) {
-  await BlockModel.deleteBlock(block_id, owner_id);
 }
 
 export async function getBlocksInParent(parent_id: string) {
@@ -71,5 +63,4 @@ export async function getBlocksInParent(parent_id: string) {
 
 export default {
   getBlocksInParent,
-  deleteBlock,
 };

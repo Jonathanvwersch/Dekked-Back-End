@@ -1,23 +1,22 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import BlockModel from "../Persistance/BlockModel";
 import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks } from "../Services/BlockService";
+import { getUserIdFromRequest } from "../utils";
 
 export class BlockController {
-  public async getBlocksByPage(
+  public async getBlocksByPageId(
     req: express.Request,
-    res: express.Response
+    res: express.Response,
+    _: NextFunction
   ): Promise<express.Response<any>> {
     const { page_id } = req.params;
+    const ownerId = getUserIdFromRequest(req);
 
-    try {
-      const page = await PageModel.getPage(page_id);
-      const blocks = await BlockModel.getBlocksByParentId(page_id);
-      const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);
+    const page = await PageModel.getPage(page_id, ownerId);
+    const blocks = await BlockModel.getBlocksByParentId(page_id);
+    const organizedBlocks = getOrganizedBlocks(page.ordering, blocks);
 
-      return res.status(200).json(organizedBlocks);
-    } catch (e) {
-      return res.status(500).json({ success: false, error: e.message });
-    }
+    return res.status(200).json(organizedBlocks);
   }
 }

@@ -7,55 +7,44 @@ export async function createBinder(
   owner_id: string,
   color: string,
   id?: string
-): Promise<BinderInterface> {
+): Promise<string> {
   const now = new Date();
+  const binders: BinderInterface[] = await db
+    .table("binders")
+    .insert({
+      folder_id,
+      name,
+      owner_id,
+      color,
+      id,
+      date_created: now,
+      date_modified: now,
+    })
+    .returning("*");
 
-  try {
-    const binders: BinderInterface[] = await db
-      .table("binders")
-      .insert({
-        folder_id,
-        name,
-        owner_id,
-        color,
-        id,
-        date_created: now,
-        date_modified: now,
-      })
-      .returning("*");
-    return binders[0];
-  } catch (err) {
-    console.error(err);
-    throw new Error("There was an error creating the binder");
-  }
+  return binders[0]?.id;
 }
 
-export async function getBindersByUserId(user_id: string) {
-  try {
-    const binder: BinderInterface[] = await db
-      .table("binders")
-      .select("*")
-      .where({ owner_id: user_id })
-      .orderBy("date_created");
-    return binder;
-  } catch (err) {
-    console.log(err);
-    throw new Error("There was an error getting the binders by user id");
-  }
+export async function getBinders(user_id: string): Promise<BinderInterface[]> {
+  const binders: BinderInterface[] = await db
+    .table("binders")
+    .select("*")
+    .where({ owner_id: user_id })
+    .orderBy("date_created");
+
+  return binders;
 }
 
-export async function getBinderById(id: string) {
-  try {
-    const binder: BinderInterface | undefined = await db
-      .table("binders")
-      .select("*")
-      .where({ id })
-      .first();
-    return binder;
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error getting the binders by binder id");
-  }
+export async function getBindersByFolderId(
+  owner_id: string,
+  folder_id: string
+): Promise<BinderInterface[]> {
+  const binders: BinderInterface[] = await db
+    .table("binders")
+    .select("*")
+    .where({ owner_id, folder_id });
+
+  return binders;
 }
 
 export async function updateBinder({
@@ -68,16 +57,15 @@ export async function updateBinder({
   owner_id: string;
   color?: string;
   name?: string;
-}) {
+}): Promise<string> {
   const now = new Date();
-  try {
-    await db("binders")
-      .update({ name, color, date_modified: now })
-      .where({ id: binder_id, owner_id });
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error updating binder");
-  }
+  const binders: BinderInterface[] = await db
+    .table("binders")
+    .update({ name, color, date_modified: now })
+    .where({ id: binder_id, owner_id })
+    .returning("*");
+
+  return binders[0]?.id;
 }
 
 export async function deleteBinder({
@@ -87,35 +75,13 @@ export async function deleteBinder({
   binder_id: string;
   owner_id: string;
 }) {
-  try {
-    await db("binders").delete("*").where({ id: binder_id, owner_id });
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error deleting binder");
-  }
-}
-
-export async function getBindersByFolderId(
-  owner_id: string,
-  folder_id: string
-) {
-  try {
-    const binders: BinderInterface[] = await db
-      .table("binders")
-      .select("*")
-      .where({ owner_id, folder_id });
-    return binders;
-  } catch (err) {
-    console.log(err);
-    throw Error("There was an error fetching the binders");
-  }
+  await db("binders").delete("*").where({ id: binder_id, owner_id });
 }
 
 export default {
   updateBinder,
   createBinder,
-  getBinderById,
-  getBindersByUserId,
+  getBinders,
   deleteBinder,
   getBindersByFolderId,
 };

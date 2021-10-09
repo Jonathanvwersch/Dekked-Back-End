@@ -9,26 +9,22 @@ async function createBlock(
 ): Promise<string> {
   const response: BlockInterface[] = await db
     .table("blocks")
-    .insert({ parent_id, draft_key, content, owner_id }, ["id"]);
+    .insert({ parent_id, draft_key, content, owner_id }, ["id"])
+    .returning("*");
 
-  if (response[0].id) {
-    return response[0].id;
-  }
-
-  throw new Error("There was an error creating the block");
+  return response?.[0]?.id;
 }
 
-async function getBlock(parent_id: string, draft_key: string) {
+async function getBlock(
+  parent_id: string,
+  draft_key: string
+): Promise<BlockInterface> {
   const response: BlockInterface[] = await db
     .table("blocks")
     .select("*")
     .where({ draft_key, parent_id });
 
-  if (response.length) {
-    return response[0];
-  }
-
-  throw new Error("No block was found");
+  return response?.[0];
 }
 
 async function updateBlock({
@@ -39,12 +35,14 @@ async function updateBlock({
   parent_id: string;
   draft_key: string;
   content: string;
-}): Promise<number> {
-  const response = await db
+}): Promise<string> {
+  const response: BlockInterface[] = await db
     .table("blocks")
     .update({ content })
-    .where({ draft_key, parent_id });
-  return response;
+    .where({ draft_key, parent_id })
+    .returning("*");
+
+  return response?.[0]?.id;
 }
 
 async function getBlocksByParentId(
@@ -58,11 +56,7 @@ async function getBlocksByParentId(
 }
 
 async function deleteBlock(id: string, owner_id: string) {
-  try {
-    await db.table("blocks").delete("*").where({ id, owner_id });
-  } catch (error) {
-    throw Error("There was an error deleting block");
-  }
+  await db.table("blocks").delete("*").where({ id, owner_id });
 }
 
 export default {

@@ -3,7 +3,6 @@ import FlashcardModel from "../Persistance/FlashcardModel";
 import { getStudySetById } from "../Persistance/StudySetModel";
 import {
   BlockInterface,
-  DeckInterface,
   DueSpacedRepetitionDecks,
   FlashcardInterface,
   FlashcardLearningStatus,
@@ -11,7 +10,6 @@ import {
   StudySetInterface,
 } from "../types";
 import BlockService, { getOrganizedBlocks, saveBlocks } from "./BlockService";
-import { getDeckByStudySetIdAsync } from "./DeckService";
 
 async function createFlashcard(
   study_set_id: string,
@@ -32,155 +30,121 @@ async function createFlashcard(
     back_draft_keys,
   });
 
-  if (result.length) {
+  if (result) {
     await saveBlocks(
       front_blocks ?? [],
-      result[0]?.id,
+      result?.id,
       front_draft_keys ?? [],
       owner_id
     );
     await saveBlocks(
       back_blocks ?? [],
-      result[0]?.id,
+      result?.id,
       back_draft_keys ?? [],
       owner_id
     );
-    return result[0];
-  } else {
-    throw new Error("There was an error creating flashcard");
+    return result;
   }
 }
 
 async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
-  try {
-    const flashcards = await FlashcardModel.getFlashcardsByDeckId(
-      owner_id,
-      deck_id
-    );
-    const fullFlashcards = await Promise.all(
-      flashcards.map(async (val) => {
-        const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
-        const front_blocks = getOrganizedBlocks(
-          val.front_ordering,
-          blocksInCard
-        );
-        const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
-        return {
-          ...val,
-          front_blocks,
-          back_blocks,
-        };
-      })
-    );
-    return fullFlashcards;
-  } catch (error) {
-    console.log(error);
-    throw Error("There was an error getting flashcards by deck id");
-  }
+  const flashcards = await FlashcardModel.getFlashcardsByDeckId(
+    owner_id,
+    deck_id
+  );
+  const fullFlashcards = await Promise.all(
+    flashcards.map(async (val) => {
+      const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
+      const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
+      const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
+      return {
+        ...val,
+        front_blocks,
+        back_blocks,
+      };
+    })
+  );
+  return fullFlashcards;
 }
 
 async function getFlashcardsByStudySetId(
   study_set_id: string,
   owner_id: string
 ) {
-  try {
-    const flashcards = await FlashcardModel.getFlashcardsByStudySetId(
-      owner_id,
-      study_set_id
-    );
-    return flashcards;
-  } catch (error) {
-    console.log(error);
-    throw Error("There was an error getting flashcards by deck id");
-  }
+  const flashcards = await FlashcardModel.getFlashcardsByStudySetId(
+    owner_id,
+    study_set_id
+  );
+  return flashcards;
 }
 
 async function getSpacedRepetitionDeckByDeckId(
   deck_id: string,
   owner_id: string
 ) {
-  try {
-    const flashcards = await FlashcardModel.getSpacedRepetitionDeckByDeckId(
-      owner_id,
-      deck_id
-    );
-    const fullFlashcards = await Promise.all(
-      flashcards.map(async (val) => {
-        const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
-        const front_blocks = getOrganizedBlocks(
-          val.front_ordering,
-          blocksInCard
-        );
-        const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
-        return {
-          ...val,
-          front_blocks,
-          back_blocks,
-        };
-      })
-    );
-    return fullFlashcards;
-  } catch (error) {
-    console.log(error);
-    throw Error(
-      "There was an error getting spaced repetition flashcards by deck id"
-    );
-  }
+  const flashcards = await FlashcardModel.getSpacedRepetitionDeckByDeckId(
+    owner_id,
+    deck_id
+  );
+  const fullFlashcards = await Promise.all(
+    flashcards.map(async (val) => {
+      const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
+      const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
+      const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
+      return {
+        ...val,
+        front_blocks,
+        back_blocks,
+      };
+    })
+  );
+  return fullFlashcards;
 }
 
 async function getAllDueDecks(owner_id: string) {
   const allDueDecks: DueSpacedRepetitionDecks = {};
-  try {
-    const allDueFlashcards = await FlashcardModel.getAllDueFlashcards(owner_id);
+  const allDueFlashcards = await FlashcardModel.getAllDueFlashcards(owner_id);
 
-    allDueFlashcards?.map((flashcard: FlashcardInterface) => {
-      if (!allDueDecks?.[flashcard.deck_id]) {
-        allDueDecks[flashcard.deck_id] = {
-          study_set_id: flashcard.study_set_id,
-          name: "",
-          iconColor: "",
-          number_of_cards: 0,
-          number_of_new_cards: 0,
-          number_of_learning_cards: 0,
-          number_of_learned_cards: 0,
-        };
-      }
-      allDueDecks[flashcard.deck_id].number_of_cards += 1;
-      if (flashcard.learning_status === FlashcardLearningStatus.NEW) {
-        allDueDecks[flashcard.deck_id].number_of_new_cards += 1;
-      } else if (
-        flashcard.learning_status === FlashcardLearningStatus.LEARNING
-      ) {
-        allDueDecks[flashcard.deck_id].number_of_learning_cards += 1;
-      } else if (
-        flashcard.learning_status === FlashcardLearningStatus.LEARNED ||
-        flashcard.learning_status === FlashcardLearningStatus.DUE
-      ) {
-        allDueDecks[flashcard.deck_id].number_of_learned_cards += 1;
-      }
-    });
-
-    if (Object.keys(allDueDecks).length > 0) {
-      await Promise.all(
-        Object.entries(allDueDecks).map(async (deck) => {
-          const studySet: StudySetInterface | undefined = await getStudySetById(
-            deck?.[1]?.study_set_id
-          );
-          if (studySet?.color || studySet?.name || studySet?.name === "") {
-            deck[1].iconColor = studySet.color;
-            deck[1].name = studySet.name;
-          }
-        })
-      );
+  allDueFlashcards?.map((flashcard: FlashcardInterface) => {
+    if (!allDueDecks?.[flashcard.deck_id]) {
+      allDueDecks[flashcard.deck_id] = {
+        study_set_id: flashcard.study_set_id,
+        name: "",
+        iconColor: "",
+        number_of_cards: 0,
+        number_of_new_cards: 0,
+        number_of_learning_cards: 0,
+        number_of_learned_cards: 0,
+      };
     }
+    allDueDecks[flashcard.deck_id].number_of_cards += 1;
+    if (flashcard.learning_status === FlashcardLearningStatus.NEW) {
+      allDueDecks[flashcard.deck_id].number_of_new_cards += 1;
+    } else if (flashcard.learning_status === FlashcardLearningStatus.LEARNING) {
+      allDueDecks[flashcard.deck_id].number_of_learning_cards += 1;
+    } else if (
+      flashcard.learning_status === FlashcardLearningStatus.LEARNED ||
+      flashcard.learning_status === FlashcardLearningStatus.DUE
+    ) {
+      allDueDecks[flashcard.deck_id].number_of_learned_cards += 1;
+    }
+  });
 
-    return allDueDecks;
-  } catch (error) {
-    console.log(error);
-    throw Error(
-      "There was an error getting spaced repetition flashcards by deck id"
+  if (Object.keys(allDueDecks).length > 0) {
+    await Promise.all(
+      Object.entries(allDueDecks).map(async (deck) => {
+        const studySet: StudySetInterface | undefined = await getStudySetById(
+          deck?.[1]?.study_set_id
+        );
+        if (studySet?.color || studySet?.name || studySet?.name === "") {
+          deck[1].iconColor = studySet.color;
+          deck[1].name = studySet.name;
+        }
+      })
     );
   }
+
+  return allDueDecks;
 }
 
 async function saveFlashcard({
@@ -238,49 +202,39 @@ async function saveFlashcard({
 }
 
 async function deleteFlashcard(owner_id: string, id: string) {
-  try {
-    const blocks = await BlockService.getBlocksInParent(id);
-    await Promise.all(
-      blocks.map(async (val: BlockInterface) =>
-        BlockService.deleteBlock(val.id, owner_id)
-      )
-    );
-    await FlashcardModel.deleteFlashcard({
-      owner_id,
-      id,
-    });
-  } catch (error) {
-    console.log(error);
-    throw Error("There was an error deleting flashcard");
-  }
+  const blocks = await BlockService.getBlocksInParent(id);
+  await Promise.all(
+    blocks.map(async (val: BlockInterface) =>
+      BlockModel.deleteBlock(val.id, owner_id)
+    )
+  );
+  await FlashcardModel.deleteFlashcard({
+    owner_id,
+    id,
+  });
 }
 
 async function deleteFlashcardByStudySetId(
   owner_id: string,
   study_set_id: string
 ) {
-  try {
-    const flashcards = await getFlashcardsByStudySetId(study_set_id, owner_id);
+  const flashcards = await getFlashcardsByStudySetId(study_set_id, owner_id);
 
-    // delete text blocks associated with flashcards
-    await Promise.all(
-      flashcards.map(async (flashcard) => {
-        const blocks = await BlockService.getBlocksInParent(flashcard.id);
-        blocks.map(async (val: BlockInterface) =>
-          BlockService.deleteBlock(val.id, owner_id)
-        );
-      })
-    );
+  // delete text blocks associated with flashcards
+  await Promise.all(
+    flashcards.map(async (flashcard) => {
+      const blocks = await BlockService.getBlocksInParent(flashcard.id);
+      blocks.map(async (val: BlockInterface) =>
+        BlockModel.deleteBlock(val.id, owner_id)
+      );
+    })
+  );
 
-    // then delete flashcards
-    await FlashcardModel.deleteFlashcardByStudySetId({
-      owner_id,
-      study_set_id,
-    });
-  } catch (error) {
-    console.log(error);
-    throw Error("There was an error deleting flashcard");
-  }
+  // then delete flashcards
+  await FlashcardModel.deleteFlashcardByStudySetId({
+    owner_id,
+    study_set_id,
+  });
 }
 
 export default {
