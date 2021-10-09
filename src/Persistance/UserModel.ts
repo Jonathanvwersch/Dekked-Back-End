@@ -1,4 +1,4 @@
-import { StudySetInterface, UserInterface } from "../types";
+import { UserInterface } from "../types";
 import db from "../db/database";
 
 export async function getUserById(id: string): Promise<UserInterface> {
@@ -63,9 +63,9 @@ export async function updateUser({
   email_address?: string;
   password?: string;
   reset_password_token?: string;
-}): Promise<string> {
+}): Promise<UserInterface> {
   const now = new Date();
-  const studySet: StudySetInterface[] = await db
+  const users: UserInterface[] = await db
     .table("users")
     .update({
       email_address,
@@ -78,5 +78,5 @@ export async function updateUser({
     .where({ id })
     .returning("*");
 
-  return studySet[0]?.id;
+  return users[0];
 }
