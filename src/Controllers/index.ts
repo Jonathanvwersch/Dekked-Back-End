@@ -9,4 +9,3 @@ export { PageController } from "./PageController";
 export { StudySetController } from "./StudySetController";
 export { UserController } from "./UserController";
 export { FileController } from "./FileController";
-export { HomeController } from "./HomeController";
