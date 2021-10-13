@@ -67,6 +67,26 @@ async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
   return fullFlashcards;
 }
 
+async function getBinderFlashcards(deckIds: string[], ownerId: string) {
+  const flashcards = await FlashcardModel.getFlashcardsByDeckIds(
+    ownerId,
+    deckIds
+  );
+  const fullFlashcards = await Promise.all(
+    flashcards.map(async (val) => {
+      const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
+      const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
+      const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
+      return {
+        ...val,
+        front_blocks,
+        back_blocks,
+      };
+    })
+  );
+  return fullFlashcards;
+}
+
 async function getFlashcardsByStudySetId(
   study_set_id: string,
   owner_id: string
@@ -242,6 +262,7 @@ export default {
   getFullFlashcardsByDeckId,
   saveFlashcard,
   deleteFlashcard,
+  getBinderFlashcards,
   deleteFlashcardByStudySetId,
   getFlashcardsByStudySetId,
   getSpacedRepetitionDeckByDeckId,

@@ -26,6 +26,14 @@ router.get(
 );
 
 router.get(
+  `/binder/:id`,
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  catchAsync(flashcardController.getBinderFlashcards)
+);
+
+router.get(
   `/spaced-repetition/:deck_id`,
   passport.authenticate("jwt", {
     session: false,

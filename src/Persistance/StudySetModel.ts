@@ -38,12 +38,29 @@ export async function getStudySetById(id: string): Promise<StudySetInterface> {
 export async function getStudySetsByBinderId(
   binder_id: string
 ): Promise<StudySetInterface[]> {
-  const study_sets: StudySetInterface[] = await db
+  const studySets: StudySetInterface[] = await db
     .table("study_sets")
     .select("*")
     .where({ binder_id });
 
-  return study_sets;
+  return studySets;
+}
+
+export async function getStudySetIdsByBinderId(
+  binder_id: string
+): Promise<string[]> {
+  const studySetIds: { id: string }[] = await db
+    .table("study_sets")
+    .select("id")
+    .where({ binder_id });
+
+  const returnedIds: string[] = [];
+
+  studySetIds?.forEach((studySetIdObject) => {
+    returnedIds.push(studySetIdObject?.id);
+  });
+
+  return returnedIds;
 }
 
 export async function getStudySetsByUserId(

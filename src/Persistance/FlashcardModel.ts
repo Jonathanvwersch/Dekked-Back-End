@@ -52,6 +52,20 @@ async function getFlashcardsByDeckId(
   return flashcards;
 }
 
+async function getFlashcardsByDeckIds(
+  userId: string,
+  deckIds: string[]
+): Promise<FlashcardInterface[]> {
+  const flashcards: FlashcardInterface[] = await db("flashcards")
+    .select("*")
+    .where({ owner_id: userId })
+    .whereIn("study_set_id", deckIds);
+
+  console.log(flashcards);
+
+  return flashcards;
+}
+
 async function getFlashcardsByStudySetId(
   owner_id: string,
   study_set_id: string
@@ -184,4 +198,5 @@ export default {
   getSpacedRepetitionDeckByDeckId,
   getFlashcardsByStudySetId,
   getAllDueFlashcards,
+  getFlashcardsByDeckIds,
 };
