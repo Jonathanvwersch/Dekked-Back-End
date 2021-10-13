@@ -47,11 +47,7 @@ async function createFlashcard(
   }
 }
 
-async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
-  const flashcards = await FlashcardModel.getFlashcardsByDeckId(
-    owner_id,
-    deck_id
-  );
+async function createFullFlashcard(flashcards: FlashcardInterface[]) {
   const fullFlashcards = await Promise.all(
     flashcards.map(async (val) => {
       const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
@@ -67,24 +63,28 @@ async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
   return fullFlashcards;
 }
 
-async function getBinderFlashcards(deckIds: string[], ownerId: string) {
-  const flashcards = await FlashcardModel.getFlashcardsByDeckIds(
+async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
+  const flashcards = await FlashcardModel.getFlashcardsByDeckId(
+    owner_id,
+    deck_id
+  );
+  return createFullFlashcard(flashcards);
+}
+
+async function getBinderFlashcards(studySetIds: string[], ownerId: string) {
+  const flashcards = await FlashcardModel.getFlashcardsByStudySetIds(
     ownerId,
-    deckIds
+    studySetIds
   );
-  const fullFlashcards = await Promise.all(
-    flashcards.map(async (val) => {
-      const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
-      const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
-      const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
-      return {
-        ...val,
-        front_blocks,
-        back_blocks,
-      };
-    })
+  return createFullFlashcard(flashcards);
+}
+
+async function getFolderFlashcards(studySetIds: string[], ownerId: string) {
+  const flashcards = await FlashcardModel.getFlashcardsByStudySetIds(
+    ownerId,
+    studySetIds
   );
-  return fullFlashcards;
+  return createFullFlashcard(flashcards);
 }
 
 async function getFlashcardsByStudySetId(
@@ -106,19 +106,7 @@ async function getSpacedRepetitionDeckByDeckId(
     owner_id,
     deck_id
   );
-  const fullFlashcards = await Promise.all(
-    flashcards.map(async (val) => {
-      const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
-      const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
-      const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
-      return {
-        ...val,
-        front_blocks,
-        back_blocks,
-      };
-    })
-  );
-  return fullFlashcards;
+  return createFullFlashcard(flashcards);
 }
 
 async function getAllDueDecks(owner_id: string) {
@@ -265,6 +253,7 @@ export default {
   getBinderFlashcards,
   deleteFlashcardByStudySetId,
   getFlashcardsByStudySetId,
+  getFolderFlashcards,
   getSpacedRepetitionDeckByDeckId,
   getAllDueDecks,
 };

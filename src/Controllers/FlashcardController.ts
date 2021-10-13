@@ -1,7 +1,10 @@
 import express, { NextFunction } from "express";
 import { FileTreeController } from ".";
 import db from "../db/database";
-import { getStudySetIdsByBinderId } from "../Persistance";
+import {
+  getStudySetIdsByBinderId,
+  getStudySetIdsByFolderId,
+} from "../Persistance";
 import FileTreeService from "../Services/FileTreeService";
 import FlashcardService from "../Services/FlashcardService";
 import { FlashcardInterface } from "../types";
@@ -40,6 +43,23 @@ export class FlashcardController {
     );
 
     return res.status(200).json(binderFlashcards);
+  }
+
+  public async getFolderFlashcards(
+    req: express.Request,
+    res: express.Response,
+    _: NextFunction
+  ): Promise<express.Response<FlashcardInterface>> {
+    const userId = getUserIdFromRequest(req);
+    const { id } = req.params;
+    const studySetIds = await getStudySetIdsByFolderId(id);
+
+    const folderFlashcards = await FlashcardService.getFolderFlashcards(
+      studySetIds,
+      userId
+    );
+
+    return res.status(200).json(folderFlashcards);
   }
 
   public async getSpacedRepetitionFlashcards(

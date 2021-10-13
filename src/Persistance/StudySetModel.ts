@@ -63,6 +63,23 @@ export async function getStudySetIdsByBinderId(
   return returnedIds;
 }
 
+export async function getStudySetIdsByFolderId(
+  folder_id: string
+): Promise<string[]> {
+  const studySetIds: { id: string }[] = await db
+    .table("study_sets")
+    .select("id")
+    .where({ folder_id });
+
+  const returnedIds: string[] = [];
+
+  studySetIds?.forEach((studySetIdObject) => {
+    returnedIds.push(studySetIdObject?.id);
+  });
+
+  return returnedIds;
+}
+
 export async function getStudySetsByUserId(
   user_id: string
 ): Promise<StudySetInterface[]> {

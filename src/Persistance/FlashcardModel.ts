@@ -52,7 +52,7 @@ async function getFlashcardsByDeckId(
   return flashcards;
 }
 
-async function getFlashcardsByDeckIds(
+async function getFlashcardsByStudySetIds(
   userId: string,
   deckIds: string[]
 ): Promise<FlashcardInterface[]> {
@@ -198,5 +198,5 @@ export default {
   getSpacedRepetitionDeckByDeckId,
   getFlashcardsByStudySetId,
   getAllDueFlashcards,
-  getFlashcardsByDeckIds,
+  getFlashcardsByStudySetIds,
 };

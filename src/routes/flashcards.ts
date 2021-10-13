@@ -34,6 +34,14 @@ router.get(
 );
 
 router.get(
+  `/folder/:id`,
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  catchAsync(flashcardController.getFolderFlashcards)
+);
+
+router.get(
   `/spaced-repetition/:deck_id`,
   passport.authenticate("jwt", {
     session: false,
