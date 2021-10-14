@@ -63,10 +63,13 @@ async function createFullFlashcard(flashcards: FlashcardInterface[]) {
   return fullFlashcards;
 }
 
-async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
-  const flashcards = await FlashcardModel.getFlashcardsByDeckId(
+async function getFullFlashcardsByStudySetId(
+  study_set_id: string,
+  owner_id: string
+) {
+  const flashcards = await FlashcardModel.getFlashcardsByStudySetId(
     owner_id,
-    deck_id
+    study_set_id
   );
   return createFullFlashcard(flashcards);
 }
@@ -247,7 +250,7 @@ async function deleteFlashcardByStudySetId(
 
 export default {
   createFlashcard,
-  getFullFlashcardsByDeckId,
+  getFullFlashcardsByStudySetId,
   saveFlashcard,
   deleteFlashcard,
   getBinderFlashcards,

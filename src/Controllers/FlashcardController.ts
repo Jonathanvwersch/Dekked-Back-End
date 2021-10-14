@@ -1,15 +1,12 @@
 import express, { NextFunction } from "express";
-import { FileTreeController } from ".";
 import db from "../db/database";
 import {
   getStudySetIdsByBinderId,
   getStudySetIdsByFolderId,
 } from "../Persistance";
-import FileTreeService from "../Services/FileTreeService";
 import FlashcardService from "../Services/FlashcardService";
 import { FlashcardInterface } from "../types";
 import { spacedRepetition, getUserIdFromRequest, ErrorHandler } from "../utils";
-import { FileController } from "./FileController";
 
 export class FlashcardController {
   public async getFlashcards(
@@ -18,10 +15,10 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<FlashcardInterface>> {
     const userId = getUserIdFromRequest(req);
-    const { deck_id } = req.params;
+    const { study_set_id } = req.params;
 
-    const flashcards = await FlashcardService.getFullFlashcardsByDeckId(
-      deck_id,
+    const flashcards = await FlashcardService.getFullFlashcardsByStudySetId(
+      study_set_id,
       userId
     );
 

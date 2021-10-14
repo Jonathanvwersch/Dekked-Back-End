@@ -18,7 +18,7 @@ router.post(
 );
 
 router.get(
-  `/:deck_id`,
+  `/:study_set_id`,
   passport.authenticate("jwt", {
     session: false,
   }),
