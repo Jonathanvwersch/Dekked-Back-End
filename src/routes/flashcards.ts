@@ -18,7 +18,7 @@ router.post(
 );
 
 router.get(
-  `/:study_set_id`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -26,23 +26,7 @@ router.get(
 );
 
 router.get(
-  `/binder/:id`,
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  catchAsync(flashcardController.getBinderFlashcards)
-);
-
-router.get(
-  `/folder/:id`,
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  catchAsync(flashcardController.getFolderFlashcards)
-);
-
-router.get(
-  `/spaced-repetition/:study_set_id`,
+  `/spaced-repetition`,
   passport.authenticate("jwt", {
     session: false,
   }),

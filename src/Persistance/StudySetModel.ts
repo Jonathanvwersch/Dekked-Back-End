@@ -47,12 +47,13 @@ export async function getStudySetsByBinderId(
 }
 
 export async function getStudySetIdsByBinderId(
-  binder_id: string
+  binder_id: string,
+  owner_id: string
 ): Promise<string[]> {
   const studySetIds: { id: string }[] = await db
     .table("study_sets")
     .select("id")
-    .where({ binder_id });
+    .where({ binder_id, owner_id });
 
   const returnedIds: string[] = [];
 

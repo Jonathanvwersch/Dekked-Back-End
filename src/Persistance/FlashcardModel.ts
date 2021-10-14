@@ -80,15 +80,15 @@ async function getFlashcardsByStudySetId(
 
 async function getSpacedRepetitionDeckByStudySetId(
   owner_id: string,
-  study_set_id: string
+  studySetIds: string[]
 ): Promise<FlashcardInterface[]> {
   const now = new Date();
   const flashcards: FlashcardInterface[] = await db("flashcards")
     .select("*")
     .where({
       owner_id,
-      study_set_id,
     })
+    .whereIn("study_set_id", studySetIds)
     .andWhere(function () {
       this.whereNull("due_date").orWhere("due_date", "<=", now);
     })

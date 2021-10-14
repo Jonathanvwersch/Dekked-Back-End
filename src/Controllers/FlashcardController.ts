@@ -6,7 +6,7 @@ import {
   getStudySetIdsByMultipleBinderIds,
 } from "../Persistance";
 import FlashcardService from "../Services/FlashcardService";
-import { FlashcardInterface } from "../types";
+import { FILETREE_TYPES, FlashcardInterface } from "../types";
 import { spacedRepetition, getUserIdFromRequest, ErrorHandler } from "../utils";
 
 export class FlashcardController {
@@ -16,52 +16,31 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<FlashcardInterface>> {
     const userId = getUserIdFromRequest(req);
-    const { study_set_id } = req.params;
+    const { id, type } = req.query as { id: string; type: FILETREE_TYPES };
 
-    const flashcards = await FlashcardService.getFullFlashcardsByStudySetId(
-      study_set_id,
-      userId
-    );
+    let flashcards: FlashcardInterface[] = [];
+
+    if (type === FILETREE_TYPES.FOLDER) {
+      const binderIds = await getBinderIdsByFolderId(userId, id);
+      const studySetIds = await getStudySetIdsByMultipleBinderIds(
+        binderIds,
+        userId
+      );
+      flashcards = await FlashcardService.getFolderFlashcards(
+        studySetIds,
+        userId
+      );
+    } else if (type === FILETREE_TYPES.BINDER) {
+      const studySetIds = await getStudySetIdsByBinderId(id, userId);
+      flashcards = await FlashcardService.getBinderFlashcards(
+        studySetIds,
+        userId
+      );
+    } else {
+      flashcards = await FlashcardService.getStudySetFlashcards(id, userId);
+    }
 
     return res.status(200).json(flashcards);
-  }
-
-  public async getBinderFlashcards(
-    req: express.Request,
-    res: express.Response,
-    _: NextFunction
-  ): Promise<express.Response<FlashcardInterface>> {
-    const userId = getUserIdFromRequest(req);
-    const { id } = req.params;
-    const studySetIds = await getStudySetIdsByBinderId(id);
-
-    const binderFlashcards = await FlashcardService.getBinderFlashcards(
-      studySetIds,
-      userId
-    );
-
-    return res.status(200).json(binderFlashcards);
-  }
-
-  public async getFolderFlashcards(
-    req: express.Request,
-    res: express.Response,
-    _: NextFunction
-  ): Promise<express.Response<FlashcardInterface>> {
-    const userId = getUserIdFromRequest(req);
-    const { id } = req.params;
-    const binderIds = await getBinderIdsByFolderId(userId, id);
-    const studySetIds = await getStudySetIdsByMultipleBinderIds(
-      binderIds,
-      userId
-    );
-
-    const folderFlashcards = await FlashcardService.getFolderFlashcards(
-      studySetIds,
-      userId
-    );
-
-    return res.status(200).json(folderFlashcards);
   }
 
   public async getSpacedRepetitionFlashcards(
@@ -70,11 +49,12 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { study_set_id } = req.params;
+    const { id, type } = req.query as { id: string; type: FILETREE_TYPES };
 
     const flashcards = await FlashcardService.getSpacedRepetitionDeckByStudySetId(
-      study_set_id,
-      userId
+      id,
+      userId,
+      type
     );
 
     return res.status(200).json(flashcards);

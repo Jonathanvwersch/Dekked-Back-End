@@ -1,9 +1,15 @@
+import { getBinderIdsByFolderId } from "../Persistance";
 import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
-import { getStudySetById } from "../Persistance/StudySetModel";
+import {
+  getStudySetById,
+  getStudySetIdsByBinderId,
+  getStudySetIdsByMultipleBinderIds,
+} from "../Persistance/StudySetModel";
 import {
   BlockInterface,
   DueSpacedRepetitionDecks,
+  FILETREE_TYPES,
   FlashcardInterface,
   FlashcardLearningStatus,
   FlashcardStatus,
@@ -63,10 +69,7 @@ async function createFullFlashcard(flashcards: FlashcardInterface[]) {
   return fullFlashcards;
 }
 
-async function getFullFlashcardsByStudySetId(
-  study_set_id: string,
-  owner_id: string
-) {
+async function getStudySetFlashcards(study_set_id: string, owner_id: string) {
   const flashcards = await FlashcardModel.getFlashcardsByStudySetId(
     owner_id,
     study_set_id
@@ -102,12 +105,21 @@ async function getFlashcardsByStudySetId(
 }
 
 async function getSpacedRepetitionDeckByStudySetId(
-  study_set_id: string,
-  owner_id: string
+  id: string,
+  userId: string,
+  type: FILETREE_TYPES
 ) {
+  let studySetIds: string[] = [id];
+  if (type === FILETREE_TYPES.FOLDER) {
+    const binderIds = await getBinderIdsByFolderId(userId, id);
+    studySetIds = await getStudySetIdsByMultipleBinderIds(binderIds, userId);
+  } else if (type === FILETREE_TYPES.BINDER) {
+    studySetIds = await getStudySetIdsByBinderId(id, userId);
+  }
+
   const flashcards = await FlashcardModel.getSpacedRepetitionDeckByStudySetId(
-    owner_id,
-    study_set_id
+    userId,
+    studySetIds
   );
   return createFullFlashcard(flashcards);
 }
@@ -250,7 +262,7 @@ async function deleteFlashcardByStudySetId(
 
 export default {
   createFlashcard,
-  getFullFlashcardsByStudySetId,
+  getStudySetFlashcards,
   saveFlashcard,
   deleteFlashcard,
   getBinderFlashcards,
