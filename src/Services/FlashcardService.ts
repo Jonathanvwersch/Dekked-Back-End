@@ -101,11 +101,11 @@ async function getFlashcardsByStudySetId(
   return flashcards;
 }
 
-async function getSpacedRepetitionDeckByDeckId(
+async function getSpacedRepetitionDeckByStudySetId(
   deck_id: string,
   owner_id: string
 ) {
-  const flashcards = await FlashcardModel.getSpacedRepetitionDeckByDeckId(
+  const flashcards = await FlashcardModel.getSpacedRepetitionDeckByStudySetId(
     owner_id,
     deck_id
   );
@@ -257,6 +257,6 @@ export default {
   deleteFlashcardByStudySetId,
   getFlashcardsByStudySetId,
   getFolderFlashcards,
-  getSpacedRepetitionDeckByDeckId,
+  getSpacedRepetitionDeckByStudySetId,
   getAllDueDecks,
 };

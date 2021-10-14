@@ -42,7 +42,7 @@ router.get(
 );
 
 router.get(
-  `/spaced-repetition/:deck_id`,
+  `/spaced-repetition/:study_set_id`,
   passport.authenticate("jwt", {
     session: false,
   }),

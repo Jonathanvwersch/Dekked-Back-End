@@ -65,10 +65,10 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { deck_id } = req.params;
+    const { studySetId } = req.params;
 
-    const flashcards = await FlashcardService.getSpacedRepetitionDeckByDeckId(
-      deck_id,
+    const flashcards = await FlashcardService.getSpacedRepetitionDeckByStudySetId(
+      studySetId,
       userId
     );
 
