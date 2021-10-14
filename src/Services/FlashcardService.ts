@@ -102,12 +102,12 @@ async function getFlashcardsByStudySetId(
 }
 
 async function getSpacedRepetitionDeckByStudySetId(
-  deck_id: string,
+  study_set_id: string,
   owner_id: string
 ) {
   const flashcards = await FlashcardModel.getSpacedRepetitionDeckByStudySetId(
     owner_id,
-    deck_id
+    study_set_id
   );
   return createFullFlashcard(flashcards);
 }
