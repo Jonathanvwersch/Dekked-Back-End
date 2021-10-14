@@ -46,11 +46,14 @@ export const missingParams = (
 };
 
 const sendErrorDev = (err: ErrorHandler, res: express.Response) => {
+  const now = new Date();
+
   res.status(err.status).json({
     status: err.status,
     error: err,
     message: err.message,
     stack: err.stack,
+    timeStamp: now,
   });
 };
 
