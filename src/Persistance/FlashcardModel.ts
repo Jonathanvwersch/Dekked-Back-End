@@ -54,14 +54,12 @@ async function getFlashcardsByDeckId(
 
 async function getFlashcardsByStudySetIds(
   userId: string,
-  deckIds: string[]
+  studySetIds: string[]
 ): Promise<FlashcardInterface[]> {
   const flashcards: FlashcardInterface[] = await db("flashcards")
     .select("*")
     .where({ owner_id: userId })
-    .whereIn("study_set_id", deckIds);
-
-  console.log(flashcards);
+    .whereIn("study_set_id", studySetIds);
 
   return flashcards;
 }

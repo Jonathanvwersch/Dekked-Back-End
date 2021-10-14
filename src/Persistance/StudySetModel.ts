@@ -63,13 +63,15 @@ export async function getStudySetIdsByBinderId(
   return returnedIds;
 }
 
-export async function getStudySetIdsByFolderId(
-  folder_id: string
+export async function getStudySetIdsByMultipleBinderIds(
+  binderIds: string[],
+  userId: String
 ): Promise<string[]> {
   const studySetIds: { id: string }[] = await db
     .table("study_sets")
     .select("id")
-    .where({ folder_id });
+    .where({ owner_id: userId })
+    .whereIn("binder_id", binderIds);
 
   const returnedIds: string[] = [];
 

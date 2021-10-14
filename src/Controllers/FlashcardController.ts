@@ -1,8 +1,9 @@
 import express, { NextFunction } from "express";
 import db from "../db/database";
 import {
+  getBinderIdsByFolderId,
   getStudySetIdsByBinderId,
-  getStudySetIdsByFolderId,
+  getStudySetIdsByMultipleBinderIds,
 } from "../Persistance";
 import FlashcardService from "../Services/FlashcardService";
 import { FlashcardInterface } from "../types";
@@ -49,7 +50,11 @@ export class FlashcardController {
   ): Promise<express.Response<FlashcardInterface>> {
     const userId = getUserIdFromRequest(req);
     const { id } = req.params;
-    const studySetIds = await getStudySetIdsByFolderId(id);
+    const binderIds = await getBinderIdsByFolderId(userId, id);
+    const studySetIds = await getStudySetIdsByMultipleBinderIds(
+      binderIds,
+      userId
+    );
 
     const folderFlashcards = await FlashcardService.getFolderFlashcards(
       studySetIds,
