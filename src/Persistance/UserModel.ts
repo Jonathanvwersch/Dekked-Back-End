@@ -1,6 +1,5 @@
 import { UserInterface } from "../types";
 import db from "../db/database";
-import Knex from "knex";
 
 export async function getUserById(id: string): Promise<UserInterface> {
   return await db.table("users").where({ id }).first();
@@ -13,6 +12,7 @@ export async function getUserByEmail(
     .table("users")
     .where({ email_address })
     .first();
+  delete user.password;
 
   return user;
 }
@@ -24,6 +24,8 @@ export async function getUserByResetPasswordToken(
     .table("users")
     .where({ reset_password_token })
     .first();
+
+  delete user.password;
 
   return user;
 }
@@ -46,6 +48,8 @@ export async function createNewUser(
       date_modified: now,
     })
     .returning("*");
+
+  delete users[0].password;
 
   return users[0];
 }
@@ -95,23 +99,6 @@ export async function updateUser({
       .returning("*");
   }
 
+  delete returningUser[0].password;
   return returningUser[0] as UserInterface;
-}
-
-export async function updateRecentlyVisited({
-  id,
-  recently_visited,
-}: {
-  id: string;
-  recently_visited?: string[];
-}): Promise<UserInterface> {
-  const users: UserInterface[] = await db
-    .table("users")
-    .update({
-      recently_visited,
-    })
-    .where({ id })
-    .returning("*");
-
-  return users[0];
 }

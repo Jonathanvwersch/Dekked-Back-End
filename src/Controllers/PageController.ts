@@ -45,7 +45,7 @@ export class PageController {
     } = req.body;
 
     // update recently visited array
-    updateUser({ id: userId, recently_visited: study_set_id });
+    await updateUser({ id: userId, recently_visited: study_set_id });
 
     await saveBlocks(blocks, page_id, draft_keys, userId);
     const page = await PageModel.updatePage({

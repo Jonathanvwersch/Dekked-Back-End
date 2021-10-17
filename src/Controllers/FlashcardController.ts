@@ -94,7 +94,7 @@ export class FlashcardController {
     } = req.body;
 
     // update recently visited array
-    updateUser({ id: userId, recently_visited: study_set_id });
+    await updateUser({ id: userId, recently_visited: study_set_id });
 
     const flashcard = await FlashcardService.createFlashcard(
       study_set_id,
@@ -138,7 +138,7 @@ export class FlashcardController {
     } = req.body;
 
     // update recently visited array
-    updateUser({ id: owner_id, recently_visited: study_set_id });
+    await updateUser({ id: owner_id, recently_visited: study_set_id });
 
     if (quality) {
       const currentFlashcards:
