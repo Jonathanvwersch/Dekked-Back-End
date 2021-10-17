@@ -122,6 +122,7 @@ export interface UserInterface {
   password?: string;
   date_created?: string;
   date_modified?: string;
+  recently_visited?: string[];
 }
 export interface FileTreeInterface {
   [instance_id: string]: {

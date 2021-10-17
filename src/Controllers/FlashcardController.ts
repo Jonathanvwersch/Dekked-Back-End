@@ -4,6 +4,7 @@ import {
   getBinderIdsByFolderId,
   getStudySetIdsByBinderId,
   getStudySetIdsByMultipleBinderIds,
+  updateUser,
 } from "../Persistance";
 import FlashcardService from "../Services/FlashcardService";
 import { FILETREE_TYPES, FlashcardInterface } from "../types";
@@ -81,6 +82,7 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+
     const {
       study_set_id,
       block_link,
@@ -90,6 +92,9 @@ export class FlashcardController {
       back_draft_keys,
       deck_id,
     } = req.body;
+
+    // update recently visited array
+    updateUser({ id: userId, recently_visited: study_set_id });
 
     const flashcard = await FlashcardService.createFlashcard(
       study_set_id,
@@ -129,7 +134,11 @@ export class FlashcardController {
       interval,
       learning_status,
       flashcard_id: id,
+      study_set_id,
     } = req.body;
+
+    // update recently visited array
+    updateUser({ id: owner_id, recently_visited: study_set_id });
 
     if (quality) {
       const currentFlashcards:
