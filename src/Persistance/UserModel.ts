@@ -81,15 +81,17 @@ export async function updateUser({
     if (!recentlyVisited) {
       recentlyVisited = [];
     }
-    recentlyVisited?.unshift(recently_visited);
-    if (recentlyVisited.length > 6) {
-      recentlyVisited.pop();
+    const recentlyVisitedFiltered = recentlyVisited.filter(
+      (visited) => visited !== recently_visited
+    );
+    recentlyVisitedFiltered?.unshift(recently_visited);
+    if (recentlyVisitedFiltered.length > 6) {
+      recentlyVisitedFiltered.pop();
     }
     returningUser = await db("users")
-      .update({ recently_visited: recentlyVisited })
+      .update({ recently_visited: recentlyVisitedFiltered })
       .where({ id })
       .returning("*");
-    console.log(returningUser);
   } else {
     returningUser = await db("users")
       .update({
