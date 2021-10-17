@@ -47,6 +47,23 @@ export async function getBindersByFolderId(
   return binders;
 }
 
+export async function getBinderIdsByFolderId(
+  owner_id: string,
+  folder_id: string
+): Promise<string[]> {
+  const binderIds: BinderInterface[] = await db
+    .table("binders")
+    .select("id")
+    .where({ owner_id, folder_id });
+
+  const returnedIds: string[] = [];
+
+  binderIds?.forEach((binderIdObject) => {
+    returnedIds.push(binderIdObject?.id);
+  });
+  return returnedIds;
+}
+
 export async function updateBinder({
   binder_id,
   owner_id,

@@ -1,4 +1,5 @@
 import express, { NextFunction } from "express";
+import { updateUser } from "../Persistance";
 import BlockModel from "../Persistance/BlockModel";
 import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks, saveBlocks } from "../Services/BlockService";
@@ -30,15 +31,21 @@ export class PageController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+
     const {
       blocks,
       draft_keys,
       page_id,
+      study_set_id,
     }: {
-      blocks: [string];
-      draft_keys: [string];
+      blocks: string[];
+      draft_keys: string[];
       page_id: string;
+      study_set_id: string;
     } = req.body;
+
+    // update recently visited array
+    await updateUser({ id: userId, recently_visited: study_set_id });
 
     await saveBlocks(blocks, page_id, draft_keys, userId);
     const page = await PageModel.updatePage({

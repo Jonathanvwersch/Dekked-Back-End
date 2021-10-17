@@ -52,6 +52,18 @@ async function getFlashcardsByDeckId(
   return flashcards;
 }
 
+async function getFlashcardsByStudySetIds(
+  userId: string,
+  studySetIds: string[]
+): Promise<FlashcardInterface[]> {
+  const flashcards: FlashcardInterface[] = await db("flashcards")
+    .select("*")
+    .where({ owner_id: userId })
+    .whereIn("study_set_id", studySetIds);
+
+  return flashcards;
+}
+
 async function getFlashcardsByStudySetId(
   owner_id: string,
   study_set_id: string
@@ -66,17 +78,17 @@ async function getFlashcardsByStudySetId(
   return flashcards;
 }
 
-async function getSpacedRepetitionDeckByDeckId(
+async function getSpacedRepetitionDeckByStudySetId(
   owner_id: string,
-  deck_id: string
+  studySetIds: string[]
 ): Promise<FlashcardInterface[]> {
   const now = new Date();
   const flashcards: FlashcardInterface[] = await db("flashcards")
     .select("*")
     .where({
       owner_id,
-      deck_id,
     })
+    .whereIn("study_set_id", studySetIds)
     .andWhere(function () {
       this.whereNull("due_date").orWhere("due_date", "<=", now);
     })
@@ -181,7 +193,8 @@ export default {
   updateFlashcard,
   deleteFlashcardByStudySetId,
   deleteFlashcard,
-  getSpacedRepetitionDeckByDeckId,
+  getSpacedRepetitionDeckByStudySetId,
   getFlashcardsByStudySetId,
   getAllDueFlashcards,
+  getFlashcardsByStudySetIds,
 };

@@ -53,8 +53,8 @@ export interface FlashcardInterface {
   ease_factor: number;
   failed_consecutive_attempts: number;
   interval: number;
-  front_blocks: string[];
-  back_blocks: string[];
+  front_blocks: BlockInterface[];
+  back_blocks: BlockInterface[];
   due_date: Date;
   deck_id: string;
   block_link?: string;
@@ -122,6 +122,7 @@ export interface UserInterface {
   password?: string;
   date_created?: string;
   date_modified?: string;
+  recently_visited?: string[];
 }
 export interface FileTreeInterface {
   [instance_id: string]: {

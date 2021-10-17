@@ -1,9 +1,15 @@
+import { getBinderIdsByFolderId } from "../Persistance";
 import BlockModel from "../Persistance/BlockModel";
 import FlashcardModel from "../Persistance/FlashcardModel";
-import { getStudySetById } from "../Persistance/StudySetModel";
+import {
+  getStudySetById,
+  getStudySetIdsByBinderId,
+  getStudySetIdsByMultipleBinderIds,
+} from "../Persistance/StudySetModel";
 import {
   BlockInterface,
   DueSpacedRepetitionDecks,
+  FILETREE_TYPES,
   FlashcardInterface,
   FlashcardLearningStatus,
   FlashcardStatus,
@@ -47,11 +53,7 @@ async function createFlashcard(
   }
 }
 
-async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
-  const flashcards = await FlashcardModel.getFlashcardsByDeckId(
-    owner_id,
-    deck_id
-  );
+async function createFullFlashcard(flashcards: FlashcardInterface[]) {
   const fullFlashcards = await Promise.all(
     flashcards.map(async (val) => {
       const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
@@ -65,6 +67,30 @@ async function getFullFlashcardsByDeckId(deck_id: string, owner_id: string) {
     })
   );
   return fullFlashcards;
+}
+
+async function getStudySetFlashcards(study_set_id: string, owner_id: string) {
+  const flashcards = await FlashcardModel.getFlashcardsByStudySetId(
+    owner_id,
+    study_set_id
+  );
+  return createFullFlashcard(flashcards);
+}
+
+async function getBinderFlashcards(studySetIds: string[], ownerId: string) {
+  const flashcards = await FlashcardModel.getFlashcardsByStudySetIds(
+    ownerId,
+    studySetIds
+  );
+  return createFullFlashcard(flashcards);
+}
+
+async function getFolderFlashcards(studySetIds: string[], ownerId: string) {
+  const flashcards = await FlashcardModel.getFlashcardsByStudySetIds(
+    ownerId,
+    studySetIds
+  );
+  return createFullFlashcard(flashcards);
 }
 
 async function getFlashcardsByStudySetId(
@@ -78,27 +104,24 @@ async function getFlashcardsByStudySetId(
   return flashcards;
 }
 
-async function getSpacedRepetitionDeckByDeckId(
-  deck_id: string,
-  owner_id: string
+async function getSpacedRepetitionDeckByStudySetId(
+  id: string,
+  userId: string,
+  type: FILETREE_TYPES
 ) {
-  const flashcards = await FlashcardModel.getSpacedRepetitionDeckByDeckId(
-    owner_id,
-    deck_id
+  let studySetIds: string[] = [id];
+  if (type === FILETREE_TYPES.FOLDER) {
+    const binderIds = await getBinderIdsByFolderId(userId, id);
+    studySetIds = await getStudySetIdsByMultipleBinderIds(binderIds, userId);
+  } else if (type === FILETREE_TYPES.BINDER) {
+    studySetIds = await getStudySetIdsByBinderId(id, userId);
+  }
+
+  const flashcards = await FlashcardModel.getSpacedRepetitionDeckByStudySetId(
+    userId,
+    studySetIds
   );
-  const fullFlashcards = await Promise.all(
-    flashcards.map(async (val) => {
-      const blocksInCard = await BlockModel.getBlocksByParentId(val.id);
-      const front_blocks = getOrganizedBlocks(val.front_ordering, blocksInCard);
-      const back_blocks = getOrganizedBlocks(val.back_ordering, blocksInCard);
-      return {
-        ...val,
-        front_blocks,
-        back_blocks,
-      };
-    })
-  );
-  return fullFlashcards;
+  return createFullFlashcard(flashcards);
 }
 
 async function getAllDueDecks(owner_id: string) {
@@ -239,11 +262,13 @@ async function deleteFlashcardByStudySetId(
 
 export default {
   createFlashcard,
-  getFullFlashcardsByDeckId,
+  getStudySetFlashcards,
   saveFlashcard,
   deleteFlashcard,
+  getBinderFlashcards,
   deleteFlashcardByStudySetId,
   getFlashcardsByStudySetId,
-  getSpacedRepetitionDeckByDeckId,
+  getFolderFlashcards,
+  getSpacedRepetitionDeckByStudySetId,
   getAllDueDecks,
 };

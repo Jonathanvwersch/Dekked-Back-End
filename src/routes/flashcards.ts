@@ -18,7 +18,7 @@ router.post(
 );
 
 router.get(
-  `/:deck_id`,
+  `/`,
   passport.authenticate("jwt", {
     session: false,
   }),
@@ -26,7 +26,7 @@ router.get(
 );
 
 router.get(
-  `/spaced-repetition/:deck_id`,
+  `/spaced-repetition`,
   passport.authenticate("jwt", {
     session: false,
   }),

@@ -1,7 +1,13 @@
 import express, { NextFunction } from "express";
 import db from "../db/database";
+import {
+  getBinderIdsByFolderId,
+  getStudySetIdsByBinderId,
+  getStudySetIdsByMultipleBinderIds,
+  updateUser,
+} from "../Persistance";
 import FlashcardService from "../Services/FlashcardService";
-import { FlashcardInterface } from "../types";
+import { FILETREE_TYPES, FlashcardInterface } from "../types";
 import { spacedRepetition, getUserIdFromRequest, ErrorHandler } from "../utils";
 
 export class FlashcardController {
@@ -11,12 +17,29 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<FlashcardInterface>> {
     const userId = getUserIdFromRequest(req);
-    const { deck_id } = req.params;
+    const { id, type } = req.query as { id: string; type: FILETREE_TYPES };
 
-    const flashcards = await FlashcardService.getFullFlashcardsByDeckId(
-      deck_id,
-      userId
-    );
+    let flashcards: FlashcardInterface[] = [];
+
+    if (type === FILETREE_TYPES.FOLDER) {
+      const binderIds = await getBinderIdsByFolderId(userId, id);
+      const studySetIds = await getStudySetIdsByMultipleBinderIds(
+        binderIds,
+        userId
+      );
+      flashcards = await FlashcardService.getFolderFlashcards(
+        studySetIds,
+        userId
+      );
+    } else if (type === FILETREE_TYPES.BINDER) {
+      const studySetIds = await getStudySetIdsByBinderId(id, userId);
+      flashcards = await FlashcardService.getBinderFlashcards(
+        studySetIds,
+        userId
+      );
+    } else {
+      flashcards = await FlashcardService.getStudySetFlashcards(id, userId);
+    }
 
     return res.status(200).json(flashcards);
   }
@@ -27,11 +50,12 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    const { deck_id } = req.params;
+    const { id, type } = req.query as { id: string; type: FILETREE_TYPES };
 
-    const flashcards = await FlashcardService.getSpacedRepetitionDeckByDeckId(
-      deck_id,
-      userId
+    const flashcards = await FlashcardService.getSpacedRepetitionDeckByStudySetId(
+      id,
+      userId,
+      type
     );
 
     return res.status(200).json(flashcards);
@@ -58,6 +82,7 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+
     const {
       study_set_id,
       block_link,
@@ -67,6 +92,9 @@ export class FlashcardController {
       back_draft_keys,
       deck_id,
     } = req.body;
+
+    // update recently visited array
+    await updateUser({ id: userId, recently_visited: study_set_id });
 
     const flashcard = await FlashcardService.createFlashcard(
       study_set_id,
@@ -106,7 +134,11 @@ export class FlashcardController {
       interval,
       learning_status,
       flashcard_id: id,
+      study_set_id,
     } = req.body;
+
+    // update recently visited array
+    await updateUser({ id: owner_id, recently_visited: study_set_id });
 
     if (quality) {
       const currentFlashcards:
