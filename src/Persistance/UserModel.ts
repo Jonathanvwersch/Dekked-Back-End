@@ -2,7 +2,10 @@ import { UserInterface } from "../types";
 import db from "../db/database";
 
 export async function getUserById(id: string): Promise<UserInterface> {
-  return await db.table("users").where({ id }).first();
+  const user: UserInterface = await db.table("users").where({ id }).first();
+  delete user.password;
+
+  return user;
 }
 
 export async function getUserByEmail(
@@ -24,7 +27,6 @@ export async function getUserByResetPasswordToken(
     .table("users")
     .where({ reset_password_token })
     .first();
-
   delete user.password;
 
   return user;
@@ -48,7 +50,6 @@ export async function createNewUser(
       date_modified: now,
     })
     .returning("*");
-
   delete users[0].password;
 
   return users[0];
@@ -76,15 +77,19 @@ export async function updateUser({
 
   if (recently_visited) {
     const user = await getUserById(id);
-    const recentlyVisited = user?.recently_visited;
+    let recentlyVisited = user?.recently_visited;
+    if (!recentlyVisited) {
+      recentlyVisited = [];
+    }
     recentlyVisited?.unshift(recently_visited);
-    if (recentlyVisited && recentlyVisited.length > 6) {
+    if (recentlyVisited.length > 6) {
       recentlyVisited.pop();
     }
     returningUser = await db("users")
       .update({ recently_visited: recentlyVisited })
       .where({ id })
       .returning("*");
+    console.log(returningUser);
   } else {
     returningUser = await db("users")
       .update({
