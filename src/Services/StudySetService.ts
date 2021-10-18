@@ -48,7 +48,7 @@ async function deleteStudySet({
   );
   await db("users")
     .update({ recently_visited: recentlyVisitedFiltered })
-    .where({ id: study_set_id });
+    .where({ id: owner_id });
 
   await StudySetModel.deleteStudySet({ owner_id, study_set_id });
   const page = await PageService.getDeckByStudySetId(study_set_id, owner_id);
