@@ -1,3 +1,5 @@
+import db from "../db/database";
+import { getUserById } from "../Persistance";
 import StudySetModel from "../Persistance/StudySetModel";
 import { StudySetInterface } from "../types";
 import DeckService from "./DeckService";
@@ -38,6 +40,16 @@ async function deleteStudySet({
   study_set_id: string;
   owner_id: string;
 }) {
+  // we need to delete study_set_id from recently_visited array (if it exists in the array)
+  const user = await getUserById(owner_id);
+  let recentlyVisited = user?.recently_visited;
+  const recentlyVisitedFiltered = recentlyVisited?.filter(
+    (visited) => visited !== study_set_id
+  );
+  await db("users")
+    .update({ recently_visited: recentlyVisitedFiltered })
+    .where({ id: study_set_id });
+
   await StudySetModel.deleteStudySet({ owner_id, study_set_id });
   const page = await PageService.getDeckByStudySetId(study_set_id, owner_id);
   await PageService.deletePage(page.id, owner_id);
