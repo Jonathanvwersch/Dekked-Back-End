@@ -15,7 +15,6 @@ export async function getUserByEmail(
     .table("users")
     .where({ email_address })
     .first();
-  delete user.password;
 
   return user;
 }
@@ -50,8 +49,7 @@ export async function createNewUser(
       date_modified: now,
     })
     .returning("*");
-  delete users[0].password;
-
+  console.log(users);
   return users[0];
 }
 
