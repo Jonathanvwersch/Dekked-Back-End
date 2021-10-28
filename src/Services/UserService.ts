@@ -1,4 +1,4 @@
-import { getUserById, updateUser } from "../Persistance/UserModel";
+import { getUserById } from "../Persistance/UserModel";
 import { config } from "../config";
 import sgMail from "@sendgrid/mail";
 import { UserInterface } from "../types";

@@ -22,8 +22,9 @@ async function deleteBinder({
   const study_sets = await getStudySetsByBinderId(binder_id);
 
   await Promise.all(
-    study_sets.map(async (val) =>
-      StudySetService.deleteStudySet({ study_set_id: val.id, owner_id })
+    study_sets.map(
+      async (val) =>
+        await StudySetService.deleteStudySet({ study_set_id: val.id, owner_id })
     )
   );
 
