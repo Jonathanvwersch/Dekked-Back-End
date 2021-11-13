@@ -8,7 +8,7 @@ import {
 import StudySetService, {
   createStudySetObject,
 } from "../Services/StudySetService";
-import { getUserIdFromRequest } from "../utils";
+import { getUserIdFromRequest, missingParams } from "../utils";
 
 export class StudySetController {
   public async getStudySets(
@@ -32,6 +32,8 @@ export class StudySetController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["binder_id"]);
+
     const { binder_id, name, color, id } = req.body;
 
     const response = await createStudySet(binder_id, name, userId, color, id);
@@ -47,6 +49,8 @@ export class StudySetController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["study_set_id"]);
+
     const { name, color, study_set_id } = req.body;
 
     const studySet = await StudySetService.updateStudySet({
@@ -66,6 +70,8 @@ export class StudySetController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["study_set_id"]);
+
     const { study_set_id } = req.body;
 
     await StudySetService.deleteStudySet({

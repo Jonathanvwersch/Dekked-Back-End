@@ -8,7 +8,12 @@ import {
 } from "../Persistance";
 import FlashcardService from "../Services/FlashcardService";
 import { FILETREE_TYPES, FlashcardInterface } from "../types";
-import { spacedRepetition, getUserIdFromRequest, ErrorHandler } from "../utils";
+import {
+  spacedRepetition,
+  getUserIdFromRequest,
+  ErrorHandler,
+  missingParams,
+} from "../utils";
 
 export class FlashcardController {
   public async getFlashcards(
@@ -82,6 +87,7 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["study_set_id"]);
 
     const {
       study_set_id,
@@ -124,6 +130,7 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const owner_id = getUserIdFromRequest(req);
+    missingParams(req.body, ["flashcard_id"]);
 
     const {
       front_blocks,
@@ -212,6 +219,8 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["flashcard_id"]);
+
     const { flashcard_id } = req.body;
 
     await FlashcardService.deleteFlashcard(userId, flashcard_id);

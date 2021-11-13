@@ -3,7 +3,7 @@ import { updateUser } from "../Persistance";
 import BlockModel from "../Persistance/BlockModel";
 import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks, saveBlocks } from "../Services/BlockService";
-import { getUserIdFromRequest } from "../utils";
+import { getUserIdFromRequest, missingParams } from "../utils";
 
 export class PageController {
   public async getPage(
@@ -12,6 +12,8 @@ export class PageController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { page_id } = req.params;
+    missingParams(req.body, ["page_id"]);
+
     const userId = getUserIdFromRequest(req);
 
     const page = await PageModel.getPage(page_id, userId);
@@ -30,6 +32,7 @@ export class PageController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["study_set_id", "page_id"]);
 
     const {
       blocks,
@@ -73,6 +76,8 @@ export class PageController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { study_set_id } = req.params;
+    missingParams(req.params, ["study_set_id"]);
+
     const userId = getUserIdFromRequest(req);
 
     const response = PageModel.getPageByStudySetId(study_set_id, userId);
