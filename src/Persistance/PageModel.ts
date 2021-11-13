@@ -62,7 +62,6 @@ async function getPageByStudySetId(study_set_id: string, owner_id: string) {
     .table("pages")
     .select("*")
     .where({ study_set_id, owner_id });
-
   return response[0];
 }
 

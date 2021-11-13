@@ -80,7 +80,7 @@ export class PageController {
 
     const userId = getUserIdFromRequest(req);
 
-    const response = PageModel.getPageByStudySetId(study_set_id, userId);
+    const response = await PageModel.getPageByStudySetId(study_set_id, userId);
 
     return res.status(200).json(response);
   }
