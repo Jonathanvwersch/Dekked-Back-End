@@ -11,7 +11,7 @@ export class BlockController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { page_id } = req.params;
-    missingParams(req.body, ["page_id"]);
+    missingParams(req.params, ["page_id"]);
 
     const ownerId = getUserIdFromRequest(req);
 

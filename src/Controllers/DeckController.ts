@@ -8,7 +8,7 @@ export class DeckController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { study_set_id } = req.params;
-    missingParams(req.body, ["study_set_id"]);
+    missingParams(req.params, ["study_set_id"]);
 
     const ownerId = getUserIdFromRequest(req);
 
