@@ -126,6 +126,7 @@ async function updateFlashcard({
   failed_consecutive_attempts,
   due_date,
   quality,
+  starred,
 }: {
   id: string;
   owner_id: string;
@@ -139,6 +140,7 @@ async function updateFlashcard({
   failed_consecutive_attempts?: number;
   due_date?: Date;
   quality?: number;
+  starred?: boolean;
 }): Promise<FlashcardInterface> {
   const now = new Date();
   const flashcards: FlashcardInterface[] = await db("flashcards")
@@ -154,6 +156,7 @@ async function updateFlashcard({
       failed_consecutive_attempts,
       due_date,
       quality,
+      starred,
     })
     .where({ id, owner_id })
     .returning("*");

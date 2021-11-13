@@ -3,12 +3,6 @@ import { BlockInterface } from "../types";
 import BlockService from "./BlockService";
 import BlockModel from "../Persistance/BlockModel";
 
-async function getDeckByStudySetId(study_set_id: string, ownerId: string) {
-  const result = await PageModel.getPageByStudySetId(study_set_id, ownerId);
-
-  return result;
-}
-
 async function deletePage(page_id: string, owner_id: string) {
   const blocks = await BlockService.getBlocksInParent(page_id);
   await Promise.all(
@@ -20,6 +14,5 @@ async function deletePage(page_id: string, owner_id: string) {
 }
 
 export default {
-  getDeckByStudySetId,
   deletePage,
 };

@@ -135,6 +135,7 @@ export class FlashcardController {
       learning_status,
       flashcard_id: id,
       study_set_id,
+      starred,
     } = req.body;
 
     // update recently visited array
@@ -191,6 +192,7 @@ export class FlashcardController {
       front_draft_keys,
       back_blocks,
       back_draft_keys,
+      starred,
     });
 
     const fullFlashcard: FlashcardInterface = {

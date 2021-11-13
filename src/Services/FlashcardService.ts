@@ -185,6 +185,7 @@ async function saveFlashcard({
   failed_consecutive_attempts,
   due_date,
   quality,
+  starred,
 }: {
   id: string;
   owner_id: string;
@@ -200,6 +201,7 @@ async function saveFlashcard({
   failed_consecutive_attempts?: number;
   due_date?: Date;
   quality?: number;
+  starred?: boolean;
 }) {
   front_draft_keys &&
     front_blocks &&
@@ -220,6 +222,7 @@ async function saveFlashcard({
     due_date,
     block_link,
     quality,
+    starred,
   });
   return flashcard;
 }
