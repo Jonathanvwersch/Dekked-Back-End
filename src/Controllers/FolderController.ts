@@ -1,6 +1,6 @@
 import express, { NextFunction } from "express";
 import FolderModel from "../Persistance/FolderModel";
-import { getUserIdFromRequest } from "../utils";
+import { getUserIdFromRequest, missingParams } from "../utils";
 import FolderService from "../Services/FolderService";
 export class FolderController {
   public async getFolders(
@@ -18,6 +18,7 @@ export class FolderController {
     res: express.Response,
     _: NextFunction
   ): Promise<express.Response<any>> {
+    missingParams(req.body, ["id"]);
     const { name, color, id } = req.body;
     const userId = getUserIdFromRequest(req);
     const folder = await FolderModel.createFolder(name, userId, color, id);
@@ -31,6 +32,8 @@ export class FolderController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["folder_id"]);
+
     const { name, color, folder_id } = req.body;
 
     const folder = await FolderModel.updateFolder({
@@ -49,6 +52,8 @@ export class FolderController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
+    missingParams(req.body, ["folder_id"]);
+
     const { folder_id } = req.body;
     await FolderService.deleteFolder(folder_id, userId);
 

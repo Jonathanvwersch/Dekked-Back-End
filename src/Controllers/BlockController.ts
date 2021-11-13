@@ -2,7 +2,7 @@ import express, { NextFunction } from "express";
 import BlockModel from "../Persistance/BlockModel";
 import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks } from "../Services/BlockService";
-import { getUserIdFromRequest } from "../utils";
+import { getUserIdFromRequest, missingParams } from "../utils";
 
 export class BlockController {
   public async getBlocksByPageId(
@@ -11,6 +11,8 @@ export class BlockController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { page_id } = req.params;
+    missingParams(req.body, ["page_id"]);
+
     const ownerId = getUserIdFromRequest(req);
 
     const page = await PageModel.getPage(page_id, ownerId);
