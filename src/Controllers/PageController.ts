@@ -3,7 +3,6 @@ import { updateUser } from "../Persistance";
 import BlockModel from "../Persistance/BlockModel";
 import PageModel from "../Persistance/PageModel";
 import { getOrganizedBlocks, saveBlocks } from "../Services/BlockService";
-import PageService from "../Services/PageService";
 import { getUserIdFromRequest } from "../utils";
 
 export class PageController {
@@ -76,10 +75,7 @@ export class PageController {
     const { study_set_id } = req.params;
     const userId = getUserIdFromRequest(req);
 
-    const response = await PageService.getDeckByStudySetId(
-      study_set_id,
-      userId
-    );
+    const response = PageModel.getPageByStudySetId(study_set_id, userId);
 
     return res.status(200).json(response);
   }
