@@ -1,5 +1,6 @@
 import db from "../db/database";
 import { getUserById } from "../Persistance";
+import DeckModel from "../Persistance/DeckModel";
 import StudySetModel from "../Persistance/StudySetModel";
 import { StudySetInterface } from "../types";
 import DeckService from "./DeckService";
@@ -51,7 +52,7 @@ async function deleteStudySet({
     .where({ id: owner_id });
 
   await StudySetModel.deleteStudySet({ owner_id, study_set_id });
-  const page = await PageService.getDeckByStudySetId(study_set_id, owner_id);
+  const page = await DeckModel.getDeckByStudySetId(study_set_id, owner_id);
   await PageService.deletePage(page.id, owner_id);
   await DeckService.deleteDeck(study_set_id, owner_id);
 }
