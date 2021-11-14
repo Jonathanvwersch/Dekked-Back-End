@@ -87,7 +87,7 @@ export class FlashcardController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const userId = getUserIdFromRequest(req);
-    missingParams(req.body, ["study_set_id"]);
+    missingParams(req.body, ["study_set_id", "deck_id"]);
 
     const {
       study_set_id,
