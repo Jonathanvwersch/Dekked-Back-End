@@ -29,6 +29,7 @@ import {
   filesRouter,
   filesRoute,
 } from "./routes";
+import { imagesRoute, imagesRouter } from "./routes/images";
 
 const app = express();
 app.use(cookieParser());
@@ -77,6 +78,7 @@ app.use(blockRoute, blocksRouter);
 app.use(flashcardsRoute, flashcardsRouter);
 app.use(decksRoute, decksRouter);
 app.use(filesRoute, filesRouter);
+app.use(imagesRoute, imagesRouter);
 
 app.all("*", (req, _, next) => {
   next(
