@@ -1,7 +1,17 @@
 import express, { NextFunction } from "express";
-import { getUserIdFromRequest, uploadFile } from "../utils";
+import { getFileStream, getUserIdFromRequest, uploadFile } from "../utils";
 
 export class ImageController {
+  public async getImages(
+    req: express.Request,
+    res: express.Response,
+    _: NextFunction
+  ): Promise<express.Response<any>> {
+    const { key } = req.params;
+    const readStream = getFileStream(key);
+    return readStream.pipe(res);
+  }
+
   public async uploadImages(
     req: express.Request,
     res: express.Response,
@@ -12,8 +22,6 @@ export class ImageController {
 
     const uploadedImage = await uploadFile(file, userId);
 
-    return res.status(200).json({
-      imageUrl: uploadedImage?.Location,
-    });
+    return res.send({ imagePath: `/images/${uploadedImage?.Key}` });
   }
 }
