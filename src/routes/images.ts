@@ -11,6 +11,14 @@ const router = express.Router();
 const imageController = new ImageController();
 export const imagesRoute = `${commonBaseUrl}/images`;
 
+router.get(
+  `/:key`,
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  catchAsync(imageController.getImages)
+);
+
 router.post(
   `/`,
   passport.authenticate("jwt", {
