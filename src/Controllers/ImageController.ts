@@ -13,7 +13,7 @@ export class ImageController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { key } = req.params;
-    missingParams(req.params, ["key", "deck_id"]);
+    missingParams(req.params, ["key"]);
     const readStream = getFileStream(key);
     return readStream.pipe(res);
   }
@@ -27,6 +27,7 @@ export class ImageController {
     const file = req.file as Express.Multer.File;
 
     const uploadedImage = await uploadFile(file, userId);
+
     return res.send({ imagePath: `/images/${uploadedImage?.Key}` });
   }
 }
