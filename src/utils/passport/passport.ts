@@ -8,6 +8,7 @@ const { AUTHENTICATION_SECRET_KEY } = config;
 export const applyPassportStrategy = (passport: PassportStatic) => {
   const JWStrategy = passportJWT.Strategy;
   const ExtractJWT = passportJWT.ExtractJwt;
+
   passport.use(
     new JWStrategy(
       {
