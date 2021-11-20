@@ -17,7 +17,10 @@ type ConfigType = {
 
 export const config: ConfigType = {
   APP_ENV: process.env.APP_ENV!,
-  DB_CONNECTION: process.env.DB_CONNECTION!,
+  DB_CONNECTION:
+    process.env.APP_ENV === "production"
+      ? process.env.PRODUCTION_DB_CONNECTION!
+      : process.env.DB_CONNECTION!,
   CLIENT: process.env.CLIENT!,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!,

@@ -36,32 +36,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(compression());
 
-// const allowedOrigins = [
-//   "http://localhost:3000",
-//   "http://127.0.0.1",
-//   "https://www.integration.dekked.com",
-//   "integration.dekked.com",
-//   "app.dekked.com",
-//   "https://www.app.dekked.com",
-//   "https://integration.dekked.com",
-//   "https://app.dekked.com",
-// ];
-
-// const corsOptions = {
-//   credentials: true,
-//   origin: function (origin: any, callback: any) {
-//     // allow requests with no origin
-//     // (like mobile apps or curl requests)
-//     if (!origin) return callback(null, true);
-//     if (allowedOrigins.indexOf(origin) === -1) {
-//       var msg =
-//         "The CORS policy for this site does not " +
-//         "allow access from the specified Origin.";
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   },
-// };
 app.use(cors());
 
 const { APP_ENV } = config;
