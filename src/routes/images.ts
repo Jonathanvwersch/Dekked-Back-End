@@ -11,7 +11,7 @@ const router = express.Router();
 const imageController = new ImageController();
 export const imagesRoute = `${commonBaseUrl}/images`;
 
-router.get(`/:key`, catchAsync(imageController.getImages));
+router.get("/:key", catchAsync(imageController.getImages));
 
 router.post(
   `/`,
