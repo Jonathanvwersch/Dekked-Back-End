@@ -13,7 +13,7 @@ export class ImageController {
     _: NextFunction
   ): Promise<express.Response<any>> {
     const { key } = req.params;
-    missingParams(req.body, ["key"]);
+    missingParams(req.params, ["key"]);
     const readStream = getFileStream(key);
     return readStream.pipe(res);
   }
