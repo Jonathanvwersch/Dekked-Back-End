@@ -143,6 +143,7 @@ export class FlashcardController {
       flashcard_id: id,
       study_set_id,
       starred,
+      block_link,
     } = req.body;
 
     // update recently visited array
@@ -178,6 +179,7 @@ export class FlashcardController {
           id,
           owner_id,
           learning_status,
+          block_link,
         });
 
         const fullFlashcard: FlashcardInterface = {
